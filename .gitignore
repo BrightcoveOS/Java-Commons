@@ -1,1 +1,7 @@
 /Icon.png
+.metadata/
+json-org/bin/org
+json-org/release/json-org.jar
+json-org/.classpath
+json-org/.project
+json-org/.settings/
