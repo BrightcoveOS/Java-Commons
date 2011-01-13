@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<project default="main">
+	<target name="main" depends="prepare, clean, compile, javadoc, release" description="Main target">
+		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="prepare" description="Prepare target">
+		<echo>Preparing project:</echo>
+		<mkdir dir="bin"/>
+		<mkdir dir="release"/>
+		<mkdir dir="javadoc"/>
+	</target>
+	
+	<target name="clean" description="Clean target">
+		<echo>Cleaning project:</echo>
+		<delete>
+			<fileset dir="release" includes="json-org.jar"/>
+		</delete>
+		<delete>
+			<fileset dir="javadoc" includes="**/*"/>
+		</delete>
+		<delete dir="bin/org" />
+	</target>
+	
+	<target name="compile" description="Compilation target">
+		<echo>Compiling source code:</echo>
+		<javac debug="on" srcdir="src" destdir="bin" includes="**/*">
+			<!-- <classpath refid="build.class.path" /> -->
+		</javac>
+	</target>
+	
+	<target name="javadoc" description="JavaDoc target">
+		<javadoc packagenames="org.json.*"
+			sourcepath="src"
+			defaultexcludes="yes"
+			destdir="javadoc"
+			author="true"
+			version="true"
+			use="true"
+			windowtitle="json.org">
+				<doctitle><![CDATA[<h1>json.org</h1>]]></doctitle>
+				<bottom><![CDATA[<i>see http://www.json.org/java/index.html for original source.</i>]]></bottom>
+		</javadoc>
+	</target>
+	
+	<target name="release" description="Compression target">
+		<echo>Building jar file:</echo>
+		<jar jarfile="release/json-org.jar" basedir="bin" includes="**/*" />
+	</target>
+</project>
