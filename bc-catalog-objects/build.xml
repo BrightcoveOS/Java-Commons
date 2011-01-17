@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<project default="main">
+	<property name="release-package-name" value="bc-commons-catalog-objects"/>
+	<property name="json-org-jar" value="../json-org/release/json-org.jar"/>
+	
+	<path id="project.class.path">
+		<pathelement location="${json-org-jar}"/>
+	</path>
+	
+	<target name="main" depends="json-org-available, prepare, clean, compile, javadoc, release" description="Main target">
+		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="json-org-available" depends="is-json-org-available" if="json-org-missing">
+		<fail message="json-org.jar could not be found at ${json-org-jar}"/>
+	</target>
+	<target name="is-json-org-available">
+		<condition property="json-org-missing">
+			<not>
+				<available file="${json-org-jar}" property="json-org-available"/>
+			</not>
+		</condition>
+	</target>	
+	
+	<target name="prepare" description="Prepare target">
+		<echo>Preparing project:</echo>
+		<mkdir dir="bin"/>
+		<mkdir dir="release"/>
+		<mkdir dir="javadoc"/>
+	</target>
+	
+	<target name="clean" description="Clean target">
+		<echo>Cleaning project:</echo>
+		<delete>
+			<fileset dir="release" includes="${release-package-name}.jar"/>
+			<fileset dir="javadoc" includes="**/*"/>
+		</delete>
+		<delete dir="bin/com" />
+	</target>
+	
+	<target name="compile" description="Compilation target">
+		<echo>Compiling source code:</echo>
+		<javac debug="on" srcdir="src" destdir="bin" includes="**/*">
+			<classpath refid="project.class.path"/>
+		</javac>
+	</target>
+	
+	<target name="javadoc" description="JavaDoc target">
+		<javadoc packagenames="com.*"
+			sourcepath="src"
+			defaultexcludes="yes"
+			destdir="javadoc"
+			author="true"
+			version="true"
+			use="true"
+			windowtitle="${release-package-name}">
+				<classpath refid="project.class.path"/>
+				<doctitle><![CDATA[<h1>com.brightcove.commons.catalog.objects</h1>]]></doctitle>
+				<bottom><![CDATA[<i>http://opensource.brightcove.com/.</i>]]></bottom>
+		</javadoc>
+	</target>
+	
+	<target name="release" description="Compression target">
+		<echo>Building jar file:</echo>
+		<jar jarfile="release/${release-package-name}.jar" duplicate="fail" whenmanifestonly="fail">
+			<fileset dir="bin" includes="**/*"/>
+			<fileset dir="src" includes="**/*"/>
+		</jar>
+	</target>
+</project>

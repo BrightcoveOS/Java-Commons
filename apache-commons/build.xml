@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<project default="main">
+	<property name="http-client-version" value="4.0.3"/>
+	<property name="http-client-package" value="httpcomponents-client-${http-client-version}"/>
+	
+	<target name="main" depends="prepare, clean, extract, repackage" description="Main target">
+		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="prepare" description="Prepare target">
+		<echo>Preparing project:</echo>
+		<mkdir dir="release"/>
+	</target>
+	
+	<target name="clean" description="Clean target">
+		<echo>Cleaning project:</echo>
+		<delete includeemptydirs="true">
+			<fileset dir="release" includes="**/*"/>
+		</delete>
+	</target>
+	
+	<target name="extract-httpclient" description="Extracts the necessary libs from the Apache HTTP Components Client download">
+		<unzip src="download/${http-client-package}-bin.zip" dest="release"/>
+	</target>
+	
+	<target name="repackage-httpclient" description="Repackages necessary libs from the Apache HTTP Components to remove unneeded files">
+		<move todir="release">
+			<fileset dir="release/${http-client-package}/lib" includes="*.jar"/>
+		</move>
+		
+		<mkdir dir="release/${http-client-package}-license"/>
+		<move todir="release/${http-client-package}-license">
+			<fileset dir="release/${http-client-package}" includes="*.txt"/>
+		</move>
+		
+		<delete dir="release/${http-client-package}"/>
+	</target>
+	
+	<target name="extract" description="Extracts downloaded libraries" depends="extract-httpclient">
+		<echo>Downloaded packages extracted.</echo>
+	</target>
+	
+	<target name="repackage" description="Repackages extracted libraries" depends="repackage-httpclient">
+		<echo>Extracted libraries repackaged.</echo>
+	</target>
+</project>
