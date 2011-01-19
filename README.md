@@ -12,50 +12,72 @@ Whenever possible, the libraries will be compatible with Java 1.5, but in
 some cases Java 1.6 may be required.  Each commons library should make note
 of this.
 
-Several 3rd party libraries (such as Apache Commons HTTP) will be included
-with release packages.  A version of each repository without these 3rd party
-libraries will also be provided, but the end user must provide them separately
-before the library will function correctly.
-
-Package - json-org
-==================
+Package - (3rd party) json-org
+==============================
 
 This package is almost entirely just the source code downloaded from json.org
 (http://www.json.org/java/index.html) downloaded on January 12th 2011.  The
 only changes made are to resolve compiler and/or eclipse warnings.
 
-This library will be included with some of the releases packages in this
-project, but will not be included in any -no-dep release package.
+Dependencies: 
+ 
+- None
 
-Package - apache-commons
-========================
+Package - (3rd party) apache-commons
+====================================
 
-This package includes all of the Apache Commons libraries
-(http://commons.apache.org/) needed by any of the other libraries in this
-project.
+This package includes several Apache Commons libraries, including: 
+ 
+- Mime4j (from Apache James project)
+- Commons IO
+- HTTP Components (core and client)
 
-These libraries will be included with some of the releases packages in this
-project, but will not be included in any -no-dep release package.
+These can all be downloaded from Apache directly if preferred: 
+ 
+- [Apache Commons](http://commons.apache.org/)
+- [Apache James](http://james.apache.org/download.cgi)
+- [Apache HTTP Components](http://hc.apache.org/)
 
-Package - xalan
-===============
+The versions stored here will be stripped down to just what is needed (plus any legal / license notifications)
 
-This package includes the Xalan libraries from release version 2.7.1.
+Dependencies: 
+ 
+- None
 
-These libraries will be included with some of the releases packages in this
-project, but will not be included in any -no-dep release package.
+Package - (3rd party) xalan
+===========================
 
-Package - bc-java-commons-system
-================================
+This package will include the Xalan libraries from release version 2.7.1.
 
-This package includes classes to make working with the native system easier.
-This includes methods to determinine the host operating system and methods to
-execute system calls and capture the output from the command.
+This package has not yet been released.
 
-These calls tend to use not-perfectly-portable Java code (e.g. Java's
-Runtime.exec() call).  All efforts are made to test this code, but these calls
-are the most vulerable to problems when running in an enexpected host
-environment.
+Package - collection-utils
+==========================
 
+This package includes classes to make working with Collections (Sets, Lists, etc) easier.
 
+Dependencies: 
+ 
+- None
+
+Package - http-utils
+====================
+
+This package includes classes to make working with HTTP objects (requests, responses, entities, etc) easier.
+
+Dependencies: 
+ 
+- Apache HTTP Components (core)
+- Apache Commons IO
+
+Package - bc-catalog-objects
+============================
+
+This package includes classes to represent all of the fundamental data objects produced by or needed to interface with the Brightcove system.
+
+Most of the objects are created following the Brightcove Media API object reference, but some modifications are needed to support other projects.
+
+Dependencies: 
+ 
+- json.org
 
