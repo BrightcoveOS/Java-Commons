@@ -23,9 +23,12 @@ public class Videos extends ArrayList<Video> {
 	public Videos(JSONObject jsonObj) throws JSONException {
 		JSONArray jsonItems = jsonObj.getJSONArray("items");
 		for(int itemIdx=0;itemIdx<jsonItems.length();itemIdx++){
-			JSONObject jsonItem = (JSONObject)jsonItems.get(itemIdx);
-			Video video = new Video(jsonItem);
-			add(video);
+			// Protect against item being null (Media API can do this for some reason...?)
+			if(jsonItems.get(itemIdx) != JSONObject.NULL) {
+				JSONObject jsonItem = (JSONObject)jsonItems.get(itemIdx);
+				Video video = new Video(jsonItem);
+				add(video);
+			}
 		}
 		
 		try{

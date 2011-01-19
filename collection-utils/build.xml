@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <project default="main">
 	<property name="release-package-name" value="bc-commons-collection-utils"/>
+	<property name="release-package-version" value="3.0"/>
 	
 	<target name="main" depends="prepare, clean, compile, javadoc, release" description="Main target">
 		<echo>Full build complete.</echo>
@@ -16,7 +17,7 @@
 	<target name="clean" description="Clean target">
 		<echo>Cleaning project:</echo>
 		<delete>
-			<fileset dir="release" includes="${release-package-name}.jar"/>
+			<fileset dir="release" includes="**/*"/>
 			<fileset dir="javadoc" includes="**/*"/>
 		</delete>
 		<delete dir="bin/com" />
@@ -37,7 +38,7 @@
 			author="true"
 			version="true"
 			use="true"
-			windowtitle="${release-package-name}">
+			windowtitle="${release-package-name} - v${release-package-version}">
 				<doctitle><![CDATA[<h1>com.brightcove.commons.collection</h1>]]></doctitle>
 				<bottom><![CDATA[<i>http://opensource.brightcove.com/.</i>]]></bottom>
 		</javadoc>
@@ -45,7 +46,7 @@
 	
 	<target name="release" description="Compression target">
 		<echo>Building jar file:</echo>
-		<jar jarfile="release/${release-package-name}.jar" duplicate="fail" whenmanifestonly="fail">
+		<jar jarfile="release/${release-package-name}-${release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
 			<fileset dir="bin" includes="**/*"/>
 			<fileset dir="src" includes="**/*"/>
 		</jar>

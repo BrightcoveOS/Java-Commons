@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<project default="main">
+	<target name="main" depends="prepare, clean, release" description="Main target">
+		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="prepare" description="Prepare target">
+		<echo>Preparing project:</echo>
+		<mkdir dir="release"/>
+	</target>
+	
+	<target name="clean" description="Clean target">
+		<echo>Cleaning project:</echo>
+		<delete>
+			<fileset dir="release" includes="**/*"/>
+		</delete>
+	</target>
+	
+	<target name="json-org" description="Release json.org libraries">
+		<ant dir="../json-org"/>
+	</target>
+	
+	<target name="apache-commons" description="Release Apache Commons libraries">
+		<ant dir="../apache-commons"/>
+	</target>
+	
+	<target name="collection-utils" description="Release Brightcove Collection Utils libraries">
+		<ant dir="../collection-utils"/>
+	</target>
+	
+	<target name="http-utils" description="Release Brightcove HTTP Utils libraries">
+		<ant dir="../http-utils"/>
+	</target>
+	
+	<target name="bc-catalog-objects" description="Release Brightcove Catalog Objects libraries">
+		<ant dir="../bc-catalog-objects"/>
+	</target>
+	
+	<target name="release" description="Release all commons libraries" depends="json-org, apache-commons, collection-utils, http-utils, bc-catalog-objects">
+		<echo>Sub-projects released, compiling together:</echo>
+		<copy todir="release">
+			<fileset dir="../json-org/release">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="../apache-commons/release">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="../collection-utils/release">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="../http-utils/release">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="../bc-catalog-objects/release">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+	</target>
+</project>

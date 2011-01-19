@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <project default="main">
 	<property name="release-package-name" value="bc-commons-catalog-objects"/>
+	<property name="release-package-version" value="3.0"/>
 	<property name="json-org-jar" value="../json-org/release/json-org.jar"/>
 	
 	<path id="project.class.path">
@@ -32,7 +33,7 @@
 	<target name="clean" description="Clean target">
 		<echo>Cleaning project:</echo>
 		<delete>
-			<fileset dir="release" includes="${release-package-name}.jar"/>
+			<fileset dir="release" includes="**/*"/>
 			<fileset dir="javadoc" includes="**/*"/>
 		</delete>
 		<delete dir="bin/com" />
@@ -53,7 +54,7 @@
 			author="true"
 			version="true"
 			use="true"
-			windowtitle="${release-package-name}">
+			windowtitle="${release-package-name} - v${release-package-version}">
 				<classpath refid="project.class.path"/>
 				<doctitle><![CDATA[<h1>com.brightcove.commons.catalog.objects</h1>]]></doctitle>
 				<bottom><![CDATA[<i>http://opensource.brightcove.com/.</i>]]></bottom>
@@ -62,7 +63,7 @@
 	
 	<target name="release" description="Compression target">
 		<echo>Building jar file:</echo>
-		<jar jarfile="release/${release-package-name}.jar" duplicate="fail" whenmanifestonly="fail">
+		<jar jarfile="release/${release-package-name}-${release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
 			<fileset dir="bin" includes="**/*"/>
 			<fileset dir="src" includes="**/*"/>
 		</jar>

@@ -2,6 +2,7 @@ package com.brightcove.commons.catalog.objects;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import com.brightcove.commons.catalog.objects.enumerations.EconomicsEnum;
 import com.brightcove.commons.catalog.objects.enumerations.GeoFilterCodeEnum;
 import com.brightcove.commons.catalog.objects.enumerations.ItemStateEnum;
+import com.brightcove.commons.catalog.objects.enumerations.VideoFieldEnum;
 
 /**
  * <p>
@@ -248,7 +250,7 @@ public class Video {
 			}
 			else if("releaseDate".equals(rootKey)){
 				Long rootLong = jsonObj.getLong(rootKey);
-				lastModifiedDate = new Date(rootLong);
+				releaseDate = new Date(rootLong);
 			}
 			else if("geoFilteredCountries".equals(rootKey)){
 				geoFilteredCountries = new ArrayList<GeoFilterCodeEnum>();
@@ -1750,83 +1752,129 @@ public class Video {
 	}
 	
 	/**
-	 * <p>Converts the video into a JSON object suitable for use with the Media API</p>
+	 * <p>
+	 *    Converts the video into a JSON object suitable for use with the Media API
+	 * </p>
+	 * 
+	 * <p>
+	 *    Null values will not be included in the JSON sent to the server.
+	 * </p>
 	 * 
 	 * @return JSON object representing the video
+	 * @throws JSONException If the video object can not be properly converted into JSON
 	 */
 	public JSONObject toJson() throws JSONException {
+		return toJson(null);
+	}
+	
+	/**
+	 * <p>
+	 *    Converts the video into a JSON object suitable for use with the Media API
+	 * </p>
+	 * 
+	 * @param includeNullFields Set of fields to include in the JSON sent to the server, even if they are null values
+	 * @return JSON object representing the video
+	 * @throws JSONException If the video object can not be properly converted into JSON
+	 */
+	public JSONObject toJson(EnumSet<VideoFieldEnum> includeNullFields) throws JSONException {
 		JSONObject json = new JSONObject();
 		
-		if(name != null){
+		if(includeNullFields == null){
+			includeNullFields = VideoFieldEnum.CreateEmptyEnumSet();
+		}
+		
+		if((name != null) || includeNullFields.contains(VideoFieldEnum.NAME)){
 			json.put("name", name);
 		}
-		if(id != null){
-			json.put("id",   id);
+		
+		if((id != null) || includeNullFields.contains(VideoFieldEnum.ID)){
+			json.put("id", id);
 		}
-		if(referenceId != null){
+		
+		if((referenceId != null) || includeNullFields.contains(VideoFieldEnum.REFERENCEID)){
 			json.put("referenceId", referenceId);
 		}
-		if(accountId != null){
+		
+		if((accountId != null) || includeNullFields.contains(VideoFieldEnum.ACCOUNTID)){
 			json.put("accountId", accountId);
 		}
-		if(shortDescription != null){
+		
+		if((shortDescription != null) || includeNullFields.contains(VideoFieldEnum.SHORTDESCRIPTION)){
 			json.put("shortDescription", shortDescription);
 		}
-		if(longDescription != null){
+		
+		if((longDescription != null) || includeNullFields.contains(VideoFieldEnum.LONGDESCRIPTION)){
 			json.put("longDescription", longDescription);
 		}
-		if(flvUrl != null){
+		
+		if((flvUrl != null) || includeNullFields.contains(VideoFieldEnum.FLVURL)){
 			json.put("FLVURL", flvUrl);
 		}
-		if(creationDate != null){
+		
+		if((creationDate != null) || includeNullFields.contains(VideoFieldEnum.CREATIONDATE)){
 			json.put("creationDate", creationDate.getTime());
 		}
-		if(publishedDate != null){
+		
+		if((publishedDate != null) || includeNullFields.contains(VideoFieldEnum.PUBLISHEDDATE)){
 			json.put("publishedDate", publishedDate.getTime());
 		}
-		if(lastModifiedDate != null){
+		
+		if((lastModifiedDate != null) || includeNullFields.contains(VideoFieldEnum.LASTMODIFIEDDATE)){
 			json.put("lastModifiedDate", lastModifiedDate.getTime());
 		}
-		if(releaseDate != null){
+		
+		if((releaseDate != null) || includeNullFields.contains(VideoFieldEnum.RELEASEDATE)){
 			json.put("releaseDate", releaseDate.getTime());
 		}
-		if(startDate != null){
+		
+		if((startDate != null) || includeNullFields.contains(VideoFieldEnum.STARTDATE)){
 			json.put("startDate", startDate.getTime());
 		}
-		if(endDate != null){
+		
+		if((endDate != null) || includeNullFields.contains(VideoFieldEnum.ENDDATE)){
 			json.put("endDate", endDate.getTime());
 		}
-		if(linkUrl != null){
+		
+		if((linkUrl != null) || includeNullFields.contains(VideoFieldEnum.LINKURL)){
 			json.put("linkURL", linkUrl);
 		}
-		if(linkText != null){
+		
+		if((linkText != null) || includeNullFields.contains(VideoFieldEnum.LINKTEXT)){
 			json.put("linkText", linkText);
 		}
-		if(videoStillUrl != null){
+		
+		if((videoStillUrl != null) || includeNullFields.contains(VideoFieldEnum.VIDEOSTILLURL)){
 			json.put("videoStillURL", videoStillUrl);
 		}
-		if(thumbnailUrl != null){
+		
+		if((thumbnailUrl != null) || includeNullFields.contains(VideoFieldEnum.THUMBNAILURL)){
 			json.put("thumbnailURL", thumbnailUrl);
 		}
-		if(length != null){
+		
+		if((length != null) || includeNullFields.contains(VideoFieldEnum.LENGTH)){
 			json.put("length", length);
 		}
-		if(geoFiltered != null){
+		
+		if((geoFiltered != null) || includeNullFields.contains(VideoFieldEnum.GEOFILTERED)){
 			// json.put("geoFiltered", geoFiltered);
 			
 			// Change to Media API (circa 3.2.x maybe?) "geoFiltered" is
 			// now "geoRestricted"
 			json.put("geoRestricted", geoFiltered);
 		}
-		if(geoFilteredExclude != null){
+		
+		if((geoFilteredExclude != null) || includeNullFields.contains(VideoFieldEnum.GEOFILTEREXCLUDE)){
 			json.put("geoFilterExclude", geoFilteredExclude);
 		}
-		if(playsTotal != null){
+		
+		if((playsTotal != null) || includeNullFields.contains(VideoFieldEnum.PLAYSTOTAL)){
 			json.put("playsTotal", playsTotal);
 		}
-		if(playsTrailingWeek != null){
+		
+		if((playsTrailingWeek != null) || includeNullFields.contains(VideoFieldEnum.PLAYSTRAILINGWEEK)){
 			json.put("playsTrailingWeek", playsTrailingWeek);
 		}
+		
 		if(renditions != null){
 			JSONArray jsonRenditions = new JSONArray();
 			for(Rendition rendition : renditions){
@@ -1836,12 +1884,23 @@ public class Video {
 			
 			json.put("renditions", jsonRenditions);
 		}
+		else if(includeNullFields.contains(VideoFieldEnum.RENDITIONS)){
+			JSONArray jsonArray = new JSONArray();
+			json.put("renditions", jsonArray);
+		}
+		
 		if(videoFullLength != null){
 			json.put("videoFullLength", videoFullLength.toJson());
 		}
-		if(itemState != null){
+		else if(includeNullFields.contains(VideoFieldEnum.VIDEOFULLLENGTH)){
+			Rendition rendition = null;
+			json.put("videoFullLength", rendition);
+		}
+		
+		if((itemState != null) || includeNullFields.contains(VideoFieldEnum.ITEMSTATE)){
 			json.put("itemState", itemState);
 		}
+		
 		if(tags != null){
 			JSONArray tagArray = new JSONArray();
 			for(String tag : tags){
@@ -1849,9 +1908,15 @@ public class Video {
 			}
 			json.put("tags", tagArray);
 		}
-		if(economics != null){
+		else if(includeNullFields.contains(VideoFieldEnum.TAGS)){
+			JSONArray jsonArray = new JSONArray();
+			json.put("tags", jsonArray);
+		}
+		
+		if((economics != null) || includeNullFields.contains(VideoFieldEnum.NAME)){
 			json.put("economics", economics);
 		}
+		
 		if(geoFilteredCountries != null){
 			JSONArray countryArray = new JSONArray();
 			for(GeoFilterCodeEnum country : geoFilteredCountries){
@@ -1859,6 +1924,11 @@ public class Video {
 			}
 			json.put("geoFilteredCountries", countryArray);
 		}
+		else if(includeNullFields.contains(VideoFieldEnum.GEOFILTEREDCOUNTRIES)){
+			JSONArray jsonArray = new JSONArray();
+			json.put("geoFilteredCountries", jsonArray);
+		}
+		
 		if(cuePoints != null){
 			JSONArray cuePointsJson = new JSONArray();
 			for(CuePoint cuePoint : cuePoints){
@@ -1867,6 +1937,11 @@ public class Video {
 			}
 			json.put("cuePoints", cuePointsJson);
 		}
+		else if(includeNullFields.contains(VideoFieldEnum.CUEPOINTS)){
+			JSONArray jsonArray = new JSONArray();
+			json.put("cuePoints", jsonArray);
+		}
+		
 		if(customFields != null){
 			JSONObject customFieldsJson = new JSONObject();
 			for(CustomField customField : customFields){
@@ -1875,6 +1950,10 @@ public class Video {
 				}
 			}
 			json.put("customFields", customFieldsJson);
+		}
+		else if(includeNullFields.contains(VideoFieldEnum.CUSTOMFIELDS)){
+			JSONArray jsonArray = new JSONArray();
+			json.put("customFields", jsonArray);
 		}
 		
 		return json;

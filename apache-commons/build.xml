@@ -2,6 +2,12 @@
 <project default="main">
 	<property name="http-client-version" value="4.0.3"/>
 	<property name="http-client-package" value="httpcomponents-client-${http-client-version}"/>
+	<property name="http-core-version" value="4.1"/>
+	<property name="http-core-package" value="httpcomponents-core-${http-core-version}"/>
+	<property name="mime4j-version" value="0.6.1"/>
+	<property name="mime4j-package" value="apache-mime4j-${mime4j-version}"/>
+	<property name="io-version" value="2.0.1"/>
+	<property name="io-package" value="commons-io-${io-version}"/>
 	
 	<target name="main" depends="prepare, clean, extract, repackage" description="Main target">
 		<echo>Full build complete.</echo>
@@ -23,6 +29,18 @@
 		<unzip src="download/${http-client-package}-bin.zip" dest="release"/>
 	</target>
 	
+	<target name="extract-httpcore" description="Extracts the necessary libs from the Apache HTTP Components Core download">
+		<unzip src="download/${http-core-package}-bin.zip" dest="release"/>
+	</target>
+	
+	<target name="extract-mime4j" description="Extracts the necessary libs from the Apache James Mime4j download">
+		<unzip src="download/${mime4j-package}-bin.zip" dest="release"/>
+	</target>
+	
+	<target name="extract-io" description="Extracts the necessary libs from the Apache IO Commons download">
+		<unzip src="download/${io-package}-bin.zip" dest="release"/>
+	</target>
+	
 	<target name="repackage-httpclient" description="Repackages necessary libs from the Apache HTTP Components to remove unneeded files">
 		<move todir="release">
 			<fileset dir="release/${http-client-package}/lib" includes="*.jar"/>
@@ -36,11 +54,62 @@
 		<delete dir="release/${http-client-package}"/>
 	</target>
 	
-	<target name="extract" description="Extracts downloaded libraries" depends="extract-httpclient">
+	<target name="repackage-httpcore" description="Repackages necessary libs from the Apache HTTP Components to remove unneeded files">
+		<move todir="release">
+			<fileset dir="release/${http-core-package}/lib" includes="*.jar"/>
+		</move>
+		
+		<mkdir dir="release/${http-core-package}-license"/>
+		<move todir="release/${http-core-package}-license">
+			<fileset dir="release/${http-core-package}" includes="*.txt"/>
+		</move>
+		
+		<delete dir="release/${http-core-package}"/>
+	</target>
+	
+	<target name="repackage-mime4j" description="Repackages necessary libs from the Apache James Mime4j to remove unneeded files">
+		<move todir="release">
+			<fileset dir="release/${mime4j-package}/lib" includes="*.jar"/>
+		</move>
+		<move todir="release">
+			<fileset dir="release/${mime4j-package}" includes="*.jar"/>
+		</move>
+		
+		<mkdir dir="release/${mime4j-package}-license"/>
+		<move todir="release/${mime4j-package}-license">
+			<fileset dir="release/${mime4j-package}" includes="*.txt"/>
+		</move>
+		<move todir="release/${mime4j-package}-license">
+			<fileset dir="release/${mime4j-package}" includes="DEPENDENCIES"/>
+		</move>
+		<move todir="release/${mime4j-package}-license">
+			<fileset dir="release/${mime4j-package}" includes="LICENSE"/>
+		</move>
+		<move todir="release/${mime4j-package}-license">
+			<fileset dir="release/${mime4j-package}" includes="NOTICE"/>
+		</move>
+		
+		<delete dir="release/${mime4j-package}"/>
+	</target>
+	
+	<target name="repackage-io" description="Repackages necessary libs from the Apache IO Commons to remove unneeded files">
+		<move todir="release">
+			<fileset dir="release/${io-package}" includes="${io-package}.jar"/>
+		</move>
+		
+		<mkdir dir="release/${io-package}-license"/>
+		<move todir="release/${io-package}-license">
+			<fileset dir="release/${io-package}" includes="*.txt"/>
+		</move>
+		
+		<delete dir="release/${io-package}"/>
+	</target>
+	
+	<target name="extract" description="Extracts downloaded libraries" depends="extract-httpclient, extract-httpcore, extract-mime4j, extract-io">
 		<echo>Downloaded packages extracted.</echo>
 	</target>
 	
-	<target name="repackage" description="Repackages extracted libraries" depends="repackage-httpclient">
+	<target name="repackage" description="Repackages extracted libraries" depends="repackage-httpclient, repackage-httpcore, repackage-mime4j, repackage-io">
 		<echo>Extracted libraries repackaged.</echo>
 	</target>
 </project>

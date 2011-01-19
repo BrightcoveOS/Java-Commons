@@ -18,3 +18,12 @@ collection-utils/.classpath
 collection-utils/.project
 collection-utils/.settings/
 collection-utils/release/
+http-utils/.classpath
+http-utils/.project
+http-utils/.settings/
+http-utils/release/
+http-utils/bin/com
+release-build/.classpath
+release-build/.project
+release-build/.settings/
+release-build/release/
