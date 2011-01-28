@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<project default="main">
+	<property name="release-package-name" value="bc-commons-system-utils"/>
+	<property name="release-package-version" value="3.0"/>
+	
+	<target name="main" depends="prepare, clean, compile, javadoc, release" description="Main target">
+		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="prepare" description="Prepare target">
+		<echo>Preparing project:</echo>
+		<mkdir dir="bin"/>
+		<mkdir dir="release"/>
+		<mkdir dir="javadoc"/>
+	</target>
+	
+	<target name="clean" description="Clean target">
+		<echo>Cleaning project:</echo>
+		<delete>
+			<fileset dir="release" includes="**/*"/>
+			<fileset dir="javadoc" includes="**/*"/>
+		</delete>
+		<delete dir="bin/com" />
+	</target>
+	
+	<target name="compile" description="Compilation target">
+		<echo>Compiling source code:</echo>
+		<javac debug="on" srcdir="src" destdir="bin" includes="**/*">
+			<!-- <classpath refid="build.class.path" /> -->
+		</javac>
+	</target>
+	
+	<target name="javadoc" description="JavaDoc target">
+		<javadoc packagenames="com.*"
+			sourcepath="src"
+			defaultexcludes="yes"
+			destdir="javadoc"
+			author="true"
+			version="true"
+			use="true"
+			windowtitle="${release-package-name} - v${release-package-version}">
+				<doctitle><![CDATA[<h1>com.brightcove.commons.system</h1>]]></doctitle>
+				<bottom><![CDATA[<i>http://opensource.brightcove.com/.</i>]]></bottom>
+		</javadoc>
+	</target>
+	
+	<target name="release" description="Compression target">
+		<echo>Building jar file:</echo>
+		<jar jarfile="release/${release-package-name}-${release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
+			<fileset dir="bin" includes="**/*"/>
+			<fileset dir="src" includes="**/*"/>
+		</jar>
+	</target>
+</project>

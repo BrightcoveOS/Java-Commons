@@ -32,11 +32,15 @@
 		<ant dir="../http-utils"/>
 	</target>
 	
+	<target name="system-utils" description="Release Brightcove System Utils libraries">
+		<ant dir="../system-utils"/>
+	</target>
+	
 	<target name="bc-catalog-objects" description="Release Brightcove Catalog Objects libraries">
 		<ant dir="../bc-catalog-objects"/>
 	</target>
 	
-	<target name="release" description="Release all commons libraries" depends="json-org, apache-commons, collection-utils, http-utils, bc-catalog-objects">
+	<target name="release" description="Release all commons libraries" depends="json-org, apache-commons, collection-utils, http-utils, system-utils, bc-catalog-objects">
 		<echo>Sub-projects released, compiling together:</echo>
 		<copy todir="release">
 			<fileset dir="../json-org/release">
@@ -49,6 +53,9 @@
 				<include name="**/*"/>
 			</fileset>
 			<fileset dir="../http-utils/release">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="../system-utils/release">
 				<include name="**/*"/>
 			</fileset>
 			<fileset dir="../bc-catalog-objects/release">
