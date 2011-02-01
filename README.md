@@ -2,7 +2,7 @@ About
 =====
 
 This project provides common classes and utilities for use in other Java
-projects.  This may include 3rd party libraries as well as Brightcove Open
+projects. This may include 3rd party libraries as well as Brightcove Open
 Source libraries.
 
 Requirements
@@ -117,11 +117,3 @@ This package doesn't contain any libraries itself.  It contains scripts and conf
 Dependencies: 
  
 - None
-
-Support
-=======
-
-Please note that Open Source Initiative projects are **not** supported by
-Brightcove and all questions, comments or issues should be reported through
-the appropriate OSI channels. Brightcove Customer Support will **not**
-assist you with any Open Source Initiative projects or integrations.
