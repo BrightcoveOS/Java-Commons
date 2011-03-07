@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project default="main">
 	<property name="release-package-name" value="bc-commons-http-utils"/>
-	<property name="release-package-version" value="3.0"/>
+	<property name="release-package-version" value="3.0.3"/>
 	<property name="apache-http-core-jar" value="../apache-commons/release/httpcore-4.1.jar"/>
 	<property name="apache-commons-io-jar" value="../apache-commons/release/commons-io-2.0.1.jar"/>
 	

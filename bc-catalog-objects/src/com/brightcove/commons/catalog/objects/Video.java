@@ -1812,27 +1812,57 @@ public class Video {
 		}
 		
 		if((creationDate != null) || includeNullFields.contains(VideoFieldEnum.CREATIONDATE)){
-			json.put("creationDate", creationDate.getTime());
+			if(creationDate != null){
+				json.put("creationDate", creationDate.getTime());
+			}
+			else{
+				json.put("creationDate", "");
+			}
 		}
 		
 		if((publishedDate != null) || includeNullFields.contains(VideoFieldEnum.PUBLISHEDDATE)){
-			json.put("publishedDate", publishedDate.getTime());
+			if(publishedDate != null){
+				json.put("publishedDate", publishedDate.getTime());
+			}
+			else{
+				json.put("publishedDate", "");
+			}
 		}
 		
 		if((lastModifiedDate != null) || includeNullFields.contains(VideoFieldEnum.LASTMODIFIEDDATE)){
-			json.put("lastModifiedDate", lastModifiedDate.getTime());
+			if(lastModifiedDate != null){
+				json.put("lastModifiedDate", lastModifiedDate.getTime());
+			}
+			else{
+				json.put("lastModifiedDate", "");
+			}
 		}
 		
 		if((releaseDate != null) || includeNullFields.contains(VideoFieldEnum.RELEASEDATE)){
-			json.put("releaseDate", releaseDate.getTime());
+			if(releaseDate != null){
+				json.put("releaseDate", releaseDate.getTime());
+			}
+			else{
+				json.put("releaseDate", "");
+			}
 		}
 		
 		if((startDate != null) || includeNullFields.contains(VideoFieldEnum.STARTDATE)){
-			json.put("startDate", startDate.getTime());
+			if(startDate != null){
+				json.put("startDate", startDate.getTime());
+			}
+			else{
+				json.put("startDate", "");
+			}
 		}
 		
 		if((endDate != null) || includeNullFields.contains(VideoFieldEnum.ENDDATE)){
-			json.put("endDate", endDate.getTime());
+			if(endDate != null){
+				json.put("endDate", endDate.getTime());
+			}
+			else{
+				json.put("endDate", "");
+			}
 		}
 		
 		if((linkUrl != null) || includeNullFields.contains(VideoFieldEnum.LINKURL)){

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project default="main">
 	<property name="release-package-name" value="bc-commons-system-utils"/>
-	<property name="release-package-version" value="3.0"/>
+	<property name="release-package-version" value="3.0.3"/>
 	
 	<target name="main" depends="prepare, clean, compile, javadoc, release" description="Main target">
 		<echo>Full build complete.</echo>

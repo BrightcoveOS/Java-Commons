@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project default="main">
 	<property name="release-package-name" value="bc-commons-catalog-objects"/>
-	<property name="release-package-version" value="3.0"/>
+	<property name="release-package-version" value="3.0.3"/>
 	<property name="json-org-jar" value="../json-org/release/json-org.jar"/>
 	
 	<path id="project.class.path">
