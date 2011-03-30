@@ -122,7 +122,7 @@ public class Playlist {
 				name = (String)rootValue;
 			}
 			else if("id".equals(rootKey)){
-				id = (Long)rootValue;
+				id = jsonObj.getLong(rootKey);
 			}
 			else if("accountId".equals(rootKey)){
 				Long rootLong = jsonObj.getLong(rootKey);

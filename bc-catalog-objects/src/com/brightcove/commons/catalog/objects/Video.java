@@ -1816,7 +1816,7 @@ public class Video {
 				json.put("creationDate", creationDate.getTime());
 			}
 			else{
-				json.put("creationDate", "");
+				json.put("creationDate", JSONObject.NULL);
 			}
 		}
 		
@@ -1825,7 +1825,7 @@ public class Video {
 				json.put("publishedDate", publishedDate.getTime());
 			}
 			else{
-				json.put("publishedDate", "");
+				json.put("publishedDate", JSONObject.NULL);
 			}
 		}
 		
@@ -1834,7 +1834,7 @@ public class Video {
 				json.put("lastModifiedDate", lastModifiedDate.getTime());
 			}
 			else{
-				json.put("lastModifiedDate", "");
+				json.put("lastModifiedDate", JSONObject.NULL);
 			}
 		}
 		
@@ -1843,7 +1843,7 @@ public class Video {
 				json.put("releaseDate", releaseDate.getTime());
 			}
 			else{
-				json.put("releaseDate", "");
+				json.put("releaseDate", JSONObject.NULL);
 			}
 		}
 		
@@ -1852,7 +1852,7 @@ public class Video {
 				json.put("startDate", startDate.getTime());
 			}
 			else{
-				json.put("startDate", "");
+				json.put("startDate", JSONObject.NULL);
 			}
 		}
 		
@@ -1861,7 +1861,7 @@ public class Video {
 				json.put("endDate", endDate.getTime());
 			}
 			else{
-				json.put("endDate", "");
+				json.put("endDate", JSONObject.NULL);
 			}
 		}
 		
