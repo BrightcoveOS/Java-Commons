@@ -20,6 +20,7 @@ Downloads
 This release adds quite a few new libraries (and may actually be released as 3.1 rather than 3.0.5).
 
 The primary additions are:
+
 - FTP Utils - a set of utilities for uploading files to an FTP server
 - Misc Utils - a set of utilities that could not be classified elsewhere
 - XML Utils - a set of utilities for working with XML files
@@ -36,6 +37,7 @@ Individual Packages (3rd Party):
 - [3rd Party - Xalan-J for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-3.0.5-beta.zip)
 
 Individual Packages (BC Commons):
+
 - [BC Commons - XML Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-xml-utils-3.0.5-beta.jar)
 - [BC Commons - System Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-system-utils-3.0.5-beta.jar)
 - [BC Commons - Misc Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-misc-utils-3.0.5-beta.jar)
@@ -45,6 +47,7 @@ Individual Packages (BC Commons):
 - [BC Commons - Catalog Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-catalog-objects-3.0.5-beta.jar)
 
 Individual Packages (Examples):
+
 - [BC Commons - Examples v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-3.0.5-beta.zip)
 
 **Version 3.0.4**:
