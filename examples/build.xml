@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!DOCTYPE project [
+	<!ENTITY common SYSTEM "../release-build/common.xml">
+]>
+<project default="main">
+	<!-- Include any common properties / declarations -->
+	&common;
+	
+	<property name="release-package-name" value="bc-commons-examples"/>
+	
+	<target name="main" depends="prepare, clean, release" description="Main target">
+		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="release" description="Compression target">
+		<echo>Building zip file:</echo>
+		
+		<zip destfile="release/${release-package-name}-${common-release-package-version}.zip">
+			<fileset dir="." includes="src/**"/>
+			<fileset dir="." includes="config/**"/>
+		</zip>
+	</target>
+</project>

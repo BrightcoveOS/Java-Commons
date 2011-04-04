@@ -1,19 +1,15 @@
 <?xml version="1.0" ?>
+<!DOCTYPE project [
+	<!ENTITY common SYSTEM "./common.xml">
+]>
 <project default="main">
-	<target name="main" depends="prepare, clean, release" description="Main target">
+	<!-- Include any common properties / declarations -->
+	&common;
+	
+	<property name="global-release-package-name" value="bc-commons"/>
+	
+	<target name="main" depends="prepare, clean, release, rezip-all-packages" description="Main target">
 		<echo>Full build complete.</echo>
-	</target>
-	
-	<target name="prepare" description="Prepare target">
-		<echo>Preparing project:</echo>
-		<mkdir dir="release"/>
-	</target>
-	
-	<target name="clean" description="Clean target">
-		<echo>Cleaning project:</echo>
-		<delete>
-			<fileset dir="release" includes="**/*"/>
-		</delete>
 	</target>
 	
 	<target name="json-org" description="Release json.org libraries">
@@ -22,6 +18,10 @@
 	
 	<target name="apache-commons" description="Release Apache Commons libraries">
 		<ant dir="../apache-commons"/>
+	</target>
+	
+	<target name="xalan" description="Release Xalan libraries">
+		<ant dir="../xalan"/>
 	</target>
 	
 	<target name="collection-utils" description="Release Brightcove Collection Utils libraries">
@@ -36,11 +36,31 @@
 		<ant dir="../system-utils"/>
 	</target>
 	
+	<target name="misc-utils" description="Release Brightcove Misc Utils libraries">
+		<ant dir="../misc-utils"/>
+	</target>
+	
+	<target name="xml-utils" description="Release Brightcove XML Utils libraries" depends="xalan">
+		<ant dir="../xml-utils"/>
+	</target>
+	
+	<target name="ftp-utils" description="Release Brightcove FTP Utils libraries" depends="xml-utils">
+		<ant dir="../ftp-utils"/>
+	</target>
+	
 	<target name="bc-catalog-objects" description="Release Brightcove Catalog Objects libraries">
 		<ant dir="../bc-catalog-objects"/>
 	</target>
 	
-	<target name="release" description="Release all commons libraries" depends="json-org, apache-commons, collection-utils, http-utils, system-utils, bc-catalog-objects">
+	<target name="examples" description="Release Brightcove Commons examples">
+		<ant dir="../examples"/>
+	</target>
+	
+	<target
+		name="release"
+		description="Release all commons libraries"
+		depends="json-org, apache-commons, collection-utils, http-utils, system-utils, misc-utils, xml-utils, ftp-utils, bc-catalog-objects, examples"
+	>
 		<echo>Sub-projects released, compiling together:</echo>
 		<copy todir="release">
 			<fileset dir="../json-org/release">
@@ -58,9 +78,34 @@
 			<fileset dir="../system-utils/release">
 				<include name="**/*"/>
 			</fileset>
+			<fileset dir="../xalan/release">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="../xml-utils/release">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="../misc-utils/release">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="../ftp-utils/release">
+				<include name="**/*"/>
+			</fileset>
 			<fileset dir="../bc-catalog-objects/release">
 				<include name="**/*"/>
 			</fileset>
+			<fileset dir="../examples/release">
+				<include name="**/*"/>
+			</fileset>
 		</copy>
+	</target>
+	
+	<target name="rezip-all-packages">
+		<zip destfile="release/${global-release-package-name}-${common-release-package-version}.zip"
+			basedir="release"
+			update="true"
+			excludes="**/*.zip"
+		>
+			<fileset dir="release" includes="bc-commons-examples-*.zip"/>
+		</zip>
 	</target>
 </project>

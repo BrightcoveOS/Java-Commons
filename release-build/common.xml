@@ -1,0 +1,19 @@
+	<property name="common-release-package-version" value="3.0.5-beta"/>
+	
+	<target name="prepare" description="Prepare target">
+		<echo>Preparing project:</echo>
+		<mkdir dir="bin"/>
+		<mkdir dir="release"/>
+		<mkdir dir="javadoc"/>
+	</target>
+	
+	<target name="clean" description="Clean target">
+		<echo>Cleaning project:</echo>
+		<delete>
+			<fileset dir="release" includes="**/*"/>
+			<fileset dir="javadoc" includes="**/*"/>
+		</delete>
+		<delete dir="bin/com" />
+		<delete dir="bin/org" />
+	</target>
+	

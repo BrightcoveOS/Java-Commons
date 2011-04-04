@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<!DOCTYPE project [
+	<!ENTITY common SYSTEM "../release-build/common.xml">
+]>
+<project default="main">
+	<!-- Include any common properties / declarations -->
+	&common;
+	
+	<property name="xalan-version" value="2_7_1"/>
+	<property name="xalan-package" value="xalan-j_${xalan-version}"/>
+	
+	<target name="main" depends="prepare, clean, extract, repackage, rezip-all-packages" description="Main target">
+		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="extract-xalan" description="Extracts the necessary libs from the Xalan download">
+		<unzip src="download/${xalan-package}-bin.zip" dest="release"/>
+	</target>
+	
+	<target name="repackage-xalan" description="Repackages necessary libs from the Xalan extraction to remove unneeded files">
+		<move todir="release">
+			<fileset dir="release/${xalan-package}" includes="*.jar"/>
+		</move>
+		
+		<mkdir dir="release/${xalan-package}-license"/>
+		<move todir="release/${xalan-package}-license">
+			<fileset dir="release/${xalan-package}" includes="*.txt"/>
+		</move>
+		<move todir="release/${xalan-package}-license">
+			<fileset dir="release/${xalan-package}" includes="*.html"/>
+		</move>
+		
+		<delete dir="release/${xalan-package}"/>
+	</target>
+	
+	<target name="extract" description="Extracts downloaded libraries" depends="extract-xalan">
+		<echo>Downloaded packages extracted.</echo>
+	</target>
+	
+	<target name="repackage" description="Repackages extracted libraries" depends="repackage-xalan">
+		<echo>Extracted libraries repackaged.</echo>
+	</target>
+	
+	<target name="rezip-all-packages">
+		<zip destfile="release/xalan-bcver-${common-release-package-version}.zip"
+			basedir="release"
+			update="true"
+			excludes="**/*.zip"
+		/>
+	</target>
+</project>

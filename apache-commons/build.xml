@@ -1,5 +1,11 @@
 <?xml version="1.0" ?>
+<!DOCTYPE project [
+	<!ENTITY common SYSTEM "../release-build/common.xml">
+]>
 <project default="main">
+	<!-- Include any common properties / declarations -->
+	&common;
+	
 	<property name="http-client-version" value="4.0.3"/>
 	<property name="http-client-package" value="httpcomponents-client-${http-client-version}"/>
 	<property name="http-core-version" value="4.1"/>
@@ -8,21 +14,11 @@
 	<property name="mime4j-package" value="apache-mime4j-${mime4j-version}"/>
 	<property name="io-version" value="2.0.1"/>
 	<property name="io-package" value="commons-io-${io-version}"/>
+	<property name="net-version" value="2.2"/>
+	<property name="net-package" value="commons-net-${net-version}"/>
 	
-	<target name="main" depends="prepare, clean, extract, repackage" description="Main target">
+	<target name="main" depends="prepare, clean, extract, repackage, rezip-all-packages" description="Main target">
 		<echo>Full build complete.</echo>
-	</target>
-	
-	<target name="prepare" description="Prepare target">
-		<echo>Preparing project:</echo>
-		<mkdir dir="release"/>
-	</target>
-	
-	<target name="clean" description="Clean target">
-		<echo>Cleaning project:</echo>
-		<delete includeemptydirs="true">
-			<fileset dir="release" includes="**/*"/>
-		</delete>
 	</target>
 	
 	<target name="extract-httpclient" description="Extracts the necessary libs from the Apache HTTP Components Client download">
@@ -39,6 +35,10 @@
 	
 	<target name="extract-io" description="Extracts the necessary libs from the Apache IO Commons download">
 		<unzip src="download/${io-package}-bin.zip" dest="release"/>
+	</target>
+	
+	<target name="extract-net" description="Extracts the necessary libs from the Apache Commons Net download">
+		<unzip src="download/${net-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="repackage-httpclient" description="Repackages necessary libs from the Apache HTTP Components to remove unneeded files">
@@ -105,11 +105,35 @@
 		<delete dir="release/${io-package}"/>
 	</target>
 	
-	<target name="extract" description="Extracts downloaded libraries" depends="extract-httpclient, extract-httpcore, extract-mime4j, extract-io">
+	<target name="repackage-net" description="Repackages necessary libs from the Apache Commons Net to remove unneeded files">
+		<move todir="release">
+			<fileset dir="release/${net-package}" includes="${net-package}.jar"/>
+		</move>
+		
+		<mkdir dir="release/${net-package}-license"/>
+		<move todir="release/${net-package}-license">
+			<fileset dir="release/${net-package}" includes="*.txt"/>
+		</move>
+		<move todir="release/${net-package}-license">
+			<fileset dir="release/${net-package}" includes="README"/>
+		</move>
+		
+		<delete dir="release/${net-package}"/>
+	</target>
+	
+	<target name="rezip-all-packages">
+		<zip destfile="release/apache-commons-bcver-${common-release-package-version}.zip"
+			basedir="release"
+			update="true"
+			excludes="**/*.zip"
+		/>
+	</target>
+	
+	<target name="extract" description="Extracts downloaded libraries" depends="extract-httpclient, extract-httpcore, extract-mime4j, extract-io, extract-net">
 		<echo>Downloaded packages extracted.</echo>
 	</target>
 	
-	<target name="repackage" description="Repackages extracted libraries" depends="repackage-httpclient, repackage-httpcore, repackage-mime4j, repackage-io">
+	<target name="repackage" description="Repackages extracted libraries" depends="repackage-httpclient, repackage-httpcore, repackage-mime4j, repackage-io, repackage-net">
 		<echo>Extracted libraries repackaged.</echo>
 	</target>
 </project>

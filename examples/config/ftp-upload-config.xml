@@ -1,0 +1,44 @@
+<config>
+	<setting name="FTP_UPLOAD_SERVER">
+		<value>upload.brightcove.com</value>
+	</setting>
+	<setting name="FTP_UPLOAD_PORT">
+		<value>21</value>
+	</setting>
+	<setting name="FTP_UPLOAD_USER">
+		<value>foo</value>
+	</setting>
+	<setting name="FTP_UPLOAD_PASSWORD">
+		<value>bar</value>
+	</setting>
+	<setting name="FTP_UPLOAD_LOCAL_DIRECTORY">
+		<value>/home/myname/ingest/data/upload-stage</value>
+	</setting>
+	<setting name="FTP_UPLOAD_LOCAL_REGEX">
+		<value>\.flv$|\.jpg$</value>
+	</setting>
+	<!--
+	<setting name="FTP_UPLOAD_LOCAL_FILE">
+		<value>my-video.flv</value>
+	</setting>
+	-->
+	<setting name="FTP_UPLOAD_REMOTE_DIRECTORY">
+		<value>/</value>
+	</setting>
+	<setting name="FTP_UPLOAD_SKIP">
+		<value>FALSE</value>
+	</setting>
+	<setting name="FTP_UPLOAD_REMOVE_SOURCE">
+		<value>FALSE</value>
+	</setting>
+	<setting name="FTP_UPLOAD_USE_PASSIVE_TRANSFER">
+		<value>TRUE</value>
+	</setting>
+	<setting name="FTP_UPLOAD_DEBUG">
+		<value>TRUE</value>
+	</setting>
+	<setting name="FTP_UPLOAD_TIMEOUT_MILLISECONDS">
+		<!--  20 minutes -->
+		<value>1200000</value>
+	</setting>
+</config>

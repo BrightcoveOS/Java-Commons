@@ -15,6 +15,38 @@ of this.
 Downloads
 =========
 
+**BETA RELEASE - Version 3.0.5-beta**:
+
+This release adds quite a few new libraries (and may actually be released as 3.1 rather than 3.0.5).
+
+The primary additions are:
+- FTP Utils - a set of utilities for uploading files to an FTP server
+- Misc Utils - a set of utilities that could not be classified elsewhere
+- XML Utils - a set of utilities for working with XML files
+- Xalan - Repackaged Xalan-J libraries for working with XML files
+
+Full Download:
+
+- [BC Commons v3.0.5-beta](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-3.0.5-beta.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-3.0.5-beta.zip)
+- [3rd Party - JSON.org for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-3.0.5-beta.zip)
+- [3rd Party - Xalan-J for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-3.0.5-beta.zip)
+
+Individual Packages (BC Commons):
+- [BC Commons - XML Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-xml-utils-3.0.5-beta.jar)
+- [BC Commons - System Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-system-utils-3.0.5-beta.jar)
+- [BC Commons - Misc Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-misc-utils-3.0.5-beta.jar)
+- [BC Commons - HTTP Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-http-utils-3.0.5-beta.jar)
+- [BC Commons - FTP Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-ftp-utils-3.0.5-beta.jar)
+- [BC Commons - Collection Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-collection-utils-3.0.5-beta.jar)
+- [BC Commons - Catalog Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-catalog-objects-3.0.5-beta.jar)
+
+Individual Packages (Examples):
+- [BC Commons - Examples v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-3.0.5-beta.zip)
+
 **Version 3.0.4**:
 
 This version fixes a few bugs in the BC Commons - Catalog Objects package.
@@ -88,12 +120,20 @@ Dependencies:
  
 - None
 
-Package - (3rd party) xalan
-===========================
+Package - (3rd party) Xalan-J
+====================================
 
-This package will include the Xalan libraries from release version 2.7.1.
+This package includes repackaged Xalan-J libraries for working with XML
 
-This package has not yet been released.
+These can all be downloaded from directly from the source if preferred: 
+ 
+- [Xalan-J](http://xml.apache.org/xalan-j/downloads.html)
+
+The versions stored here will be stripped down to just what is needed (plus any legal / license notifications)
+
+Dependencies: 
+ 
+- None
 
 Package - bc-catalog-objects
 ============================
@@ -115,6 +155,16 @@ Dependencies:
  
 - None
 
+Package - ftp-utils
+====================
+
+This package includes classes to make working with FTP servers easier.
+
+Dependencies: 
+ 
+- Xalan-J
+- BC Commons - XML Utils (used for config files)
+
 Package - http-utils
 ====================
 
@@ -125,6 +175,17 @@ Dependencies:
 - Apache HTTP Components (core)
 - Apache Commons IO
 
+Package - misc-utils
+====================
+
+This package includes miscellaneous classes that could not easily be fit into another package.
+
+E.g. Date/Time utils, String utils, Object comparison utils
+
+Dependencies: 
+ 
+- None
+
 Package - system-utils
 ==========================
 
@@ -133,6 +194,24 @@ This package includes classes to make working with the underlying system (e.g. s
 Dependencies: 
  
 - None
+
+Package - xml-utils
+====================
+
+This package includes classes to make working with XML objects (especially XML files) easier.
+
+Dependencies: 
+ 
+- Xalan-J
+
+Package - examples
+====================
+
+This package includes examples for working with the other BC Commons packages.
+
+Dependencies: 
+ 
+- *.*
 
 Package - release-build
 ==========================
