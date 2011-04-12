@@ -15,40 +15,22 @@ of this.
 Downloads
 =========
 
-**BETA RELEASE - Version 3.0.5-beta**:
+**Version 3.0.5**:
 
-This release adds quite a few new libraries (and may actually be released as 3.1 rather than 3.0.5).
-
-The primary additions are:
-
-- FTP Utils - a set of utilities for uploading files to an FTP server
-- Misc Utils - a set of utilities that could not be classified elsewhere
-- XML Utils - a set of utilities for working with XML files
-- Xalan - Repackaged Xalan-J libraries for working with XML files
+This version fixes a bug in CuePoint in the BC Commons - Catalog Objects package.
 
 Full Download:
 
-- [BC Commons v3.0.5-beta](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-3.0.5-beta.zip)
+- [BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-3.0.5.zip)
 
-Individual Packages (3rd Party):
+Individual Packages:
 
-- [3rd Party - Apache Commons for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-3.0.5-beta.zip)
-- [3rd Party - JSON.org for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-3.0.5-beta.zip)
-- [3rd Party - Xalan-J for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-3.0.5-beta.zip)
-
-Individual Packages (BC Commons):
-
-- [BC Commons - XML Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-xml-utils-3.0.5-beta.jar)
-- [BC Commons - System Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-system-utils-3.0.5-beta.jar)
-- [BC Commons - Misc Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-misc-utils-3.0.5-beta.jar)
-- [BC Commons - HTTP Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-http-utils-3.0.5-beta.jar)
-- [BC Commons - FTP Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-ftp-utils-3.0.5-beta.jar)
-- [BC Commons - Collection Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-collection-utils-3.0.5-beta.jar)
-- [BC Commons - Catalog Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-catalog-objects-3.0.5-beta.jar)
-
-Individual Packages (Examples):
-
-- [BC Commons - Examples v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-3.0.5-beta.zip)
+- [3rd Party - Apache Commons for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-3.0.5.zip)
+- [3rd Party - JSON.org for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-3.0.5.zip)
+- [BC Commons - Catalog Objects v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-catalog-objects-3.0.5.jar)
+- [BC Commons - Collection Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-collection-utils-3.0.5.jar)
+- [BC Commons - HTTP Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-http-utils-3.0.5.jar)
+- [BC Commons - System Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-system-utils-3.0.5.jar)
 
 **Version 3.0.4**:
 
