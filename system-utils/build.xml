@@ -1,26 +1,15 @@
 <?xml version="1.0" ?>
+<!DOCTYPE project [
+	<!ENTITY common SYSTEM "../release-build/common.xml">
+]>
 <project default="main">
+	<!-- Include any common properties / declarations -->
+	&common;
+	
 	<property name="release-package-name" value="bc-commons-system-utils"/>
-	<property name="release-package-version" value="3.0.4"/>
 	
 	<target name="main" depends="prepare, clean, compile, javadoc, release" description="Main target">
 		<echo>Full build complete.</echo>
-	</target>
-	
-	<target name="prepare" description="Prepare target">
-		<echo>Preparing project:</echo>
-		<mkdir dir="bin"/>
-		<mkdir dir="release"/>
-		<mkdir dir="javadoc"/>
-	</target>
-	
-	<target name="clean" description="Clean target">
-		<echo>Cleaning project:</echo>
-		<delete>
-			<fileset dir="release" includes="**/*"/>
-			<fileset dir="javadoc" includes="**/*"/>
-		</delete>
-		<delete dir="bin/com" />
 	</target>
 	
 	<target name="compile" description="Compilation target">
@@ -38,7 +27,7 @@
 			author="true"
 			version="true"
 			use="true"
-			windowtitle="${release-package-name} - v${release-package-version}">
+			windowtitle="${release-package-name} - v${common-release-package-version}">
 				<doctitle><![CDATA[<h1>com.brightcove.commons.system</h1>]]></doctitle>
 				<bottom><![CDATA[<i>http://opensource.brightcove.com/.</i>]]></bottom>
 		</javadoc>
@@ -46,7 +35,7 @@
 	
 	<target name="release" description="Compression target">
 		<echo>Building jar file:</echo>
-		<jar jarfile="release/${release-package-name}-${release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
+		<jar jarfile="release/${release-package-name}-${common-release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
 			<fileset dir="bin" includes="**/*"/>
 			<fileset dir="src" includes="**/*"/>
 		</jar>

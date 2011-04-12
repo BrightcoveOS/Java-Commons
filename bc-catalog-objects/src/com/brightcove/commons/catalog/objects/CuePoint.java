@@ -454,7 +454,7 @@ public class CuePoint {
 			json.put("forceStop", forceStop);
 		}
 		if(type != null){
-			json.put("type", type);
+			json.put("type", type.getCode());
 		}
 		if(metadata != null){
 			json.put("metadata", metadata);

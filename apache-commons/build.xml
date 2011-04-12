@@ -1,5 +1,11 @@
 <?xml version="1.0" ?>
+<!DOCTYPE project [
+	<!ENTITY common SYSTEM "../release-build/common.xml">
+]>
 <project default="main">
+	<!-- Include any common properties / declarations -->
+	&common;
+	
 	<property name="http-client-version" value="4.0.3"/>
 	<property name="http-client-package" value="httpcomponents-client-${http-client-version}"/>
 	<property name="http-core-version" value="4.1"/>
@@ -9,20 +15,8 @@
 	<property name="io-version" value="2.0.1"/>
 	<property name="io-package" value="commons-io-${io-version}"/>
 	
-	<target name="main" depends="prepare, clean, extract, repackage" description="Main target">
+	<target name="main" depends="prepare, clean, extract, repackage, rezip-all-packages" description="Main target">
 		<echo>Full build complete.</echo>
-	</target>
-	
-	<target name="prepare" description="Prepare target">
-		<echo>Preparing project:</echo>
-		<mkdir dir="release"/>
-	</target>
-	
-	<target name="clean" description="Clean target">
-		<echo>Cleaning project:</echo>
-		<delete includeemptydirs="true">
-			<fileset dir="release" includes="**/*"/>
-		</delete>
 	</target>
 	
 	<target name="extract-httpclient" description="Extracts the necessary libs from the Apache HTTP Components Client download">
@@ -111,5 +105,13 @@
 	
 	<target name="repackage" description="Repackages extracted libraries" depends="repackage-httpclient, repackage-httpcore, repackage-mime4j, repackage-io">
 		<echo>Extracted libraries repackaged.</echo>
+	</target>
+	
+	<target name="rezip-all-packages">
+		<zip destfile="release/apache-commons-bcver-${common-release-package-version}.zip"
+			basedir="release"
+			update="true"
+			excludes="**/*.zip"
+		/>
 	</target>
 </project>

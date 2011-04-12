@@ -1,19 +1,15 @@
 <?xml version="1.0" ?>
+<!DOCTYPE project [
+	<!ENTITY common SYSTEM "./common.xml">
+]>
 <project default="main">
-	<target name="main" depends="prepare, clean, release" description="Main target">
+	<!-- Include any common properties / declarations -->
+	&common;
+	
+	<property name="global-release-package-name" value="bc-commons"/>
+	
+	<target name="main" depends="prepare, clean, release, rezip-all-packages" description="Main target">
 		<echo>Full build complete.</echo>
-	</target>
-	
-	<target name="prepare" description="Prepare target">
-		<echo>Preparing project:</echo>
-		<mkdir dir="release"/>
-	</target>
-	
-	<target name="clean" description="Clean target">
-		<echo>Cleaning project:</echo>
-		<delete>
-			<fileset dir="release" includes="**/*"/>
-		</delete>
 	</target>
 	
 	<target name="json-org" description="Release json.org libraries">
@@ -62,5 +58,14 @@
 				<include name="**/*"/>
 			</fileset>
 		</copy>
+	</target>
+	
+	<target name="rezip-all-packages">
+		<zip destfile="release/${global-release-package-name}-${common-release-package-version}.zip"
+			basedir="release"
+			update="true"
+			excludes="**/*.zip"
+		>
+		</zip>
 	</target>
 </project>
