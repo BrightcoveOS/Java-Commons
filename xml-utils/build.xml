@@ -7,14 +7,20 @@
 	&common;
 	
 	<property name="release-package-name" value="bc-commons-xml-utils"/>
-	<property name="xalan-jar" value="../xalan/release/xalan.jar"/>
+	<property name="xalan-jar" value="../xalan/release/${common-release-package-version}/xalan.jar"/>
+	
+	<property name="release-dir" value="release/${common-release-package-version}"/>
 	
 	<path id="project.class.path">
 		<pathelement location="${xalan-jar}"/>
 	</path>
 	
-	<target name="main" depends="prepare, clean, compile, javadoc, release" description="Main target">
+	<target name="main" depends="prepare, clean, local-prepare, compile, javadoc, release" description="Main target">
 		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="local-prepare">
+		<mkdir dir="${release-dir}"/>
 	</target>
 	
 	<target name="compile" description="Compilation target">
@@ -41,7 +47,7 @@
 	
 	<target name="release" description="Compression target">
 		<echo>Building jar file ${release-package-name}-${common-release-package-version}.jar:</echo>
-		<jar jarfile="release/${release-package-name}-${common-release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
+		<jar jarfile="${release-dir}/${release-package-name}-${common-release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
 			<fileset dir="bin" includes="**/*"/>
 			<fileset dir="src" includes="**/*"/>
 		</jar>

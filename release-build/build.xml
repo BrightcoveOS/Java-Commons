@@ -6,106 +6,184 @@
 	<!-- Include any common properties / declarations -->
 	&common;
 	
-	<property name="global-release-package-name" value="bc-commons"/>
+	<property name="rb-release-package-name" value="bc-commons"/>
 	
-	<target name="main" depends="prepare, clean, release, rezip-all-packages" description="Main target">
+	<property name="rb-release-dir" value="release/bc-commons" />
+	<property name="rb-versioned-release-dir" value="${rb-release-dir}/${common-release-package-version}" />
+	<property name="rb-wd-release-dir" value="release/bc-commons-with-dep" />
+	<property name="rb-versioned-wd-release-dir" value="${rb-wd-release-dir}/${common-release-package-version}" />
+	
+	<target name="main" depends="prepare, clean, local-prepare, release" description="Main target">
 		<echo>Full build complete.</echo>
 	</target>
 	
-	<target name="json-org" description="Release json.org libraries">
+	<target name="local-prepare" depends="build-dependencies">
+		<mkdir dir="release/apache-commons"/>
+		<mkdir dir="release/json-org"/>
+		<mkdir dir="release/xalan"/>
+		<mkdir dir="release/bc-commons/${common-release-package-version}"/>
+		<mkdir dir="release/bc-commons-with-dep/${common-release-package-version}"/>
+		<mkdir dir="release/examples"/>
+	</target>
+	
+	<target name="build-dependencies" description="Build other projects we have dependencies on">
 		<ant dir="../json-org"/>
-	</target>
-	
-	<target name="apache-commons" description="Release Apache Commons libraries">
 		<ant dir="../apache-commons"/>
-	</target>
-	
-	<target name="xalan" description="Release Xalan libraries">
 		<ant dir="../xalan"/>
-	</target>
-	
-	<target name="collection-utils" description="Release Brightcove Collection Utils libraries">
 		<ant dir="../collection-utils"/>
-	</target>
-	
-	<target name="http-utils" description="Release Brightcove HTTP Utils libraries">
 		<ant dir="../http-utils"/>
-	</target>
-	
-	<target name="system-utils" description="Release Brightcove System Utils libraries">
 		<ant dir="../system-utils"/>
-	</target>
-	
-	<target name="misc-utils" description="Release Brightcove Misc Utils libraries">
 		<ant dir="../misc-utils"/>
-	</target>
-	
-	<target name="xml-utils" description="Release Brightcove XML Utils libraries" depends="xalan">
 		<ant dir="../xml-utils"/>
-	</target>
-	
-	<target name="ftp-utils" description="Release Brightcove FTP Utils libraries" depends="xml-utils">
 		<ant dir="../ftp-utils"/>
-	</target>
-	
-	<target name="bc-catalog-objects" description="Release Brightcove Catalog Objects libraries">
 		<ant dir="../bc-catalog-objects"/>
+		<ant dir="../examples"/>
 	</target>
 	
-	<target name="examples" description="Release Brightcove Commons examples">
-		<ant dir="../examples"/>
+	<target name="release-apache-commons" depends="build-dependencies">
+		<echo>Releasing Apache Commons...</echo>
+		<copy todir="release/apache-commons">
+			<fileset dir="../apache-commons/release">
+				<include name="**/*.zip"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="release-json-org" depends="build-dependencies">
+		<echo>Releasing JSON.org...</echo>
+		<copy todir="release/json-org">
+			<fileset dir="../json-org/release">
+				<include name="**/*.zip"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="release-xalan" depends="build-dependencies">
+		<echo>Releasing Xalan...</echo>
+		<copy todir="release/xalan">
+			<fileset dir="../xalan/release">
+				<include name="**/*.zip"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="release-bc-commons" depends="build-dependencies">
+		<echo>Releasing BC Commons...</echo>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../collection-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../http-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../system-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../xml-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../misc-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../ftp-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../bc-catalog-objects/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-release-dir}">
+			<fileset dir="../examples/release/" includes="**/*.zip" />
+		</copy>
+	</target>
+	
+	<target name="release-bc-examples" depends="build-dependencies">
+		<echo>Releasing BC Commons Examples...</echo>
+		<copy todir="release/examples">
+			<fileset dir="../examples/release">
+				<include name="**/*.zip"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="release-bc-commons-with-dep" depends="build-dependencies">
+		<echo>Releasing BC Commons With Dependencies...</echo>
+		
+		<copy todir="${rb-wd-release-dir}">
+			<fileset dir="../apache-commons/release" includes="**/*.zip" />
+		</copy>
+		<copy todir="${rb-wd-release-dir}">
+			<fileset dir="../json-org/release" includes="**/*.zip" />
+		</copy>
+		<copy todir="${rb-wd-release-dir}">
+			<fileset dir="../xalan/release" includes="**/*.zip" />
+		</copy>
+		
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../collection-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../http-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../system-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../xml-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../misc-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../ftp-utils/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../bc-catalog-objects/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-wd-release-dir}">
+			<fileset dir="../examples/release/" includes="**/*.zip" />
+		</copy>
 	</target>
 	
 	<target
 		name="release"
 		description="Release all commons libraries"
-		depends="json-org, apache-commons, collection-utils, http-utils, system-utils, misc-utils, xml-utils, ftp-utils, bc-catalog-objects, examples"
+		depends="release-apache-commons, release-json-org, release-xalan, release-bc-examples, release-bc-commons, release-bc-commons-with-dep"
 	>
-		<echo>Sub-projects released, compiling together:</echo>
-		<copy todir="release">
-			<fileset dir="../json-org/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../apache-commons/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../collection-utils/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../http-utils/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../system-utils/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../xalan/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../xml-utils/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../misc-utils/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../ftp-utils/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../bc-catalog-objects/release">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="../examples/release">
-				<include name="**/*"/>
-			</fileset>
-		</copy>
-	</target>
-	
-	<target name="rezip-all-packages">
-		<zip destfile="release/${global-release-package-name}-${common-release-package-version}.zip"
-			basedir="release"
+		<echo>Sub-projects built, releasing...</echo>
+		
+		<echo>Releasing BC libraries only...</echo>
+		<unzip src="${rb-release-dir}/bc-commons-examples-${common-release-package-version}.zip" dest="${rb-release-dir}"/>
+		<move file="${rb-release-dir}/${common-release-package-version}" tofile="${rb-release-dir}/bc-commons-${common-release-package-version}"/>
+		<zip destfile="${rb-release-dir}/${rb-release-package-name}-${common-release-package-version}.zip"
+			basedir="${rb-release-dir}"
 			update="true"
-			excludes="**/*.zip"
+			excludes="**/*"
 		>
-			<fileset dir="release" includes="bc-commons-examples-*.zip"/>
+			<fileset dir="${rb-release-dir}" includes="bc-commons-${common-release-package-version}/" />
 		</zip>
+		<delete>
+			<fileset dir="${rb-release-dir}/bc-commons-${common-release-package-version}" />
+			<fileset dir="${rb-release-dir}" includes="bc-commons-examples-${common-release-package-version}.zip" />
+		</delete>
+		
+		<echo>Releasing BC libraries and all dependencies</echo>
+		<unzip src="${rb-wd-release-dir}/bc-commons-examples-${common-release-package-version}.zip" dest="${rb-wd-release-dir}"/>
+		<unzip src="${rb-wd-release-dir}/apache-commons-bcver-${common-release-package-version}.zip" dest="${rb-wd-release-dir}"/>
+		<unzip src="${rb-wd-release-dir}/json-org-bcver-${common-release-package-version}.zip" dest="${rb-wd-release-dir}"/>
+		<unzip src="${rb-wd-release-dir}/xalan-bcver-${common-release-package-version}.zip" dest="${rb-wd-release-dir}"/>
+		<move file="${rb-wd-release-dir}/${common-release-package-version}" tofile="${rb-wd-release-dir}/bc-commons-with-dep-${common-release-package-version}"/>
+		<zip destfile="${rb-wd-release-dir}/${rb-release-package-name}-with-dep-${common-release-package-version}.zip"
+			basedir="${rb-wd-release-dir}"
+			update="true"
+			excludes="**/*"
+		>
+			<fileset dir="${rb-wd-release-dir}" includes="bc-commons-with-dep-${common-release-package-version}/" />
+		</zip>
+		<delete>
+			<fileset dir="${rb-wd-release-dir}/bc-commons-with-dep-${common-release-package-version}" />
+			<fileset dir="${rb-wd-release-dir}" includes="bc-commons-examples-${common-release-package-version}.zip" />
+			<fileset dir="${rb-wd-release-dir}" includes="apache-commons-bcver-${common-release-package-version}.zip" />
+			<fileset dir="${rb-wd-release-dir}" includes="json-org-bcver-${common-release-package-version}.zip" />
+			<fileset dir="${rb-wd-release-dir}" includes="xalan-bcver-${common-release-package-version}.zip" />
+		</delete>
 	</target>
 </project>

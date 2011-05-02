@@ -6,8 +6,14 @@
 	<!-- Include any common properties / declarations -->
 	&common;
 	
-	<target name="main" depends="prepare, clean, compile, javadoc, release, rezip-all-packages" description="Main target">
+	<property name="release-dir" value="release/${common-release-package-version}"/>
+	
+	<target name="main" depends="prepare, clean, local-prepare, compile, javadoc, release, rezip-all-packages" description="Main target">
 		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="local-prepare">
+		<mkdir dir="${release-dir}"/>
 	</target>
 	
 	<target name="compile" description="Compilation target">
@@ -33,14 +39,15 @@
 	
 	<target name="release" description="Compression target">
 		<echo>Building jar file:</echo>
-		<jar jarfile="release/json-org.jar" basedir="bin" includes="**/*" />
+		<jar jarfile="${release-dir}/json-org.jar" basedir="bin" includes="**/*" />
 	</target>
 	
 	<target name="rezip-all-packages">
 		<zip destfile="release/json-org-bcver-${common-release-package-version}.zip"
 			basedir="release"
 			update="true"
-			excludes="**/*.zip"
-		/>
+			>
+				<fileset dir="release" includes="${common-release-package-version}"/>
+			</zip>
 	</target>
 </project>

@@ -15,6 +15,34 @@ of this.
 Downloads
 =========
 
+**Version 4.0.0**:
+
+New major release.
+
+This release introduces a number of new packages, including:
+
+- BC Examples (examples for using other libraries)
+- BC FTP Utils (libraries for working with FTP servers)
+- BC Misc Utils (libraries that do not easily fit within another package)
+- BC XML Utils (for working with XML)
+- Xalan for Java (XML / XSLT libraries)
+- New Apache Commons libraries (Codec, Lang, Logging)
+
+Full Download:
+
+- [BC Commons v4.0.0 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.0.0.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.0.0.zip)
+- [3rd Party - JSON.org for BC Commons v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.0.0.zip)
+- [3rd Party - Xalan for BC Commons v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.0.0.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.0.zip)
+- [BC Commons Examples v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.0.0.zip)
+
 **Version 3.0.5**:
 
 This version fixes a bug in CuePoint in the BC Commons - Catalog Objects package.

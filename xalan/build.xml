@@ -9,8 +9,14 @@
 	<property name="xalan-version" value="2_7_1"/>
 	<property name="xalan-package" value="xalan-j_${xalan-version}"/>
 	
-	<target name="main" depends="prepare, clean, extract, repackage, rezip-all-packages" description="Main target">
+	<property name="release-dir" value="release/${common-release-package-version}"/>
+	
+	<target name="main" depends="prepare, clean, local-prepare, extract, repackage, rezip-all-packages" description="Main target">
 		<echo>Full build complete.</echo>
+	</target>
+	
+	<target name="local-prepare">
+		<mkdir dir="${release-dir}"/>
 	</target>
 	
 	<target name="extract-xalan" description="Extracts the necessary libs from the Xalan download">
@@ -18,15 +24,15 @@
 	</target>
 	
 	<target name="repackage-xalan" description="Repackages necessary libs from the Xalan extraction to remove unneeded files">
-		<move todir="release">
+		<move todir="${release-dir}">
 			<fileset dir="release/${xalan-package}" includes="*.jar"/>
 		</move>
 		
-		<mkdir dir="release/${xalan-package}-license"/>
-		<move todir="release/${xalan-package}-license">
+		<mkdir dir="${release-dir}/${xalan-package}-license"/>
+		<move todir="${release-dir}/${xalan-package}-license">
 			<fileset dir="release/${xalan-package}" includes="*.txt"/>
 		</move>
-		<move todir="release/${xalan-package}-license">
+		<move todir="${release-dir}/${xalan-package}-license">
 			<fileset dir="release/${xalan-package}" includes="*.html"/>
 		</move>
 		
@@ -45,7 +51,8 @@
 		<zip destfile="release/xalan-bcver-${common-release-package-version}.zip"
 			basedir="release"
 			update="true"
-			excludes="**/*.zip"
-		/>
+		>
+			<fileset dir="release" includes="${common-release-package-version}"/>
+		</zip>
 	</target>
 </project>

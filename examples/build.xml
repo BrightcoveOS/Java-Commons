@@ -8,16 +8,29 @@
 	
 	<property name="release-package-name" value="bc-commons-examples"/>
 	
-	<target name="main" depends="prepare, clean, release" description="Main target">
+	<property name="release-dir" value="release/${common-release-package-version}"/>
+	
+	<target name="local-prepare">
+		<mkdir dir="${release-dir}"/>
+		<mkdir dir="${release-dir}/examples"/>
+	</target>
+	
+	<target name="main" depends="prepare, clean, local-prepare, release" description="Main target">
 		<echo>Full build complete.</echo>
 	</target>
 	
 	<target name="release" description="Compression target">
 		<echo>Building zip file:</echo>
 		
-		<zip destfile="release/${release-package-name}-${common-release-package-version}.zip">
+		<copy todir="${release-dir}/examples">
 			<fileset dir="." includes="src/**"/>
 			<fileset dir="." includes="config/**"/>
+		</copy>
+		
+		<zip destfile="release/${release-package-name}-${common-release-package-version}.zip">
+			<fileset dir="release" includes="${common-release-package-version}/**"/>
 		</zip>
+		
+		<delete dir="release/examples"/>
 	</target>
 </project>

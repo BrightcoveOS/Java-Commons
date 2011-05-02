@@ -7,26 +7,21 @@
 	&common;
 	
 	<property name="release-package-name" value="bc-commons-catalog-objects"/>
-	<property name="json-org-jar" value="../json-org/release/json-org.jar"/>
+	<property name="json-org-jar" value="../json-org/release/${common-release-package-version}/json-org.jar"/>
+	
+	<property name="release-dir" value="release/${common-release-package-version}"/>
 	
 	<path id="project.class.path">
 		<pathelement location="${json-org-jar}"/>
 	</path>
 	
-	<target name="main" depends="json-org-available, prepare, clean, compile, javadoc, release" description="Main target">
+	<target name="main" depends="prepare, clean, local-prepare, compile, javadoc, release" description="Main target">
 		<echo>Full build complete.</echo>
 	</target>
 	
-	<target name="json-org-available" depends="is-json-org-available" if="json-org-missing">
-		<fail message="json-org.jar could not be found at ${json-org-jar}"/>
+	<target name="local-prepare">
+		<mkdir dir="${release-dir}"/>
 	</target>
-	<target name="is-json-org-available">
-		<condition property="json-org-missing">
-			<not>
-				<available file="${json-org-jar}" property="json-org-available"/>
-			</not>
-		</condition>
-	</target>	
 	
 	<target name="compile" description="Compilation target">
 		<echo>Compiling source code:</echo>
@@ -52,7 +47,7 @@
 	
 	<target name="release" description="Compression target">
 		<echo>Building jar file:</echo>
-		<jar jarfile="release/${release-package-name}-${common-release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
+		<jar jarfile="${release-dir}/${release-package-name}-${common-release-package-version}.jar" duplicate="fail" whenmanifestonly="fail">
 			<fileset dir="bin" includes="**/*"/>
 			<fileset dir="src" includes="**/*"/>
 		</jar>

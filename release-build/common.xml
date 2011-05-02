@@ -1,4 +1,4 @@
-	<property name="common-release-package-version" value="3.0.5-beta"/>
+	<property name="common-release-package-version" value="4.0.0"/>
 	
 	<target name="prepare" description="Prepare target">
 		<echo>Preparing project:</echo>
@@ -9,11 +9,14 @@
 	
 	<target name="clean" description="Clean target">
 		<echo>Cleaning project:</echo>
-		<delete>
-			<fileset dir="release" includes="**/*"/>
-			<fileset dir="javadoc" includes="**/*"/>
-		</delete>
-		<delete dir="bin/com" />
-		<delete dir="bin/org" />
+		
+		<delete dir="release" includeemptydirs="true" />
+		<mkdir dir="release"/>
+		
+		<delete dir="javadoc" includeemptydirs="true" />
+		<mkdir dir="javadoc"/>
+		
+		<delete dir="bin/com" includeemptydirs="true" />
+		<delete dir="bin/org" includeemptydirs="true" />
 	</target>
 	
