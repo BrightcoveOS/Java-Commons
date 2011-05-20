@@ -7,10 +7,12 @@
 	&common;
 	
 	<property name="release-package-name" value="bc-commons-misc-utils"/>
+	<property name="http-jar" value="../apache-commons/release/${common-release-package-version}/httpcore-4.1.jar"/>
 	
 	<property name="release-dir" value="release/${common-release-package-version}"/>
 	
 	<path id="project.class.path">
+		<pathelement location="${http-jar}"/>
 	</path>
 	
 	<target name="main" depends="prepare, clean, local-prepare, compile, javadoc, release" description="Main target">

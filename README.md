@@ -15,6 +15,27 @@ of this.
 Downloads
 =========
 
+**Version 4.0.1**:
+
+This release brings ad keys into the Video object in BC Commons Catalog
+Objects, and adds classes to help working with Apache HttpParams in
+the BC Commons Misc Utils package.
+
+Full Download:
+
+- [BC Commons v4.0.1 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.0.1.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.0.1.zip)
+- [3rd Party - JSON.org for BC Commons v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.0.1.zip)
+- [3rd Party - Xalan for BC Commons v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.0.1.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.1.zip)
+- [BC Commons Examples v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.0.1.zip)
+
 **Version 4.0.0**:
 
 New major release.

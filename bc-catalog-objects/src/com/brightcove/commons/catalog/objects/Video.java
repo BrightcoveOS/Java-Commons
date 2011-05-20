@@ -59,6 +59,7 @@ public class Video {
 	private Integer playsTotal;
 	private Integer playsTrailingWeek;
 	private Date    releaseDate;
+	private String  adKeys;
 	
 	private List<Rendition> renditions;
 	private Rendition       videoFullLength;
@@ -252,6 +253,9 @@ public class Video {
 				Long rootLong = jsonObj.getLong(rootKey);
 				releaseDate = new Date(rootLong);
 			}
+			else if("adKeys".equals(rootKey)){
+				adKeys = rootValue.toString();
+			}
 			else if("geoFilteredCountries".equals(rootKey)){
 				geoFilteredCountries = new ArrayList<GeoFilterCodeEnum>();
 				
@@ -368,6 +372,7 @@ public class Video {
 		playsTotal         = null;
 		playsTrailingWeek  = null;
 		releaseDate        = null;
+		adKeys             = null;
 		
 		renditions      = null;
 		videoFullLength = null;
@@ -1465,27 +1470,55 @@ public class Video {
 		this.economics = economics;
 	}
 	
+	/**
+	 * <p>
+	 *    Gets the ad keys for this Video.
+	 * </p>
+	 * 
+	 * <p>
+	 *    <code>
+	 *          Property name: adKeys<br/>
+	 *          Type:          String<br/>
+	 *          Read only?:    no<br/>
+	 *          Description:   A string representing the ad
+	 *                         <a href="http://support.brightcove.com/en/docs/setting-ad-policies-videos#keyvalue">key/value pairs</a>
+	 *                         assigned to the video. Key/value pairs are
+	 *                         formatted as key=value and are separated by
+	 *                         ampersands (&). For example:<br/>
+	 *                         "adKeys":"category=sports&live=true"
+	 *    </code>
+	 * </p>
+	 * 
+	 * @return The ad keys for this Video
+	 */
+	public String getAdKeys(){
+		return adKeys;
+	}
 	
-	
-	
-	// ******* ToDo - AdKeys
-	// * <p>
-	// *    <code>
-	// *          Property name: adKeys<br/>
-	// *          Type:          String<br/>
-	// *          Read only?:    no<br/>
-	// *          Description:   A string representing the ad
-	// *                         <a href="http://support.brightcove.com/en/docs/setting-ad-policies-videos#keyvalue">key/value pairs</a>
-	// *                         assigned to the video. Key/value pairs are
-	// *                         formatted as key=value and are separated by
-	// *                         ampersands (&). For example:<br/>
-	// *                         "adKeys":"category=sports&live=true"
-	// *    </code>
-	// * </p>
-	
-	
-	
-	
+	/**
+	 * <p>
+	 *    Sets the ad keys for this Video.
+	 * </p>
+	 * 
+	 * <p>
+	 *    <code>
+	 *          Property name: adKeys<br/>
+	 *          Type:          String<br/>
+	 *          Read only?:    no<br/>
+	 *          Description:   A string representing the ad
+	 *                         <a href="http://support.brightcove.com/en/docs/setting-ad-policies-videos#keyvalue">key/value pairs</a>
+	 *                         assigned to the video. Key/value pairs are
+	 *                         formatted as key=value and are separated by
+	 *                         ampersands (&). For example:<br/>
+	 *                         "adKeys":"category=sports&live=true"
+	 *    </code>
+	 * </p>
+	 * 
+	 * @param adKeys The ad keys for this Video
+	 */
+	public void setAdKeys(String adKeys){
+		this.adKeys = adKeys;
+	}
 	
 	/**
 	 * <p>
