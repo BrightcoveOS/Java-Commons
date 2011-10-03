@@ -7,9 +7,11 @@
 	&common;
 	
 	<property name="release-package-name" value="bc-commons-ftp-utils"/>
+	
 	<property name="apache-commons-net-jar" value="../apache-commons/release/${common-release-package-version}/commons-net-2.2.jar"/>
 	<property name="bc-commons-system-utils-jar" value="../system-utils/release/${common-release-package-version}/bc-commons-system-utils-${common-release-package-version}.jar"/>
 	<property name="bc-commons-xml-utils-jar" value="../xml-utils/release/${common-release-package-version}/bc-commons-xml-utils-${common-release-package-version}.jar"/>
+	
 	<property name="xalan-jar" value="../xalan/release/${common-release-package-version}/xalan.jar"/>
 	<property name="xerces-jar" value="../xalan/release/${common-release-package-version}/xercesImpl.jar"/>
 	<property name="serializer-jar" value="../xalan/release/${common-release-package-version}/serializer.jar"/>
