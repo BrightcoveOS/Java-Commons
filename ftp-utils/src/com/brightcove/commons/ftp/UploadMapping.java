@@ -11,7 +11,7 @@ import java.io.File;
  * @author <a href="https://github.com/three4clavin">three4clavin</a>
  *
  */
-public class UploadMapping {
+public class UploadMapping implements FTPMapping<File, String> {
 	private File   source;
 	private String dest;
 	
@@ -28,45 +28,29 @@ public class UploadMapping {
 		this.dest   = dest;
 	}
 	
-	/**
-	 * <p>
-	 *    Sets the source file on disk to upload
-	 * </p>
-	 * 
-	 * @param source Source file on disk to upload
+	/* (non-Javadoc)
+	 * @see com.brightcove.commons.ftp.FTPMapping#setSource(java.lang.Object)
 	 */
 	public void setSource(File source){
 		this.source = source;
 	}
 	
-	/**
-	 * <p>
-	 *    Returns the source file on disk to upload
-	 * </p>
-	 * 
-	 * @return Source file on disk to upload
+	/* (non-Javadoc)
+	 * @see com.brightcove.commons.ftp.FTPMapping#getSource()
 	 */
 	public File getSource(){
 		return source;
 	}
 	
-	/**
-	 * <p>
-	 *    Sets the destination path on the FTP server
-	 * </p>
-	 * 
-	 * @param path Destination path on the FTP server
+	/* (non-Javadoc)
+	 * @see com.brightcove.commons.ftp.FTPMapping#setDestination(java.lang.Object)
 	 */
 	public void setDestination(String path){
 		this.dest = path;
 	}
 	
-	/**
-	 * <p>
-	 *    Returns the destination path on the FTP server
-	 * </p>
-	 * 
-	 * @return Destination path on the FTP server
+	/* (non-Javadoc)
+	 * @see com.brightcove.commons.ftp.FTPMapping#getDestination()
 	 */
 	public String getDestination(){
 		return dest;

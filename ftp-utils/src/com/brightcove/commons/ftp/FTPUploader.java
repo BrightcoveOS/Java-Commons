@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,78 +14,198 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.brightcove.commons.system.commandLine.CommandLineProgram;
 import com.brightcove.commons.xml.XalanUtils;
 
-public class FTPUploader {
-	Logger              log;
-	List<UploadMapping> uploadMappings;
-	String              serverName;
-	Integer             serverPort;
-	String              username;
-	String              password;
-	Boolean             skipUpload;
-	Boolean             removeSource;
-	Boolean             passiveTransfer;
-	Long                uploadTimeoutMillis;
-	Boolean             debug;
+/**
+ * <p>
+ *    Utility class to upload files to an FTP server.  Includes logic to
+ *    thread the upload and retry if the request takes too long.
+ * </p>
+ * 
+ * @author <a href="https://github.com/three4clavin">three4clavin</a>
+ *
+ */
+public class FTPUploader extends CommandLineProgram {
+	Logger log;
+	Long   uploadTimeoutMillis;
 	
-	public FTPUploader(String serverName, String username, String password, Boolean skipUpload, Boolean removeSource, Boolean passiveTransfer, Long uploadTimeoutMillis, Boolean debug) {
-		init();
+	FTPUploaderThread ftput;
+	
+	/**
+	 * <p>
+	 *    Main command line execution.  This should not be called from another
+	 *    class/object - it is meant only as a command line bootstrap.
+	 * </p>
+	 * 
+	 * <p>
+	 *    Accepted command line arguments:<ul>
+	 *        <li>--config-file:     Path to config file with FTP options</li>
+	 *        <li>--timeout-retries: Number of times to retry a timed out request</li>
+	 *    </ul>
+	 * </p>
+	 * 
+	 * @param args Command line arguments
+	 */
+	public static void main(String[] args) {
+		FTPUploader ftpu = new FTPUploader();
 		
-		this.serverName          = serverName;
-		this.serverPort          = 21;
-		this.username            = username;
-		this.password            = password;
-		this.skipUpload          = skipUpload;
-		this.removeSource        = removeSource;
-		this.passiveTransfer     = passiveTransfer;
-		this.uploadTimeoutMillis = uploadTimeoutMillis;
-		this.debug               = debug;
+		ftpu.allowNormalArgument("config-file",     "--config-file <path>",        "--config-file:     Path to configuration file",                        true);
+		ftpu.allowNormalArgument("timeout-retries", "--timeout-retries <integer>", "--timeout-retries: Number of times to retry an upload that times out", false);
+		
+		ftpu.setMaxNakedArguments(0);
+		ftpu.setMinNakedArguments(0);
+		
+		ftpu.run(args);
 	}
 	
-	public FTPUploader(String serverName, Integer serverPort, String username, String password, Boolean skipUpload, Boolean removeSource, Boolean passiveTransfer, Long uploadTimeoutMillis, Boolean debug) {
+	/**
+	 * <p>
+	 *    Default constructor.  Not intended to be called by other
+	 *    classes/objects - for command line use mainly.
+	 * </p>
+	 */
+	public FTPUploader(){
 		init();
 		
-		this.serverName          = serverName;
-		this.serverPort          = serverPort;
-		this.username            = username;
-		this.password            = password;
-		this.skipUpload          = skipUpload;
-		this.removeSource        = removeSource;
-		this.passiveTransfer     = passiveTransfer;
-		this.uploadTimeoutMillis = uploadTimeoutMillis;
-		this.debug               = debug;
+		uploadTimeoutMillis = 0l;
+		
+		ftput = new FTPUploaderThread(
+			"",        // Server name
+			21,        // Server port
+			"",        // Username
+			"",        // Password
+			true,      // Skip transfer
+			false,     // Remove source
+			false,     // Passive transfer
+			new ArrayList<UploadMapping>(),
+			true       // Debug
+		);
 	}
 	
+	/**
+	 * <p>
+	 *    Constructor specifying everything except server port (assumes port 21).
+	 * </p>
+	 * 
+	 * @param serverName          Server host name or ip address to connect to
+	 * @param username            Username to connect with
+	 * @param password            Password to connect with
+	 * @param skipTransfer        Skip transfer (usually used for testing)
+	 * @param removeSource        Remove local file after uploading
+	 * @param passiveTransfer     Use passive transfer mode if true instead of active
+	 * @param uploadTimeoutMillis Time in milliseconds to timeout a request if it hasn't completed
+	 * @param debug               Verbose debugging messages on or off
+	 */
+	public FTPUploader(String serverName, String username, String password, Boolean skipTransfer, Boolean removeSource, Boolean passiveTransfer, Long uploadTimeoutMillis, Boolean debug) {
+		init();
+		
+		this.uploadTimeoutMillis = uploadTimeoutMillis;
+		
+		ftput = new FTPUploaderThread(
+			serverName,       // Server name
+			21,               // Server port
+			username,         // Username
+			password,         // Password
+			skipTransfer,     // Skip transfer
+			removeSource,     // Remove source
+			passiveTransfer,  // Passive transfer
+			new ArrayList<UploadMapping>(),
+			debug             // Debug
+		);
+	}
+	
+	/**
+	 * <p>
+	 *    Constructor specifying everything.
+	 * </p>
+	 * 
+	 * @param serverName          Server host name or ip address to connect to
+	 * @param serverPort          Server port to connect to
+	 * @param username            Username to connect with
+	 * @param password            Password to connect with
+	 * @param skipTransfer        Skip transfer (usually used for testing)
+	 * @param removeSource        Remove local file after uploading
+	 * @param passiveTransfer     Use passive transfer mode if true instead of active
+	 * @param uploadTimeoutMillis Time in milliseconds to timeout a request if it hasn't completed
+	 * @param debug               Verbose debugging messages on or off
+	 */
+	public FTPUploader(String serverName, Integer serverPort, String username, String password, Boolean skipTransfer, Boolean removeSource, Boolean passiveTransfer, Long uploadTimeoutMillis, Boolean debug) {
+		init();
+		
+		this.uploadTimeoutMillis = uploadTimeoutMillis;
+		
+		ftput = new FTPUploaderThread(
+			serverName,       // Server name
+			serverPort,       // Server port
+			username,         // Username
+			password,         // Password
+			skipTransfer,     // Skip transfer
+			removeSource,     // Remove source
+			passiveTransfer,  // Passive transfer
+			new ArrayList<UploadMapping>(),
+			debug             // Debug
+		);
+	}
+	
+	/**
+	 * <p>
+	 *    Constructor that pulls all of the configuration options from an XML config file
+	 * </p>
+	 * 
+	 * @param configFile Configuration file to parse
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws TransformerException
+	 */
 	public FTPUploader(File configFile) throws ParserConfigurationException, SAXException, IOException, TransformerException {
 		init();
 		
+		parseConfigFile(configFile);
+	}
+	
+	private void parseConfigFile(File configFile) throws ParserConfigurationException, SAXException, IOException, TransformerException {
 		Document configDoc = XalanUtils.parseXml(configFile, false);
 		
-		serverName = getStringSetting(configDoc, "FTP_UPLOAD_SERVER");
-		serverPort = getIntegerSetting(configDoc, "FTP_UPLOAD_PORT");
-		username   = getStringSetting(configDoc, "FTP_UPLOAD_USER");
-		password   = getStringSetting(configDoc, "FTP_UPLOAD_PASSWORD");
+		uploadTimeoutMillis = getLongSetting(configDoc, "FTP_UPLOAD_TIMEOUT_MILLISECONDS");
+		
+		String  serverName = getStringSetting(configDoc, "FTP_UPLOAD_SERVER");
+		Integer serverPort = getIntegerSetting(configDoc, "FTP_UPLOAD_PORT");
+		String  username   = getStringSetting(configDoc, "FTP_UPLOAD_USER");
+		String  password   = getStringSetting(configDoc, "FTP_UPLOAD_PASSWORD");
 		
 		if(serverPort == null){
 			serverPort = 21;
 		}
+		
+		Boolean skipTransfer    = getBooleanSetting(configDoc, "FTP_UPLOAD_SKIP");
+		Boolean removeSource    = getBooleanSetting(configDoc, "FTP_UPLOAD_REMOVE_SOURCE");
+		Boolean passiveTransfer = getBooleanSetting(configDoc, "FTP_UPLOAD_USE_PASSIVE_TRANSFER");
+		Boolean debug           = getBooleanSetting(configDoc, "FTP_UPLOAD_DEBUG");
+		
+		if(skipTransfer    == null){ skipTransfer    = false; }
+		if(removeSource    == null){ removeSource    = false; }
+		if(passiveTransfer == null){ passiveTransfer = false; }
+		if(debug           == null){ debug           = false; }
+		
+		ftput = new FTPUploaderThread(
+			serverName,       // Server name
+			serverPort,       // Server port
+			username,         // Username
+			password,         // Password
+			skipTransfer,     // Skip transfer
+			removeSource,     // Remove source
+			passiveTransfer,  // Passive transfer
+			new ArrayList<UploadMapping>(),
+			debug             // Debug
+		);
 		
 		String uploadDirectory = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_DIRECTORY");
 		String uploadRegex     = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_REGEX");
 		String uploadFile      = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_FILE");
 		String remoteDirectory = getStringSetting(configDoc, "FTP_UPLOAD_REMOTE_DIRECTORY");
 		// String uploadOptions   = getStringSetting(configDoc, "FTP_UPLOAD_OPTIONS");
-		
-		skipUpload      = getBooleanSetting(configDoc, "FTP_UPLOAD_SKIP");
-		removeSource    = getBooleanSetting(configDoc, "FTP_UPLOAD_REMOVE_SOURCE");
-		passiveTransfer = getBooleanSetting(configDoc, "FTP_UPLOAD_USE_PASSIVE_TRANSFER");
-		debug           = getBooleanSetting(configDoc, "FTP_UPLOAD_DEBUG");
-		
-		if(skipUpload      == null){ skipUpload      = false; }
-		if(removeSource    == null){ removeSource    = false; }
-		if(passiveTransfer == null){ passiveTransfer = false; }
-		if(debug           == null){ debug           = false; }
 		
 		File uploadDir = new File(uploadDirectory);
 		if(! uploadDir.exists()){
@@ -109,7 +228,58 @@ public class FTPUploader {
 			}
 		}
 		
-		uploadTimeoutMillis = getLongSetting(configDoc, "FTP_UPLOAD_TIMEOUT_MILLISECONDS");
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.brightcove.commons.system.commandLine.CommandLineProgram#run(java.lang.String[])
+	 */
+	public void run(String[] args){
+		// This is the main execution from the command line call - not meant
+		// to be called from another class or object - see doUpload() instead
+		
+		setCaller(this.getClass().getCanonicalName());
+		parseArguments(args);
+		
+		File configFile = new File(getNormalArgument("config-file"));
+		if(! configFile.exists()){
+			usage("Config file '" + configFile.getAbsolutePath() + "' doesn't exist.");
+		}
+		
+		try{
+			parseConfigFile(configFile);
+		}
+		catch(Exception e){
+			usage(e);
+		}
+		
+		String  retryArg = getNormalArgument("timeout-retries");
+		Integer retries  = 0;
+		if((retryArg != null) && (! "".equals(retryArg))){
+			retries = new Integer(retryArg);
+		}
+		
+		Integer   attempt       = 0;
+		Exception lastException = null;
+		while(attempt <= retries){
+			try {
+				doUpload();
+				log.info("Upload complete.");
+				return;
+			}
+			catch (Exception e) {
+				log.severe("Exception caught: '" + e + "'.");
+				lastException = e;
+				
+				if(attempt < retries){
+					log.info("Will retry request");
+				}
+				else{
+					log.severe("Maximum number of retries (" + retries + ") reached.  Request will not be retried.");
+				}
+			}
+		}
+		
+		usage(lastException);
 	}
 	
 	private void addUpload(File uploadFile, String remoteDir){
@@ -122,7 +292,7 @@ public class FTPUploader {
 			remoteFile += uploadFile.getName();
 		}
 		
-		addUploadMapping(uploadFile, remoteFile);
+		ftput.addUploadMapping(uploadFile, remoteFile);
 	}
 	
 	private void addUpload(File uploadDir, String uploadFile, String remoteDir){
@@ -147,48 +317,37 @@ public class FTPUploader {
 	}
 	
 	private void init(){
-		log            = Logger.getLogger(this.getClass().getCanonicalName());
-		uploadMappings = new ArrayList<UploadMapping>();
+		log = Logger.getLogger(this.getClass().getCanonicalName());
+		// uploadMappings = new ArrayList<UploadMapping>();
 	}
 	
-	public void clearUploadMappings(){
-		uploadMappings = new ArrayList<UploadMapping>();
-	}
-	
-	public void addUploadMapping(UploadMapping mapping){
-		uploadMappings.add(mapping);
-	}
-	
-	public void addUploadMapping(File source, String destination){
-		UploadMapping mapping = new UploadMapping(source, destination);
-		addUploadMapping(mapping);
-	}
-	
-	public List<UploadMapping> getUploadMappings(){
-		return uploadMappings;
-	}
-	
+	/**
+	 * <p>
+	 *    Performs the upload.  Actual upload is done by a background
+	 *    thread, so it can be killed if it runs for too long.
+	 * </p>
+	 * 
+	 * @throws Exception If thread is interrupted (mainly if upload times out)
+	 */
 	public void doUpload() throws Exception {
-		FTPUploaderThread thread = new FTPUploaderThread(serverName, username, password, skipUpload, removeSource, passiveTransfer, uploadMappings, debug);
+		log.info("Starting new thread '" + ftput + "'.");
+		ftput.start();
 		
-		log.info("Starting new thread '" + thread + "'.");
-		thread.start();
-		
-		if (thread.isAlive()) {
+		if (ftput.isAlive()) {
 			// Thread has not finished
 			Long    waitInterval = 5000l; // 5 seconds
 			Boolean cont         = true;
 			Long    threadStart  = (new Date()).getTime();
 			while(cont){
-				thread.join(waitInterval);
+				ftput.join(waitInterval);
 				
-				if(thread.isAlive()){
+				if(ftput.isAlive()){
 					Long now      = (new Date()).getTime();
 					Long timeDiff = now - threadStart;
 					if(timeDiff > uploadTimeoutMillis){
 						log.severe("Waited " + timeDiff + " for upload to complete without success.  Terminating.");
 						
-						thread.interrupt();
+						ftput.interrupt();
 						throw new InterruptedException("Stopped upload after " + timeDiff + " milliseconds.  Upload most likely was partially but not fully complete.");
 					}
 					
@@ -205,9 +364,9 @@ public class FTPUploader {
 		
 		log.info("Thread completed.  Checking for exceptions.");
 		
-		if(thread.getException() != null){
-			log.severe("Thread threw exception '" + thread.getException() + "'.");
-			throw thread.getException();
+		if(ftput.getException() != null){
+			log.severe("Thread threw exception '" + ftput.getException() + "'.");
+			throw ftput.getException();
 		}
 		
 		log.info("Upload complete.");

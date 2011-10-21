@@ -15,6 +15,46 @@ of this.
 Downloads
 =========
 
+**Version 4.0.3**:
+
+This release adds the HttpClientFactory - so an external program can override
+how an HttpClient is created for use by other methods.
+
+Full Download:
+
+- [BC Commons v4.0.3 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.0.3.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.0.3.zip)
+- [3rd Party - JSON.org for BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.0.3.zip)
+- [3rd Party - Xalan for BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.0.3.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.3.zip)
+- [BC Commons Examples v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.0.3.zip)
+
+**Version 4.0.2**:
+
+This release updates the FTP libraries - there are now threaded utility
+classes for FTP upload, download and list generation.
+
+Full Download:
+
+- [BC Commons v4.0.2 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.0.2.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.0.2.zip)
+- [3rd Party - JSON.org for BC Commons v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.0.2.zip)
+- [3rd Party - Xalan for BC Commons v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.0.2.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.2.zip)
+- [BC Commons Examples v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.0.2.zip)
+
 **Version 4.0.1**:
 
 This release brings ad keys into the Video object in BC Commons Catalog
