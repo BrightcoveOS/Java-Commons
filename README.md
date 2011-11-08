@@ -12,6 +12,10 @@ Whenever possible, the libraries will be compatible with Java 1.5, but in
 some cases Java 1.6 may be required.  Each commons library should make note
 of this.
 
+Documentation
+=============
+New - [JavaDocs!](http://brightcoveos.github.com/Java-Commons/javadoc)
+
 Downloads
 =========
 
@@ -34,133 +38,6 @@ Brightcove Libraries Only:
 
 - [BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.3.zip)
 - [BC Commons Examples v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.0.3.zip)
-
-**Version 4.0.2**:
-
-This release updates the FTP libraries - there are now threaded utility
-classes for FTP upload, download and list generation.
-
-Full Download:
-
-- [BC Commons v4.0.2 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.0.2.zip)
-
-Individual Packages (3rd Party):
-
-- [3rd Party - Apache Commons for BC Commons v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.0.2.zip)
-- [3rd Party - JSON.org for BC Commons v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.0.2.zip)
-- [3rd Party - Xalan for BC Commons v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.0.2.zip)
-
-Brightcove Libraries Only:
-
-- [BC Commons v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.2.zip)
-- [BC Commons Examples v4.0.2](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.0.2.zip)
-
-**Version 4.0.1**:
-
-This release brings ad keys into the Video object in BC Commons Catalog
-Objects, and adds classes to help working with Apache HttpParams in
-the BC Commons Misc Utils package.
-
-Full Download:
-
-- [BC Commons v4.0.1 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.0.1.zip)
-
-Individual Packages (3rd Party):
-
-- [3rd Party - Apache Commons for BC Commons v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.0.1.zip)
-- [3rd Party - JSON.org for BC Commons v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.0.1.zip)
-- [3rd Party - Xalan for BC Commons v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.0.1.zip)
-
-Brightcove Libraries Only:
-
-- [BC Commons v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.1.zip)
-- [BC Commons Examples v4.0.1](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.0.1.zip)
-
-**Version 4.0.0**:
-
-New major release.
-
-This release introduces a number of new packages, including:
-
-- BC Examples (examples for using other libraries)
-- BC FTP Utils (libraries for working with FTP servers)
-- BC Misc Utils (libraries that do not easily fit within another package)
-- BC XML Utils (for working with XML)
-- Xalan for Java (XML / XSLT libraries)
-- New Apache Commons libraries (Codec, Lang, Logging)
-
-Full Download:
-
-- [BC Commons v4.0.0 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.0.0.zip)
-
-Individual Packages (3rd Party):
-
-- [3rd Party - Apache Commons for BC Commons v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.0.0.zip)
-- [3rd Party - JSON.org for BC Commons v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.0.0.zip)
-- [3rd Party - Xalan for BC Commons v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.0.0.zip)
-
-Brightcove Libraries Only:
-
-- [BC Commons v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.0.zip)
-- [BC Commons Examples v4.0.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.0.0.zip)
-
-**Version 3.0.5**:
-
-This version fixes a bug in CuePoint in the BC Commons - Catalog Objects package.
-
-Full Download:
-
-- [BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-3.0.5.zip)
-
-Individual Packages:
-
-- [3rd Party - Apache Commons for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-3.0.5.zip)
-- [3rd Party - JSON.org for BC Commons v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-3.0.5.zip)
-- [BC Commons - Catalog Objects v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-catalog-objects-3.0.5.jar)
-- [BC Commons - Collection Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-collection-utils-3.0.5.jar)
-- [BC Commons - HTTP Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-http-utils-3.0.5.jar)
-- [BC Commons - System Utils v3.0.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-system-utils-3.0.5.jar)
-
-**Version 3.0.4**:
-
-This version fixes a few bugs in the BC Commons - Catalog Objects package.
-
-1 - Requesting toJson() on a Video object could result in calling methods on null
-Date objects.  This has been fixed so that an empty string will be used
-instead.
-
-2 - Creating a new Playlist object failed trying to cast the playlist id to a
-Long object.  A new Long object is now created from the string representation
-of the integer handed back to the wrapper.
-
-Full Download:
-
-- [BC Commons v3.0.4](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-3.0.4.zip)
-
-Individual Packages:
-
-- [3rd Party - Apache Commons for BC Commons v3.0.4](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-3.0.4.zip)
-- [3rd Party - JSON.org for BC Commons v3.0.4](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-3.0.4.zip)
-- [BC Commons - Catalog Objects v3.0.4](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-catalog-objects-3.0.4.jar)
-- [BC Commons - Collection Utils v3.0.4](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-collection-utils-3.0.4.jar)
-- [BC Commons - HTTP Utils v3.0.4](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-http-utils-3.0.4.jar)
-- [BC Commons - System Utils v3.0.4](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-system-utils-3.0.4.jar)
-
-**Version 3.0**:
-
-Full Download:
-
-- [BC Commons v3.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-3.0.zip)
-
-Individual Packages:
-
-- [3rd Party - Apache Commons for BC Commons v3.0](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-3.0.zip)
-- [3rd Party - JSON.org for BC Commons v3.0](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-3.0.zip)
-- [BC Commons - Catalog Objects v3.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-catalog-objects-3.0.jar)
-- [BC Commons - Collection Utils v3.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-collection-utils-3.0.jar)
-- [BC Commons - HTTP Utils v3.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-http-utils-3.0.jar)
-- [BC Commons - System Utils v3.0](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-system-utils-3.0.jar)
-
 
 Package - (3rd party) apache-commons
 ====================================
