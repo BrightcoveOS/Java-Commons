@@ -1,4 +1,36 @@
+	<!-- Global BC Commons Release Vars -->
 	<property name="common-release-package-version" value="4.0.3"/>
+	
+	<!-- Apache Commons Release Vars -->
+	<property name="apache-codec-version" value="1.5"/>
+	<property name="apache-codec-package" value="commons-codec-${apache-codec-version}"/>
+	<property name="apache-codec-library" value="${apache-codec-package}"/>
+	<property name="apache-http-client-version" value="4.0.3"/>
+	<property name="apache-http-client-package" value="httpcomponents-client-${apache-http-client-version}"/>
+	<property name="apache-http-client-library" value="httpclient-${apache-http-client-version}"/>
+	<property name="apache-http-core-version" value="4.1"/>
+	<property name="apache-http-core-package" value="httpcomponents-core-${apache-http-core-version}"/>
+	<property name="apache-http-core-library" value="httpcore-${apache-http-core-version}"/>
+	<property name="apache-io-version" value="2.0.1"/>
+	<property name="apache-io-package" value="commons-io-${apache-io-version}"/>
+	<property name="apache-io-library" value="${apache-io-package}"/>
+	<property name="apache-lang-version" value="2.6"/>
+	<property name="apache-lang-package" value="commons-lang-${apache-lang-version}"/>
+	<property name="apache-lang-library" value="${apache-lang-package}"/>
+	<property name="apache-logging-version" value="1.1.1"/>
+	<property name="apache-logging-package" value="commons-logging-${apache-logging-version}"/>
+	<property name="apache-logging-library" value="${apache-logging-package}"/>
+	<property name="apache-mime4j-version" value="0.6.1"/>
+	<property name="apache-mime4j-package" value="apache-mime4j-${apache-mime4j-version}"/>
+	<property name="apache-mime4j-library" value="${apache-mime4j-package}"/>
+	<property name="apache-net-version" value="2.2"/>
+	<property name="apache-net-package" value="commons-net-${apache-net-version}"/>
+	<property name="apache-net-library" value="${apache-net-package}"/>
+	
+	<!-- Xalan Release Vars -->
+	<property name="xalan-version" value="2_7_1"/>
+	<property name="xalan-package" value="xalan-j_${xalan-version}"/>
+	<property name="xalan-library" value="xalan"/>
 	
 	<target name="prepare" description="Prepare target">
 		<echo>Preparing project:</echo>

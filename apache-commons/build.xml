@@ -6,23 +6,6 @@
 	<!-- Include any common properties / declarations -->
 	&common;
 	
-	<property name="codec-version" value="1.5"/>
-	<property name="codec-package" value="commons-codec-${codec-version}"/>
-	<property name="http-client-version" value="4.0.3"/>
-	<property name="http-client-package" value="httpcomponents-client-${http-client-version}"/>
-	<property name="http-core-version" value="4.1"/>
-	<property name="http-core-package" value="httpcomponents-core-${http-core-version}"/>
-	<property name="io-version" value="2.0.1"/>
-	<property name="io-package" value="commons-io-${io-version}"/>
-	<property name="lang-version" value="2.6"/>
-	<property name="lang-package" value="commons-lang-${lang-version}"/>
-	<property name="logging-version" value="1.1.1"/>
-	<property name="logging-package" value="commons-logging-${logging-version}"/>
-	<property name="mime4j-version" value="0.6.1"/>
-	<property name="mime4j-package" value="apache-mime4j-${mime4j-version}"/>
-	<property name="net-version" value="2.2"/>
-	<property name="net-package" value="commons-net-${net-version}"/>
-	
 	<property name="release-dir" value="release/${common-release-package-version}"/>
 	
 	<target name="main" depends="prepare, clean, local-prepare, extract, repackage, rezip-all-packages" description="Main target">
@@ -34,154 +17,154 @@
 	</target>
 	
 	<target name="extract-codec" description="Extracts the necessary libs from the Apache Codec Commons download">
-		<unzip src="download/${codec-package}-bin.zip" dest="release"/>
+		<unzip src="download/${apache-codec-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="extract-httpclient" description="Extracts the necessary libs from the Apache HTTP Components Client download">
-		<unzip src="download/${http-client-package}-bin.zip" dest="release"/>
+		<unzip src="download/${apache-http-client-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="extract-httpcore" description="Extracts the necessary libs from the Apache HTTP Components Core download">
-		<unzip src="download/${http-core-package}-bin.zip" dest="release"/>
+		<unzip src="download/${apache-http-core-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="extract-io" description="Extracts the necessary libs from the Apache IO Commons download">
-		<unzip src="download/${io-package}-bin.zip" dest="release"/>
+		<unzip src="download/${apache-io-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="extract-lang" description="Extracts the necessary libs from the Apache Lang Commons download">
-		<unzip src="download/${lang-package}-bin.zip" dest="release"/>
+		<unzip src="download/${apache-lang-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="extract-logging" description="Extracts the necessary libs from the Apache Logging Commons download">
-		<unzip src="download/${logging-package}-bin.zip" dest="release"/>
+		<unzip src="download/${apache-logging-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="extract-mime4j" description="Extracts the necessary libs from the Apache James Mime4j download">
-		<unzip src="download/${mime4j-package}-bin.zip" dest="release"/>
+		<unzip src="download/${apache-mime4j-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="extract-net" description="Extracts the necessary libs from the Apache Commons Net download">
-		<unzip src="download/${net-package}-bin.zip" dest="release"/>
+		<unzip src="download/${apache-net-package}-bin.zip" dest="release"/>
 	</target>
 	
 	<target name="repackage-codec" description="Repackages necessary libs from the Apache Codec Commons to remove unneeded files">
 		<move todir="${release-dir}">
-			<fileset dir="release/${codec-package}" includes="${codec-package}.jar"/>
+			<fileset dir="release/${apache-codec-package}" includes="${apache-codec-package}.jar"/>
 		</move>
 		
-		<mkdir dir="${release-dir}/${codec-package}-license"/>
-		<move todir="${release-dir}/${codec-package}-license">
-			<fileset dir="release/${codec-package}" includes="*.txt"/>
+		<mkdir dir="${release-dir}/${apache-codec-package}-license"/>
+		<move todir="${release-dir}/${apache-codec-package}-license">
+			<fileset dir="release/${apache-codec-package}" includes="*.txt"/>
 		</move>
 		
-		<delete dir="release/${codec-package}"/>
+		<delete dir="release/${apache-codec-package}"/>
 	</target>
 	
 	<target name="repackage-httpclient" description="Repackages necessary libs from the Apache HTTP Components to remove unneeded files">
 		<move todir="${release-dir}">
-			<fileset dir="release/${http-client-package}/lib" includes="*.jar"/>
+			<fileset dir="release/${apache-http-client-package}/lib" includes="*.jar"/>
 		</move>
 		
-		<mkdir dir="${release-dir}/${http-client-package}-license"/>
-		<move todir="${release-dir}/${http-client-package}-license">
-			<fileset dir="release/${http-client-package}" includes="*.txt"/>
+		<mkdir dir="${release-dir}/${apache-http-client-package}-license"/>
+		<move todir="${release-dir}/${apache-http-client-package}-license">
+			<fileset dir="release/${apache-http-client-package}" includes="*.txt"/>
 		</move>
 		
-		<delete dir="release/${http-client-package}"/>
+		<delete dir="release/${apache-http-client-package}"/>
 	</target>
 	
 	<target name="repackage-httpcore" description="Repackages necessary libs from the Apache HTTP Components to remove unneeded files">
 		<move todir="${release-dir}">
-			<fileset dir="release/${http-core-package}/lib" includes="*.jar"/>
+			<fileset dir="release/${apache-http-core-package}/lib" includes="*.jar"/>
 		</move>
 		
-		<mkdir dir="${release-dir}/${http-core-package}-license"/>
-		<move todir="${release-dir}/${http-core-package}-license">
-			<fileset dir="release/${http-core-package}" includes="*.txt"/>
+		<mkdir dir="${release-dir}/${apache-http-core-package}-license"/>
+		<move todir="${release-dir}/${apache-http-core-package}-license">
+			<fileset dir="release/${apache-http-core-package}" includes="*.txt"/>
 		</move>
 		
-		<delete dir="release/${http-core-package}"/>
+		<delete dir="release/${apache-http-core-package}"/>
 	</target>
 	
 	<target name="repackage-io" description="Repackages necessary libs from the Apache IO Commons to remove unneeded files">
 		<move todir="${release-dir}">
-			<fileset dir="release/${io-package}" includes="${io-package}.jar"/>
+			<fileset dir="release/${apache-io-package}" includes="${apache-io-package}.jar"/>
 		</move>
 		
-		<mkdir dir="${release-dir}/${io-package}-license"/>
-		<move todir="${release-dir}/${io-package}-license">
-			<fileset dir="release/${io-package}" includes="*.txt"/>
+		<mkdir dir="${release-dir}/${apache-io-package}-license"/>
+		<move todir="${release-dir}/${apache-io-package}-license">
+			<fileset dir="release/${apache-io-package}" includes="*.txt"/>
 		</move>
 		
-		<delete dir="release/${io-package}"/>
+		<delete dir="release/${apache-io-package}"/>
 	</target>
 	
 	<target name="repackage-lang" description="Repackages necessary libs from the Apache Lang Commons to remove unneeded files">
 		<move todir="${release-dir}">
-			<fileset dir="release/${lang-package}" includes="${lang-package}.jar"/>
+			<fileset dir="release/${apache-lang-package}" includes="${apache-lang-package}.jar"/>
 		</move>
 		
-		<mkdir dir="${release-dir}/${lang-package}-license"/>
-		<move todir="${release-dir}/${lang-package}-license">
-			<fileset dir="release/${lang-package}" includes="*.txt"/>
+		<mkdir dir="${release-dir}/${apache-lang-package}-license"/>
+		<move todir="${release-dir}/${apache-lang-package}-license">
+			<fileset dir="release/${apache-lang-package}" includes="*.txt"/>
 		</move>
 		
-		<delete dir="release/${lang-package}"/>
+		<delete dir="release/${apache-lang-package}"/>
 	</target>
 	
 	<target name="repackage-logging" description="Repackages necessary libs from the Apache Logging Commons to remove unneeded files">
 		<move todir="${release-dir}">
-			<fileset dir="release/${logging-package}" includes="${logging-package}.jar"/>
+			<fileset dir="release/${apache-logging-package}" includes="${apache-logging-package}.jar"/>
 		</move>
 		
-		<mkdir dir="${release-dir}/${logging-package}-license"/>
-		<move todir="${release-dir}/${logging-package}-license">
-			<fileset dir="release/${logging-package}" includes="*.txt"/>
+		<mkdir dir="${release-dir}/${apache-logging-package}-license"/>
+		<move todir="${release-dir}/${apache-logging-package}-license">
+			<fileset dir="release/${apache-logging-package}" includes="*.txt"/>
 		</move>
 		
-		<delete dir="release/${logging-package}"/>
+		<delete dir="release/${apache-logging-package}"/>
 	</target>
 	
 	<target name="repackage-mime4j" description="Repackages necessary libs from the Apache James Mime4j to remove unneeded files">
 		<move todir="${release-dir}">
-			<fileset dir="release/${mime4j-package}/lib" includes="*.jar"/>
+			<fileset dir="release/${apache-mime4j-package}/lib" includes="*.jar"/>
 		</move>
 		<move todir="${release-dir}">
-			<fileset dir="release/${mime4j-package}" includes="*.jar"/>
+			<fileset dir="release/${apache-mime4j-package}" includes="*.jar"/>
 		</move>
 		
-		<mkdir dir="${release-dir}/${mime4j-package}-license"/>
-		<move todir="${release-dir}/${mime4j-package}-license">
-			<fileset dir="release/${mime4j-package}" includes="*.txt"/>
+		<mkdir dir="${release-dir}/${apache-mime4j-package}-license"/>
+		<move todir="${release-dir}/${apache-mime4j-package}-license">
+			<fileset dir="release/${apache-mime4j-package}" includes="*.txt"/>
 		</move>
-		<move todir="${release-dir}/${mime4j-package}-license">
-			<fileset dir="release/${mime4j-package}" includes="DEPENDENCIES"/>
+		<move todir="${release-dir}/${apache-mime4j-package}-license">
+			<fileset dir="release/${apache-mime4j-package}" includes="DEPENDENCIES"/>
 		</move>
-		<move todir="${release-dir}/${mime4j-package}-license">
-			<fileset dir="release/${mime4j-package}" includes="LICENSE"/>
+		<move todir="${release-dir}/${apache-mime4j-package}-license">
+			<fileset dir="release/${apache-mime4j-package}" includes="LICENSE"/>
 		</move>
-		<move todir="${release-dir}/${mime4j-package}-license">
-			<fileset dir="release/${mime4j-package}" includes="NOTICE"/>
+		<move todir="${release-dir}/${apache-mime4j-package}-license">
+			<fileset dir="release/${apache-mime4j-package}" includes="NOTICE"/>
 		</move>
 		
-		<delete dir="release/${mime4j-package}"/>
+		<delete dir="release/${apache-mime4j-package}"/>
 	</target>
 	
 	<target name="repackage-net" description="Repackages necessary libs from the Apache Commons Net to remove unneeded files">
 		<move todir="${release-dir}">
-			<fileset dir="release/${net-package}" includes="${net-package}.jar"/>
+			<fileset dir="release/${apache-net-package}" includes="${apache-net-package}.jar"/>
 		</move>
 		
-		<mkdir dir="${release-dir}/${net-package}-license"/>
-		<move todir="${release-dir}/${net-package}-license">
-			<fileset dir="release/${net-package}" includes="*.txt"/>
+		<mkdir dir="${release-dir}/${apache-net-package}-license"/>
+		<move todir="${release-dir}/${apache-net-package}-license">
+			<fileset dir="release/${apache-net-package}" includes="*.txt"/>
 		</move>
-		<move todir="${release-dir}/${net-package}-license">
-			<fileset dir="release/${net-package}" includes="README"/>
+		<move todir="${release-dir}/${apache-net-package}-license">
+			<fileset dir="release/${apache-net-package}" includes="README"/>
 		</move>
 		
-		<delete dir="release/${net-package}"/>
+		<delete dir="release/${apache-net-package}"/>
 	</target>
 	
 	<target name="rezip-all-packages">

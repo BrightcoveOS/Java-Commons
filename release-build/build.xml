@@ -13,9 +13,27 @@
 	<property name="rb-wd-release-dir" value="release/bc-commons-with-dep" />
 	<property name="rb-versioned-wd-release-dir" value="${rb-wd-release-dir}/${common-release-package-version}" />
 	
+	<path id="project.class.path">
+		<pathelement location="../apache-commons/release/${common-release-package-version}/${apache-codec-library}.jar"/>
+		<pathelement location="../apache-commons/release/${common-release-package-version}/${apache-http-client-library}.jar"/>
+		<pathelement location="../apache-commons/release/${common-release-package-version}/${apache-http-core-library}.jar"/>
+		<pathelement location="../apache-commons/release/${common-release-package-version}/${apache-io-library}.jar"/>
+		<pathelement location="../apache-commons/release/${common-release-package-version}/${apache-lang-library}.jar"/>
+		<pathelement location="../apache-commons/release/${common-release-package-version}/${apache-logging-library}.jar"/>
+		<pathelement location="../apache-commons/release/${common-release-package-version}/${apache-mime4j-library}.jar"/>
+		<pathelement location="../apache-commons/release/${common-release-package-version}/${apache-net-library}.jar"/>
+		<pathelement location="../xalan/release/${common-release-package-version}/${xalan-library}.jar"/>
+	</path>
+	
+	<target name="main" depends="javadoc" description="Main target">
+		<echo>Full build complete.</echo>
+	</target>
+	
+	<!--
 	<target name="main" depends="prepare, clean, local-prepare, release" description="Main target">
 		<echo>Full build complete.</echo>
 	</target>
+	-->
 	
 	<target name="local-prepare" depends="build-dependencies">
 		<mkdir dir="release/apache-commons"/>
@@ -185,5 +203,42 @@
 			<fileset dir="${rb-wd-release-dir}" includes="json-org-bcver-${common-release-package-version}.zip" />
 			<fileset dir="${rb-wd-release-dir}" includes="xalan-bcver-${common-release-package-version}.zip" />
 		</delete>
+	</target>
+	
+	<target name="javadoc" description="JavaDoc target">
+		<javadoc packagenames="*"
+			sourcepath="src"
+			defaultexcludes="yes"
+			destdir="javadoc"
+			author="true"
+			version="true"
+			use="true"
+			verbose="false"
+			windowtitle="${rb-release-package-name} - v${common-release-package-version}">
+				<classpath refid="project.class.path"/>
+				<doctitle><![CDATA[<h1>com.brightcove.commons</h1>]]></doctitle>
+				<bottom><![CDATA[<i>http://opensource.brightcove.com/.</i>]]></bottom>
+				
+				<link href="http://james.apache.org/mime4j/apidocs"/>
+				<link href="http://commons.apache.org/codec/apidocs"/>
+				<link href="http://commons.apache.org/io/api-release"/>
+				<link href="http://commons.apache.org/lang/api-release"/>
+				<link href="http://commons.apache.org/logging/apidocs"/>
+				<link href="http://commons.apache.org/net/api-2.2"/>
+				<link href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs"/>
+				<link href="http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs"/>
+				<link href="http://hc.apache.org/httpcomponents-core-ga/httpcore-nio/apidocs"/>
+				<link href="http://hc.apache.org/httpcomponents-client-ga/httpmime/apidocs"/>
+				
+				<fileset dir="../bc-catalog-objects/src"/>
+				<fileset dir="../collection-utils/src"/>
+				<fileset dir="../examples/src"/>
+				<fileset dir="../ftp-utils/src"/>
+				<fileset dir="../http-utils/src"/>
+				<fileset dir="../json-org/src"/>
+				<fileset dir="../misc-utils/src"/>
+				<fileset dir="../system-utils/src"/>
+				<fileset dir="../xml-utils/src"/>
+		</javadoc>
 	</target>
 </project>

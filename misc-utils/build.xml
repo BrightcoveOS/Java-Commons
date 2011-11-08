@@ -25,7 +25,7 @@
 	
 	<target name="compile" description="Compilation target">
 		<echo>Compiling source code:</echo>
-		<javac debug="on" srcdir="src" destdir="bin" includes="**/*">
+		<javac debug="on" srcdir="src" destdir="bin" includes="**/*" includeantruntime="false">
 			<classpath refid="project.class.path"/>
 		</javac>
 	</target>

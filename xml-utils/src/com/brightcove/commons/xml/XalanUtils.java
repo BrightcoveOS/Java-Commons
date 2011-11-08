@@ -342,7 +342,7 @@ public class XalanUtils {
 	 *    <a href="http://www.chipkillmar.net/2009/03/25/pretty-print-xml-from-a-dom/">http://www.chipkillmar.net/2009/03/25/pretty-print-xml-from-a-dom/</a>
 	 * </p>
 	 *
-	 * @param element Element to convert
+	 * @param node Node to convert
 	 * @return Pretty-print formatted String of document
 	 * @throws TransformerException If node could not be converted
 	 * @throws ParserConfigurationException If node could not be converted

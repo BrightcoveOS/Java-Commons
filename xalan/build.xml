@@ -6,9 +6,6 @@
 	<!-- Include any common properties / declarations -->
 	&common;
 	
-	<property name="xalan-version" value="2_7_1"/>
-	<property name="xalan-package" value="xalan-j_${xalan-version}"/>
-	
 	<property name="release-dir" value="release/${common-release-package-version}"/>
 	
 	<target name="main" depends="prepare, clean, local-prepare, extract, repackage, rezip-all-packages" description="Main target">
