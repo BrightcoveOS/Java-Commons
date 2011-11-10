@@ -25,15 +25,9 @@
 		<pathelement location="../xalan/release/${common-release-package-version}/${xalan-library}.jar"/>
 	</path>
 	
-	<target name="main" depends="javadoc" description="Main target">
+	<target name="main" depends="prepare, clean, local-prepare, release, javadoc" description="Main target">
 		<echo>Full build complete.</echo>
 	</target>
-	
-	<!--
-	<target name="main" depends="prepare, clean, local-prepare, release" description="Main target">
-		<echo>Full build complete.</echo>
-	</target>
-	-->
 	
 	<target name="local-prepare" depends="build-dependencies">
 		<mkdir dir="release/apache-commons"/>
