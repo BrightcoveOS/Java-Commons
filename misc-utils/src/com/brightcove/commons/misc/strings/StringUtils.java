@@ -1,5 +1,8 @@
 package com.brightcove.commons.misc.strings;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * <p>
  *    Provides utilities for working with strings
@@ -81,5 +84,19 @@ public class StringUtils {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * <p>
+	 *    Converts a java exception stack trace into a string
+	 * </p>
+	 * 
+	 * @param exception Exception to convert
+	 * @return String representation of exception stack trace
+	 */
+	public static String getExceptionStackTraceAsString(Exception exception) {
+		StringWriter sw = new StringWriter();
+		exception.printStackTrace(new PrintWriter(sw));
+		return sw.toString();
 	}
 }

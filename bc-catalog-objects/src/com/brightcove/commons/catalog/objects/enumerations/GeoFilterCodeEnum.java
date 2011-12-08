@@ -315,4 +315,14 @@ public enum GeoFilterCodeEnum {
 		}
 		return null;
 	}
+	
+	public static GeoFilterCodeEnum lookupByCode(String code){
+		String upperCode = code.toUpperCase();
+		for(GeoFilterCodeEnum lookup : EnumSet.allOf(GeoFilterCodeEnum.class)){
+			if(lookup.code.equals(upperCode)){
+				return lookup;
+			}
+		}
+		return null;
+	}
 }

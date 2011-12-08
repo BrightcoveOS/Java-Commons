@@ -8,11 +8,13 @@
 	
 	<property name="release-package-name" value="bc-commons-catalog-objects"/>
 	<property name="json-org-jar" value="../json-org/release/${common-release-package-version}/json-org.jar"/>
+	<property name="bc-commons-xml-utils-jar" value="../xml-utils/release/${common-release-package-version}/bc-commons-xml-utils-${common-release-package-version}.jar"/>
 	
 	<property name="release-dir" value="release/${common-release-package-version}"/>
 	
 	<path id="project.class.path">
 		<pathelement location="${json-org-jar}"/>
+		<pathelement location="${bc-commons-xml-utils-jar}"/>
 	</path>
 	
 	<target name="main" depends="prepare, clean, local-prepare, compile, javadoc, release" description="Main target">

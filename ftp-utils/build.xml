@@ -9,24 +9,11 @@
 	<property name="release-package-name" value="bc-commons-ftp-utils"/>
 	
 	<property name="apache-commons-net-jar" value="../apache-commons/release/${common-release-package-version}/commons-net-2.2.jar"/>
-	<property name="bc-commons-system-utils-jar" value="../system-utils/release/${common-release-package-version}/bc-commons-system-utils-${common-release-package-version}.jar"/>
-	<property name="bc-commons-xml-utils-jar" value="../xml-utils/release/${common-release-package-version}/bc-commons-xml-utils-${common-release-package-version}.jar"/>
-	
-	<property name="xalan-jar" value="../xalan/release/${common-release-package-version}/xalan.jar"/>
-	<property name="xerces-jar" value="../xalan/release/${common-release-package-version}/xercesImpl.jar"/>
-	<property name="serializer-jar" value="../xalan/release/${common-release-package-version}/serializer.jar"/>
-	<property name="xml-apis-jar" value="../xalan/release/${common-release-package-version}/xml-apis.jar"/>
 	
 	<property name="release-dir" value="release/${common-release-package-version}"/>
 	
 	<path id="project.class.path">
 		<pathelement location="${apache-commons-net-jar}"/>
-		<pathelement location="${bc-commons-system-utils-jar}"/>
-		<pathelement location="${bc-commons-xml-utils-jar}"/>
-		<pathelement location="${xalan-jar}"/>
-		<pathelement location="${xerces-jar}"/>
-		<pathelement location="${serializer-jar}"/>
-		<pathelement location="${xml-apis-jar}"/>
 	</path>
 	
 	<target name="main" depends="prepare, clean, local-prepare, compile, javadoc, release" description="Main target">

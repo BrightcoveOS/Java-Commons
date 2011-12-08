@@ -19,6 +19,31 @@ New - [JavaDocs!](http://brightcoveos.github.com/Java-Commons/javadoc)
 Downloads
 =========
 
+**Version 4.1.0**:
+
+This release adds quite a few features:
+- (new) bc-account-objects: Library to keep track of account details (e.g. read/write tokens, FTP credentials, etc)
+- (new) bc-commons-applications: Utility applications that take advantage of the commons libraries (e.g. FTPUploader)
+- (new) xml-utils: Added a pure W3C library (no Xalan dependecy) for simple operations
+- (changed) bc-catalog-objects: Added ability to serialize/deserialize objects to/from XML
+- (removed) ftp-utils: Moved command line applications to new bc-commons-applications library
+
+Full Download:
+
+- [BC Commons v4.1.0 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.1.0.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.1.0.zip)
+- [3rd Party - JSON.org for BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.1.0.zip)
+- [3rd Party - Xalan for BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.1.0.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.1.0.zip)
+- [BC Commons Examples v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.1.0.zip)
+
+
 **Version 4.0.3**:
 
 This release adds the HttpClientFactory - so an external program can override

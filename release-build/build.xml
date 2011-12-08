@@ -49,6 +49,8 @@
 		<ant dir="../xml-utils"/>
 		<ant dir="../ftp-utils"/>
 		<ant dir="../bc-catalog-objects"/>
+		<ant dir="../bc-account-objects"/>
+		<ant dir="../bc-commons-applications"/>
 		<ant dir="../examples"/>
 	</target>
 	
@@ -102,6 +104,12 @@
 		<copy todir="${rb-versioned-release-dir}">
 			<fileset dir="../bc-catalog-objects/release/${common-release-package-version}/" />
 		</copy>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../bc-account-objects/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-release-dir}">
+			<fileset dir="../bc-commons-applications/release/${common-release-package-version}/" />
+		</copy>
 		<copy todir="${rb-release-dir}">
 			<fileset dir="../examples/release/" includes="**/*.zip" />
 		</copy>
@@ -150,6 +158,12 @@
 		<copy todir="${rb-versioned-wd-release-dir}">
 			<fileset dir="../bc-catalog-objects/release/${common-release-package-version}/" />
 		</copy>
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../bc-account-objects/release/${common-release-package-version}/" />
+		</copy>
+		<copy todir="${rb-versioned-wd-release-dir}">
+			<fileset dir="../bc-commons-applications/release/${common-release-package-version}/" />
+		</copy>
 		<copy todir="${rb-wd-release-dir}">
 			<fileset dir="../examples/release/" includes="**/*.zip" />
 		</copy>
@@ -190,6 +204,7 @@
 		>
 			<fileset dir="${rb-wd-release-dir}" includes="bc-commons-with-dep-${common-release-package-version}/" />
 		</zip>
+		<!--
 		<delete>
 			<fileset dir="${rb-wd-release-dir}/bc-commons-with-dep-${common-release-package-version}" />
 			<fileset dir="${rb-wd-release-dir}" includes="bc-commons-examples-${common-release-package-version}.zip" />
@@ -197,6 +212,7 @@
 			<fileset dir="${rb-wd-release-dir}" includes="json-org-bcver-${common-release-package-version}.zip" />
 			<fileset dir="${rb-wd-release-dir}" includes="xalan-bcver-${common-release-package-version}.zip" />
 		</delete>
+		-->
 	</target>
 	
 	<target name="javadoc" description="JavaDoc target">
@@ -225,6 +241,8 @@
 				<link href="http://hc.apache.org/httpcomponents-client-ga/httpmime/apidocs"/>
 				
 				<fileset dir="../bc-catalog-objects/src"/>
+				<fileset dir="../bc-account-objects/src"/>
+				<fileset dir="../bc-commons-applications/src"/>
 				<fileset dir="../collection-utils/src"/>
 				<fileset dir="../examples/src"/>
 				<fileset dir="../ftp-utils/src"/>
