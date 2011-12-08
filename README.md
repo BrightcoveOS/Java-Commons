@@ -22,6 +22,7 @@ Downloads
 **Version 4.1.0**:
 
 This release adds quite a few features:
+
 - (new) bc-account-objects: Library to keep track of account details (e.g. read/write tokens, FTP credentials, etc)
 - (new) bc-commons-applications: Utility applications that take advantage of the commons libraries (e.g. FTPUploader)
 - (new) xml-utils: Added a pure W3C library (no Xalan dependecy) for simple operations
