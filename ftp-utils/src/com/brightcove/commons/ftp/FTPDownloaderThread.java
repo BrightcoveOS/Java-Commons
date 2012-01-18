@@ -96,6 +96,7 @@ public class FTPDownloaderThread extends FTPThread {
 			printFTPCommandInfo("end of file transfers");
 		}
 		catch(Exception e){
+			log.info("Exception thrown - '" + e + "'.");
 			exception = e;
 		}
 		
@@ -144,5 +145,16 @@ public class FTPDownloaderThread extends FTPThread {
 	 */
 	public List<DownloadMapping> getDownloadMappings(){
 		return downloadMappings;
+	}
+	
+	/**
+	 * <p>
+	 *    Sets the list of all files to be downloaded
+	 * </p>
+	 * 
+	 * @param downloadMappings List of files to download
+	 */
+	public void setDownloadMappings(List<DownloadMapping> downloadMappings){
+		this.downloadMappings = downloadMappings;
 	}
 }

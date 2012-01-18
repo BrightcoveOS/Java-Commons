@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import com.brightcove.commons.ftp.FTPUploaderThread;
@@ -31,10 +28,10 @@ import com.brightcove.commons.xml.XalanUtils;
  *
  */
 public class FTPUploader extends CommandLineProgram {
-	Logger log;
-	Long   uploadTimeoutMillis;
-	
-	FTPUploaderThread ftput;
+	Long              timeoutMilliseconds = null;
+	Integer           maxRetries          = null;
+	File              configFile          = null;
+	FTPUploaderThread ftput               = null;
 	
 	/**
 	 * <p>
@@ -54,24 +51,113 @@ public class FTPUploader extends CommandLineProgram {
 	public static void main(String[] args) {
 		FTPUploader ftpu = new FTPUploader();
 		
-		ftpu.allowNormalArgument("config-file",                            "--config-file <path>",                                  "--config-file:     Path to configuration file",                        true);
-		ftpu.allowNormalArgument("timeout-retries",                        "--timeout-retries <integer>",                           "--timeout-retries: Number of times to retry an upload that times out", false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_TIMEOUT_MILLISECONDS", "--CONFIG_FTP_UPLOAD_TIMEOUT_MILLISECONDS <long int>",   "--CONFIG_FTP_UPLOAD_TIMEOUT_MILLISECONDS: Override config file setting - number of milliseconds to wait before timing out FTP request", false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_SERVER",               "--CONFIG_FTP_UPLOAD_SERVER <host or ip>",               "--CONFIG_FTP_UPLOAD_SERVER:               Override config file setting - host or ip address of server to upload to",                    false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_PORT",                 "--CONFIG_FTP_UPLOAD_PORT <integer>",                    "--CONFIG_FTP_UPLOAD_PORT:                 Override config file setting - port of FTP server to connect to",                             false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_USER",                 "--CONFIG_FTP_UPLOAD_USER <string>",                     "--CONFIG_FTP_UPLOAD_USER:                 Override config file setting - username to log in with",                                      false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_PASSWORD",             "--CONFIG_FTP_UPLOAD_PASSWORD <string>",                 "--CONFIG_FTP_UPLOAD_PASSWORD:             Override config file setting - password to log in with",                                      false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_SKIP",                 "--CONFIG_FTP_UPLOAD_SKIP <TRUE|FALSE>",                 "--CONFIG_FTP_UPLOAD_SKIP:                 Override config file setting - if TRUE, upload will be skipped (testing mode)",               false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_REMOVE_SOURCE",        "--CONFIG_FTP_UPLOAD_REMOVE_SOURCE <TRUE|FALSE>",        "--CONFIG_FTP_UPLOAD_REMOVE_SOURCE:        Override config file setting - if TRUE, uploaded files will be deleted locally",              false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_USE_PASSIVE_TRANSFER", "--CONFIG_FTP_UPLOAD_USE_PASSIVE_TRANSFER <TRUE|FALSE>", "--CONFIG_FTP_UPLOAD_USE_PASSIVE_TRANSFER: Override config file setting - if TRUE, FTP passive mode will be used (active otherwise)",    false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_DEBUG",                "--CONFIG_FTP_UPLOAD_DEBUG <TRUE|FALSE>",                "--CONFIG_FTP_UPLOAD_DEBUG:                Override config file setting - if TRUE, verbose logging about FTP connections will be given", false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_LOCAL_DIRECTORY",      "--CONFIG_FTP_UPLOAD_LOCAL_DIRECTORY <path>",            "--CONFIG_FTP_UPLOAD_LOCAL_DIRECTORY:      Override config file setting - local directory to upload from",                               false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_LOCAL_REGEX",          "--CONFIG_FTP_UPLOAD_LOCAL_REGEX <string>",              "--CONFIG_FTP_UPLOAD_LOCAL_REGEX:          Override config file setting - files to select from local directory for upload",              false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_LOCAL_FILE",           "--CONFIG_FTP_UPLOAD_LOCAL_FILE <path>",                 "--CONFIG_FTP_UPLOAD_LOCAL_FILE:           Override config file setting - specific file to upload",                                      false);
-		ftpu.allowNormalArgument("CONFIG_FTP_UPLOAD_REMOTE_DIRECTORY",     "--CONFIG_FTP_UPLOAD_REMOTE_DIRECTORY <path>",           "--CONFIG_FTP_UPLOAD_REMOTE_DIRECTORY:     Override config file setting - remote directory to upload to",                                false);
+		ftpu.allowNormalArgument("config-file",          "--config-file <path>",            "--config-file:          Path to configuration file",                                                                  false);
+		ftpu.allowNormalArgument("max-retries",          "--max-retries <integer>",         "--max-retries:          Number of times to retry an upload that times out",                                           false);
+		ftpu.allowNormalArgument("timeout-milliseconds", "--timeout-milliseconds <long>",   "--timeout-milliseconds: Override config file setting - number of milliseconds to wait before timing out FTP request", false);
+		ftpu.allowNormalArgument("server-name",          "--server-name <host or ip>",      "--server-name:          Override config file setting - host or ip address of server to upload to",                    false);
+		ftpu.allowNormalArgument("server-port",          "--server-port <integer>",         "--server-port:          Override config file setting - port of FTP server to connect to",                             false);
+		ftpu.allowNormalArgument("username",             "--username <string>",             "--username:             Override config file setting - username to log in with",                                      false);
+		ftpu.allowNormalArgument("password",             "--password <string>",             "--password:             Override config file setting - password to log in with",                                      false);
+		ftpu.allowNormalArgument("skip-transfer",        "--skip-transfer <TRUE|FALSE>",    "--skip-transfer:        Override config file setting - if TRUE, upload will be skipped (testing mode)",               false);
+		ftpu.allowNormalArgument("remove-source",        "--remove-source <TRUE|FALSE>",    "--remove-source:        Override config file setting - if TRUE, uploaded files will be deleted locally",              false);
+		ftpu.allowNormalArgument("passive-transfer",     "--passive-transfer <TRUE|FALSE>", "--passive-transfer:     Override config file setting - if TRUE, FTP passive mode will be used (active otherwise)",    false);
+		ftpu.allowNormalArgument("debug",                "--debug <TRUE|FALSE>",            "--debug:                Override config file setting - if TRUE, verbose logging about FTP connections will be given", false);
+		ftpu.allowNormalArgument("local-directory",      "--local-directory <path>",        "--local-directory:      Override config file setting - local directory to upload from",                               false);
+		ftpu.allowNormalArgument("local-regex",          "--local-regex <string>",          "--local-regex:          Override config file setting - files to select from local directory for upload",              false);
+		ftpu.allowNormalArgument("local-file",           "--local-file <path>",             "--local-file:           Override config file setting - specific file to upload",                                      false);
+		ftpu.allowNormalArgument("remote-directory",     "--remote-directory <path>",       "--remote-directory:     Override config file setting - remote directory to upload to",                                false);
 		
 		ftpu.setMaxNakedArguments(0);
 		ftpu.setMinNakedArguments(0);
+		
+		ftpu.parseArguments(args);
+		
+		if(ftpu.getNormalArgument("config-file") != null){
+			File configFile = new File(ftpu.getNormalArgument("config-file"));
+			try {
+				ftpu.parseConfigFile(configFile);
+			}
+			catch (Exception e) {
+				ftpu.usage(e);
+			}
+		}
+		
+		if(ftpu.getNormalArgument("server-name") != null){
+			ftpu.getFtpUploaderThread().setServerName(ftpu.getNormalArgument("server-name"));
+		}
+		if(ftpu.getNormalArgument("server-port") != null){
+			ftpu.getFtpUploaderThread().setServerPort(Integer.parseInt(ftpu.getNormalArgument("server-port")));
+		}
+		if(ftpu.getNormalArgument("username") != null){
+			ftpu.getFtpUploaderThread().setUsername(ftpu.getNormalArgument("username"));
+		}
+		if(ftpu.getNormalArgument("password") != null){
+			ftpu.getFtpUploaderThread().setPassword(ftpu.getNormalArgument("password"));
+		}
+		if(ftpu.getNormalArgument("skip-transfer") != null){
+			ftpu.getFtpUploaderThread().setSkipTransfer(Boolean.parseBoolean(ftpu.getNormalArgument("skip-transfer")));
+		}
+		if(ftpu.getNormalArgument("remove-source") != null){
+			ftpu.getFtpUploaderThread().setRemoveSource(Boolean.parseBoolean(ftpu.getNormalArgument("remove-source")));
+		}
+		if(ftpu.getNormalArgument("passive-transfer") != null){
+			ftpu.getFtpUploaderThread().setPassiveTransfer(Boolean.parseBoolean(ftpu.getNormalArgument("passive-transfer")));
+		}
+		if(ftpu.getNormalArgument("debug") != null){
+			ftpu.getFtpUploaderThread().setDebug(Boolean.parseBoolean(ftpu.getNormalArgument("debug")));
+		}
+		
+		if(ftpu.getNormalArgument("local-directory") != null){
+			ftpu.getFtpUploaderThread().setUploadMappings(new ArrayList<UploadMapping>());
+			
+			File uploadDir = new File(ftpu.getNormalArgument("local-directory"));
+			if(! uploadDir.exists()){
+				ftpu.usage("Upload directory '" + uploadDir.getAbsolutePath() + "' does not exist.");
+			}
+			if(! uploadDir.isDirectory()){
+				ftpu.usage("Path '" + uploadDir.getAbsolutePath() + "' is not a directory.");
+			}
+			
+			String remoteDirectory = ftpu.getNormalArgument("remote-directory");
+			
+			if(ftpu.getNormalArgument("local-file") != null){
+				ftpu.addUpload(uploadDir, ftpu.getNormalArgument("local-file"), remoteDirectory);
+			}
+			else{
+				String uploadRegex = ftpu.getNormalArgument("local-regex");
+				for(File localFile : uploadDir.listFiles()){
+					Pattern pattern = Pattern.compile(uploadRegex);
+					Matcher matcher = pattern.matcher(localFile.getName());
+					if(matcher.find()){
+						ftpu.addUpload(localFile, remoteDirectory);
+					}
+				}
+			}
+		}
+		
+		if(ftpu.getNormalArgument("max-retries") != null){
+			ftpu.setMaxRetries(Integer.parseInt(ftpu.getNormalArgument("max-retries")));
+		}
+		if(ftpu.getNormalArgument("timeout-milliseconds") != null){
+			ftpu.setTimeoutMilliseconds(Long.parseLong(ftpu.getNormalArgument("timeout-milliseconds")));
+		}
+		
+		ftpu.getLogger().info("Configuration:\n" + 
+			"Config file:          '" + ftpu.getNormalArgument("config-file")          + "'\n" + 
+			"Max retries:          '" + ftpu.getNormalArgument("max-retries")          + "'\n" + 
+			"Timeout milliseconds: '" + ftpu.getNormalArgument("timeout-milliseconds") + "'\n" + 
+			"Server name:          '" + ftpu.getNormalArgument("server-name")          + "'\n" + 
+			"Server port:          '" + ftpu.getNormalArgument("server-port")          + "'\n" + 
+			"Username:             '" + ftpu.getNormalArgument("username")             + "'\n" + 
+			"Password:             '" + ftpu.getNormalArgument("password")             + "'\n" + 
+			"Skip transfer:        '" + ftpu.getNormalArgument("skip-transfer")        + "'\n" + 
+			"Remove source:        '" + ftpu.getNormalArgument("remove-source")        + "'\n" +
+			"Debug:                '" + ftpu.getNormalArgument("debug")                + "'\n" + 
+			"Local directory:      '" + ftpu.getNormalArgument("local-directory")      + "'\n" + 
+			"Local regex:          '" + ftpu.getNormalArgument("local-regex")          + "'\n" + 
+			"Local file:           '" + ftpu.getNormalArgument("local-file")           + "'\n" + 
+			"Remote directory:     '" + ftpu.getNormalArgument("remote-directory")     + "'."
+		);
 		
 		ftpu.run(args);
 	}
@@ -84,20 +170,6 @@ public class FTPUploader extends CommandLineProgram {
 	 */
 	public FTPUploader(){
 		init();
-		
-		uploadTimeoutMillis = 0l;
-		
-		ftput = new FTPUploaderThread(
-			"",        // Server name
-			21,        // Server port
-			"",        // Username
-			"",        // Password
-			true,      // Skip transfer
-			false,     // Remove source
-			false,     // Passive transfer
-			new ArrayList<UploadMapping>(),
-			true       // Debug
-		);
 	}
 	
 	/**
@@ -117,19 +189,15 @@ public class FTPUploader extends CommandLineProgram {
 	public FTPUploader(String serverName, String username, String password, Boolean skipTransfer, Boolean removeSource, Boolean passiveTransfer, Long uploadTimeoutMillis, Boolean debug) {
 		init();
 		
-		this.uploadTimeoutMillis = uploadTimeoutMillis;
-		
-		ftput = new FTPUploaderThread(
-			serverName,       // Server name
-			21,               // Server port
-			username,         // Username
-			password,         // Password
-			skipTransfer,     // Skip transfer
-			removeSource,     // Remove source
-			passiveTransfer,  // Passive transfer
-			new ArrayList<UploadMapping>(),
-			debug             // Debug
-		);
+		this.getFtpUploaderThread().setServerName(serverName);
+		this.getFtpUploaderThread().setServerPort(21);
+		this.getFtpUploaderThread().setUsername(username);
+		this.getFtpUploaderThread().setPassword(password);
+		this.getFtpUploaderThread().setSkipTransfer(skipTransfer);
+		this.getFtpUploaderThread().setRemoveSource(removeSource);
+		this.getFtpUploaderThread().setPassiveTransfer(passiveTransfer);
+		this.getFtpUploaderThread().setUploadMappings(new ArrayList<UploadMapping>());
+		this.getFtpUploaderThread().setDebug(debug);
 	}
 	
 	/**
@@ -150,19 +218,15 @@ public class FTPUploader extends CommandLineProgram {
 	public FTPUploader(String serverName, Integer serverPort, String username, String password, Boolean skipTransfer, Boolean removeSource, Boolean passiveTransfer, Long uploadTimeoutMillis, Boolean debug) {
 		init();
 		
-		this.uploadTimeoutMillis = uploadTimeoutMillis;
-		
-		ftput = new FTPUploaderThread(
-			serverName,       // Server name
-			serverPort,       // Server port
-			username,         // Username
-			password,         // Password
-			skipTransfer,     // Skip transfer
-			removeSource,     // Remove source
-			passiveTransfer,  // Passive transfer
-			new ArrayList<UploadMapping>(),
-			debug             // Debug
-		);
+		this.getFtpUploaderThread().setServerName(serverName);
+		this.getFtpUploaderThread().setServerPort(serverPort);
+		this.getFtpUploaderThread().setUsername(username);
+		this.getFtpUploaderThread().setPassword(password);
+		this.getFtpUploaderThread().setSkipTransfer(skipTransfer);
+		this.getFtpUploaderThread().setRemoveSource(removeSource);
+		this.getFtpUploaderThread().setPassiveTransfer(passiveTransfer);
+		this.getFtpUploaderThread().setUploadMappings(new ArrayList<UploadMapping>());
+		this.getFtpUploaderThread().setDebug(debug);
 	}
 	
 	/**
@@ -183,132 +247,50 @@ public class FTPUploader extends CommandLineProgram {
 	}
 	
 	private void parseConfigFile(File configFile) throws ParserConfigurationException, SAXException, IOException, TransformerException {
-		log.info("Parsing config file '" + configFile.getAbsolutePath() + "'.");
+		setConfigFile(configFile);
+		
+		this.getLogger().info("Parsing config file '" + configFile.getAbsolutePath() + "'.");
 		
 		Document configDoc = XalanUtils.parseXml(configFile, false);
 		
-		String FTP_UPLOAD_TIMEOUT_MILLISECONDS = getNormalArgument("CONFIG_FTP_UPLOAD_TIMEOUT_MILLISECONDS");
-		String FTP_UPLOAD_SERVER               = getNormalArgument("CONFIG_FTP_UPLOAD_SERVER");
-		String FTP_UPLOAD_PORT                 = getNormalArgument("CONFIG_FTP_UPLOAD_PORT");
-		String FTP_UPLOAD_USER                 = getNormalArgument("CONFIG_FTP_UPLOAD_USER");
-		String FTP_UPLOAD_PASSWORD             = getNormalArgument("CONFIG_FTP_UPLOAD_PASSWORD");
-		String FTP_UPLOAD_SKIP                 = getNormalArgument("CONFIG_FTP_UPLOAD_SKIP");
-		String FTP_UPLOAD_REMOVE_SOURCE        = getNormalArgument("CONFIG_FTP_UPLOAD_REMOVE_SOURCE");
-		String FTP_UPLOAD_USE_PASSIVE_TRANSFER = getNormalArgument("CONFIG_FTP_UPLOAD_USE_PASSIVE_TRANSFER");
-		String FTP_UPLOAD_DEBUG                = getNormalArgument("CONFIG_FTP_UPLOAD_DEBUG");
-		String FTP_UPLOAD_LOCAL_DIRECTORY      = getNormalArgument("CONFIG_FTP_UPLOAD_LOCAL_DIRECTORY");
-		String FTP_UPLOAD_LOCAL_REGEX          = getNormalArgument("CONFIG_FTP_UPLOAD_LOCAL_REGEX");
-		String FTP_UPLOAD_LOCAL_FILE           = getNormalArgument("CONFIG_FTP_UPLOAD_LOCAL_FILE");
-		String FTP_UPLOAD_REMOTE_DIRECTORY     = getNormalArgument("CONFIG_FTP_UPLOAD_REMOTE_DIRECTORY");
-		
-		if(FTP_UPLOAD_TIMEOUT_MILLISECONDS == null){
-			FTP_UPLOAD_TIMEOUT_MILLISECONDS = getStringSetting(configDoc, "FTP_UPLOAD_TIMEOUT_MILLISECONDS");
-		}
-		if(FTP_UPLOAD_SERVER == null){
-			FTP_UPLOAD_SERVER = getStringSetting(configDoc, "FTP_UPLOAD_SERVER");
-		}
-		if(FTP_UPLOAD_PORT == null){
-			FTP_UPLOAD_PORT = getStringSetting(configDoc, "FTP_UPLOAD_PORT");
-		}
-		if(FTP_UPLOAD_USER == null){
-			FTP_UPLOAD_USER = getStringSetting(configDoc, "FTP_UPLOAD_USER");
-		}
-		if(FTP_UPLOAD_PASSWORD == null){
-			FTP_UPLOAD_PASSWORD = getStringSetting(configDoc, "FTP_UPLOAD_PASSWORD");
-		}
-		if(FTP_UPLOAD_SKIP == null){
-			FTP_UPLOAD_SKIP = getStringSetting(configDoc, "FTP_UPLOAD_SKIP");
-		}
-		if(FTP_UPLOAD_REMOVE_SOURCE == null){
-			FTP_UPLOAD_REMOVE_SOURCE = getStringSetting(configDoc, "FTP_UPLOAD_REMOVE_SOURCE");
-		}
-		if(FTP_UPLOAD_USE_PASSIVE_TRANSFER == null){
-			FTP_UPLOAD_USE_PASSIVE_TRANSFER = getStringSetting(configDoc, "FTP_UPLOAD_USE_PASSIVE_TRANSFER");
-		}
-		if(FTP_UPLOAD_DEBUG == null){
-			FTP_UPLOAD_DEBUG = getStringSetting(configDoc, "FTP_UPLOAD_DEBUG");
-		}
-		if(FTP_UPLOAD_LOCAL_DIRECTORY == null){
-			FTP_UPLOAD_LOCAL_DIRECTORY = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_DIRECTORY");
-		}
-		if(FTP_UPLOAD_LOCAL_REGEX == null){
-			FTP_UPLOAD_LOCAL_REGEX = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_REGEX");
-		}
-		if(FTP_UPLOAD_LOCAL_FILE == null){
-			FTP_UPLOAD_LOCAL_FILE = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_FILE");
-		}
-		if(FTP_UPLOAD_REMOTE_DIRECTORY == null){
-			FTP_UPLOAD_REMOTE_DIRECTORY = getStringSetting(configDoc, "FTP_UPLOAD_REMOTE_DIRECTORY");
-		}
-		
-		if("".equals(FTP_UPLOAD_LOCAL_DIRECTORY)){
-			FTP_UPLOAD_LOCAL_DIRECTORY = null;
-		}
-		if("".equals(FTP_UPLOAD_LOCAL_REGEX)){
-			FTP_UPLOAD_LOCAL_REGEX = null;
-		}
-		if("".equals(FTP_UPLOAD_LOCAL_FILE)){
-			FTP_UPLOAD_LOCAL_FILE = null;
-		}
-		if("".equals(FTP_UPLOAD_REMOTE_DIRECTORY)){
-			FTP_UPLOAD_REMOTE_DIRECTORY = null;
-		}
-		
-		log.info(
-			"Upload settings:\n"+
-			"\tFTP_UPLOAD_TIMEOUT_MILLISECONDS: '" + FTP_UPLOAD_TIMEOUT_MILLISECONDS + "'\n" +
-			"\tFTP_UPLOAD_SERVER:               '" + FTP_UPLOAD_SERVER + "'\n" +
-			"\tFTP_UPLOAD_PORT:                 '" + FTP_UPLOAD_PORT + "'\n" +
-			"\tFTP_UPLOAD_USER:                 '" + FTP_UPLOAD_USER + "'\n" +
-			"\tFTP_UPLOAD_PASSWORD:             '" + FTP_UPLOAD_PASSWORD + "'\n" +
-			"\tFTP_UPLOAD_SKIP:                 '" + FTP_UPLOAD_SKIP + "'\n" +
-			"\tFTP_UPLOAD_REMOVE_SOURCE:        '" + FTP_UPLOAD_REMOVE_SOURCE + "'\n" +
-			"\tFTP_UPLOAD_USE_PASSIVE_TRANSFER: '" + FTP_UPLOAD_USE_PASSIVE_TRANSFER + "'\n" +
-			"\tFTP_UPLOAD_DEBUG:                '" + FTP_UPLOAD_DEBUG + "'\n" +
-			"\tFTP_UPLOAD_LOCAL_DIRECTORY:      '" + FTP_UPLOAD_LOCAL_DIRECTORY + "'\n" +
-			"\tFTP_UPLOAD_LOCAL_REGEX:          '" + FTP_UPLOAD_LOCAL_REGEX + "'\n" +
-			"\tFTP_UPLOAD_LOCAL_FILE:           '" + FTP_UPLOAD_LOCAL_FILE + "'\n" +
-			"\tFTP_UPLOAD_REMOTE_DIRECTORY:     '" + FTP_UPLOAD_REMOTE_DIRECTORY + "'\n"
-		);
-		
-		uploadTimeoutMillis = Long.parseLong(FTP_UPLOAD_TIMEOUT_MILLISECONDS);
-		
-		String  serverName = FTP_UPLOAD_SERVER;
-		Integer serverPort = Integer.parseInt(FTP_UPLOAD_PORT);
-		String  username   = FTP_UPLOAD_USER;
-		String  password   = FTP_UPLOAD_PASSWORD;
+		String serverName      = getStringSetting(configDoc, "FTP_UPLOAD_SERVER");
+		String serverPort      = getStringSetting(configDoc, "FTP_UPLOAD_PORT");
+		String username        = getStringSetting(configDoc, "FTP_UPLOAD_USER");
+		String password        = getStringSetting(configDoc, "FTP_UPLOAD_PASSWORD");
+		String skipTransfer    = getStringSetting(configDoc, "FTP_UPLOAD_SKIP");
+		String removeSource    = getStringSetting(configDoc, "FTP_UPLOAD_REMOVE_SOURCE");
+		String passiveTransfer = getStringSetting(configDoc, "FTP_UPLOAD_USE_PASSIVE_TRANSFER");
+		String debug           = getStringSetting(configDoc, "FTP_UPLOAD_DEBUG");
 		
 		if(serverPort == null){
-			serverPort = 21;
+			serverPort = "21";
+		}
+		if(skipTransfer == null){
+			skipTransfer = "false";
+		}
+		if(removeSource == null){
+			removeSource = "false";
+		}
+		if(passiveTransfer == null){
+			passiveTransfer = "true";
+		}
+		if(debug == null){
+			debug = "true";
 		}
 		
-		Boolean skipTransfer    = Boolean.parseBoolean(FTP_UPLOAD_SKIP);
-		Boolean removeSource    = Boolean.parseBoolean(FTP_UPLOAD_REMOVE_SOURCE);
-		Boolean passiveTransfer = Boolean.parseBoolean(FTP_UPLOAD_USE_PASSIVE_TRANSFER);
-		Boolean debug           = Boolean.parseBoolean(FTP_UPLOAD_DEBUG);
+		this.getFtpUploaderThread().setServerName(serverName);
+		this.getFtpUploaderThread().setServerPort(Integer.parseInt(serverPort));
+		this.getFtpUploaderThread().setUsername(username);
+		this.getFtpUploaderThread().setPassword(password);
+		this.getFtpUploaderThread().setSkipTransfer(Boolean.parseBoolean(skipTransfer));
+		this.getFtpUploaderThread().setRemoveSource(Boolean.parseBoolean(removeSource));
+		this.getFtpUploaderThread().setPassiveTransfer(Boolean.parseBoolean(passiveTransfer));
+		this.getFtpUploaderThread().setDebug(Boolean.parseBoolean(debug));
 		
-		if(skipTransfer    == null){ skipTransfer    = false; }
-		if(removeSource    == null){ removeSource    = false; }
-		if(passiveTransfer == null){ passiveTransfer = false; }
-		if(debug           == null){ debug           = false; }
-		
-		ftput = new FTPUploaderThread(
-			serverName,       // Server name
-			serverPort,       // Server port
-			username,         // Username
-			password,         // Password
-			skipTransfer,     // Skip transfer
-			removeSource,     // Remove source
-			passiveTransfer,  // Passive transfer
-			new ArrayList<UploadMapping>(),
-			debug             // Debug
-		);
-		
-		String uploadDirectory = FTP_UPLOAD_LOCAL_DIRECTORY;
-		String uploadRegex     = FTP_UPLOAD_LOCAL_REGEX;
-		String uploadFile      = FTP_UPLOAD_LOCAL_FILE;
-		String remoteDirectory = FTP_UPLOAD_REMOTE_DIRECTORY;
-		// String uploadOptions   = getStringSetting(configDoc, "FTP_UPLOAD_OPTIONS");
+		String uploadDirectory = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_DIRECTORY");
+		String uploadRegex     = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_REGEX");
+		String uploadFile      = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_FILE");
+		String remoteDirectory = getStringSetting(configDoc, "FTP_UPLOAD_REMOTE_DIRECTORY");
 		
 		File uploadDir = new File(uploadDirectory);
 		if(! uploadDir.exists()){
@@ -341,45 +323,33 @@ public class FTPUploader extends CommandLineProgram {
 		// to be called from another class or object - see doUpload() instead
 		
 		setCaller(this.getClass().getCanonicalName());
-		parseArguments(args);
+		// parseArguments(args);
 		
-		File configFile = new File(getNormalArgument("config-file"));
-		if(! configFile.exists()){
-			usage("Config file '" + configFile.getAbsolutePath() + "' doesn't exist.");
-		}
-		
-		try{
-			parseConfigFile(configFile);
-		}
-		catch(Exception e){
-			usage(e);
-		}
-		
-		String  retryArg = getNormalArgument("timeout-retries");
-		Integer retries  = 0;
-		if((retryArg != null) && (! "".equals(retryArg))){
-			retries = new Integer(retryArg);
+		if(maxRetries == null){
+			maxRetries = 0;
 		}
 		
 		Integer   attempt       = 0;
 		Exception lastException = null;
-		while(attempt <= retries){
+		while(attempt <= maxRetries){
 			try {
 				doUpload();
-				log.info("Upload complete.");
+				this.getLogger().info("Upload complete.");
 				return;
 			}
 			catch (Exception e) {
-				log.severe("Exception caught: '" + e + "'.");
+				this.getLogger().severe("Exception caught: '" + e + "'.");
 				lastException = e;
 				
-				if(attempt < retries){
-					log.info("Will retry request");
+				if(attempt < maxRetries){
+					this.getLogger().info("Will retry request");
 				}
 				else{
-					log.severe("Maximum number of retries (" + retries + ") reached.  Request will not be retried.");
+					this.getLogger().severe("Maximum number of retries (" + maxRetries + ") reached.  Request will not be retried.");
 				}
 			}
+			
+			attempt++;
 		}
 		
 		usage(lastException);
@@ -403,55 +373,21 @@ public class FTPUploader extends CommandLineProgram {
 		addUpload(localFile, remoteDir);
 	}
 	
-	private String getStringSetting(Document configDoc, String settingName) throws TransformerException {
-		String xpath = "/config/setting[@name='" + settingName + "']/value";
-		log.info("Looking up setting '"+settingName+"' with xpath '" + xpath + "'.");
-		
-		List<Node> val = XalanUtils.getNodesFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
-		
-		if(val == null){
-			log.info("    No values found.");
-			return "";
-		}
-		
-		log.info("    Found '" + val.size() + "' values.");
-		if(val.size() < 1){
-			return "";
-		}
-		
-		Node textNode = val.get(0).getFirstChild();
-		if(textNode == null){
-			log.info("        No text child nodes found.");
-			return "";
-		}
-		if(textNode.getNodeValue() == null){
-			log.info("        No text value found on child node.");
-			return "";
-		}
-		
-		log.info("        Returning value '" + textNode.getNodeValue() + "'.");
-		return textNode.getNodeValue();
-	}
-	
-	//private String getStringSetting(Document configDoc, String settingName) throws TransformerException {
-	//	return XalanUtils.getStringFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
-	//}
-	//
-	//private Integer getIntegerSetting(Document configDoc, String settingName) throws TransformerException {
-	//	return XalanUtils.getIntegerFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
-	//}
-	//
-	//private Boolean getBooleanSetting(Document configDoc, String settingName) throws TransformerException {
-	//	return XalanUtils.getBooleanFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
-	//}
-	//
-	//private Long getLongSetting(Document configDoc, String settingName) throws TransformerException {
-	//	return XalanUtils.getLongFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
-	//}
 	
 	private void init(){
-		log = Logger.getLogger(this.getClass().getCanonicalName());
-		// uploadMappings = new ArrayList<UploadMapping>();
+		timeoutMilliseconds = 0l;
+		
+		ftput = new FTPUploaderThread(
+			"",        // Server name
+			21,        // Server port
+			"",        // Username
+			"",        // Password
+			true,      // Skip transfer
+			false,     // Remove source
+			false,     // Passive transfer
+			new ArrayList<UploadMapping>(),
+			true       // Debug
+		);
 	}
 	
 	/**
@@ -463,8 +399,12 @@ public class FTPUploader extends CommandLineProgram {
 	 * @throws Exception If thread is interrupted (mainly if upload times out)
 	 */
 	public void doUpload() throws Exception {
-		log.info("Starting new thread '" + ftput + "'.");
+		this.getLogger().info("Starting new thread '" + ftput + "'.");
 		ftput.start();
+		
+		if(timeoutMilliseconds == null){
+			timeoutMilliseconds = 1000l * 60l * 60l * 24l; // 1 day
+		}
 		
 		if (ftput.isAlive()) {
 			// Thread has not finished
@@ -477,8 +417,8 @@ public class FTPUploader extends CommandLineProgram {
 				if(ftput.isAlive()){
 					Long now      = (new Date()).getTime();
 					Long timeDiff = now - threadStart;
-					if(timeDiff > uploadTimeoutMillis){
-						log.severe("Waited " + timeDiff + " for upload to complete without success.  Terminating.");
+					if(timeDiff > timeoutMilliseconds){
+						this.getLogger().severe("Waited " + timeDiff + " for upload to complete without success.  Terminating.");
 						
 						ftput.interrupt();
 						throw new InterruptedException("Stopped upload after " + timeDiff + " milliseconds.  Upload most likely was partially but not fully complete.");
@@ -495,13 +435,61 @@ public class FTPUploader extends CommandLineProgram {
 			// Finished
 		}
 		
-		log.info("Thread completed.  Checking for exceptions.");
+		this.getLogger().info("Thread completed.  Checking for exceptions.");
 		
 		if(ftput.getException() != null){
-			log.severe("Thread threw exception '" + ftput.getException() + "'.");
+			this.getLogger().severe("Thread threw exception '" + ftput.getException() + "'.");
 			throw ftput.getException();
 		}
 		
-		log.info("Upload complete.");
+		this.getLogger().info("Upload complete.");
+	}
+	
+	public Long getTimeoutMilliseconds(){
+		return timeoutMilliseconds;
+	}
+	
+	public void setTimeoutMilliseconds(Long timeoutMilliseconds){
+		this.timeoutMilliseconds = timeoutMilliseconds;
+	}
+	
+	public Integer getMaxRetries(){
+		return maxRetries;
+	}
+	
+	public void setMaxRetries(Integer maxRetries){
+		this.maxRetries = maxRetries;
+	}
+	
+	public File getConfigFile(){
+		return configFile;
+	}
+	
+	public void setConfigFile(File configFile){
+		this.configFile = configFile;
+	}
+	
+	public FTPUploaderThread getFtpUploaderThread(){
+		return ftput;
+	}
+	
+	public void setFtpUploaderThread(FTPUploaderThread ftput){
+		this.ftput = ftput;
+	}
+	
+	public String getStringSetting(Document configDoc, String settingName) throws TransformerException {
+		return XalanUtils.getStringFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
+	}
+	
+	public Integer getIntegerSetting(Document configDoc, String settingName) throws TransformerException {
+		return XalanUtils.getIntegerFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
+	}
+	
+	public Boolean getBooleanSetting(Document configDoc, String settingName) throws TransformerException {
+		return XalanUtils.getBooleanFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
+	}
+	
+	public Long getLongSetting(Document configDoc, String settingName) throws TransformerException {
+		return XalanUtils.getLongFromXPath(configDoc, "/config/setting[@name='" + settingName + "']/value");
 	}
 }

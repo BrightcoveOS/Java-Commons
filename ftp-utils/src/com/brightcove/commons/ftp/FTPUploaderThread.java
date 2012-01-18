@@ -19,7 +19,7 @@ import org.apache.commons.net.ftp.FTPClient;
  *
  */
 public class FTPUploaderThread extends FTPThread {
-	List<UploadMapping> uploadMappings;
+	private List<UploadMapping> uploadMappings;
 	
 	public FTPUploaderThread(String serverName, Integer serverPort, String username, String password, Boolean skipTransfer, Boolean removeSource, Boolean passiveTransfer, List<UploadMapping> uploadMappings, Boolean debug) {
 		log = Logger.getLogger(this.getClass().getCanonicalName());
@@ -120,5 +120,16 @@ public class FTPUploaderThread extends FTPThread {
 	 */
 	public List<UploadMapping> getUploadMappings(){
 		return uploadMappings;
+	}
+	
+	/**
+	 * <p>
+	 *    Sets the list of all files to be uploaded
+	 * </p>
+	 * 
+	 * @param uploadMappings List of files to upload
+	 */
+	public void setUploadMappings(List<UploadMapping> uploadMappings){
+		this.uploadMappings = uploadMappings;
 	}
 }

@@ -163,4 +163,17 @@ public class FTPThread extends Thread {
 	public Boolean   getPassiveTransfer() { return passiveTransfer; }
 	public Boolean   getDebug()           { return debug;           }
 	public Exception getException()       { return exception;       }
+	public FTPClient getFtpClient()       { return ftpc;            }
+	
+	public void setLog(Logger log)                          { this.log             = log;             }
+	public void setServerName(String serverName)            { this.serverName      = serverName;      }
+	public void setServerPort(Integer serverPort)           { this.serverPort      = serverPort;      }
+	public void setUsername(String username)                { this.username        = username;        }
+	public void setPassword(String password)                { this.password        = password;        }
+	public void setSkipTransfer(Boolean skipTransfer)       { this.skipTransfer    = skipTransfer;    }
+	public void setRemoveSource(Boolean removeSource)       { this.removeSource    = removeSource;    }
+	public void setPassiveTransfer(Boolean passiveTransfer) { this.passiveTransfer = passiveTransfer; }
+	public void setDebug(Boolean debug)                     { this.debug           = debug;           }
+	public void setException(Exception exception)           { this.exception       = exception;       }
+	public void setFtpClient(FTPClient ftpc)                { this.ftpc            = ftpc;            }
 }
