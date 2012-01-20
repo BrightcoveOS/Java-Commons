@@ -28,10 +28,15 @@ import com.brightcove.commons.xml.XalanUtils;
  *
  */
 public class FTPUploader extends CommandLineProgram {
-	Long              timeoutMilliseconds = null;
-	Integer           maxRetries          = null;
-	File              configFile          = null;
-	FTPUploaderThread ftput               = null;
+	private Long              timeoutMilliseconds = null;
+	private Integer           maxRetries          = null;
+	private File              configFile          = null;
+	private FTPUploaderThread ftput               = null;
+	
+	private String localDirectory  = null;
+	private String remoteDirectory = null;
+	private String localFile       = null;
+	private String localRegex      = null;
 	
 	/**
 	 * <p>
@@ -107,33 +112,12 @@ public class FTPUploader extends CommandLineProgram {
 			ftpu.getFtpUploaderThread().setDebug(Boolean.parseBoolean(ftpu.getNormalArgument("debug")));
 		}
 		
-		if(ftpu.getNormalArgument("local-directory") != null){
-			ftpu.getFtpUploaderThread().setUploadMappings(new ArrayList<UploadMapping>());
-			
-			File uploadDir = new File(ftpu.getNormalArgument("local-directory"));
-			if(! uploadDir.exists()){
-				ftpu.usage("Upload directory '" + uploadDir.getAbsolutePath() + "' does not exist.");
-			}
-			if(! uploadDir.isDirectory()){
-				ftpu.usage("Path '" + uploadDir.getAbsolutePath() + "' is not a directory.");
-			}
-			
-			String remoteDirectory = ftpu.getNormalArgument("remote-directory");
-			
-			if(ftpu.getNormalArgument("local-file") != null){
-				ftpu.addUpload(uploadDir, ftpu.getNormalArgument("local-file"), remoteDirectory);
-			}
-			else{
-				String uploadRegex = ftpu.getNormalArgument("local-regex");
-				for(File localFile : uploadDir.listFiles()){
-					Pattern pattern = Pattern.compile(uploadRegex);
-					Matcher matcher = pattern.matcher(localFile.getName());
-					if(matcher.find()){
-						ftpu.addUpload(localFile, remoteDirectory);
-					}
-				}
-			}
-		}
+		String localDirectoryArg  = ftpu.getNormalArgument("local-directory");
+		String remoteDirectoryArg = ftpu.getNormalArgument("remote-directory");
+		String localFileArg       = ftpu.getNormalArgument("local-file");
+		String localRegexArg      = ftpu.getNormalArgument("local-regex");
+		
+		ftpu.calculateUploadMappings(localDirectoryArg, localFileArg, localRegexArg, remoteDirectoryArg);
 		
 		if(ftpu.getNormalArgument("max-retries") != null){
 			ftpu.setMaxRetries(Integer.parseInt(ftpu.getNormalArgument("max-retries")));
@@ -142,21 +126,26 @@ public class FTPUploader extends CommandLineProgram {
 			ftpu.setTimeoutMilliseconds(Long.parseLong(ftpu.getNormalArgument("timeout-milliseconds")));
 		}
 		
+		String uploadMappingString = "";
+		if(ftpu.getFtpUploaderThread().getUploadMappings() != null){
+			uploadMappingString += "Upload mappings:      '" + ftpu.getFtpUploaderThread().getUploadMappings().size() + "':\n";
+			for(UploadMapping mapping : ftpu.getFtpUploaderThread().getUploadMappings()){
+				uploadMappingString += "    " + mapping.getSource().getAbsolutePath() + " - " + mapping.getDestination() + ".\n";
+			}
+		}
+		
 		ftpu.getLogger().info("Configuration:\n" + 
-			"Config file:          '" + ftpu.getNormalArgument("config-file")          + "'\n" + 
-			"Max retries:          '" + ftpu.getNormalArgument("max-retries")          + "'\n" + 
-			"Timeout milliseconds: '" + ftpu.getNormalArgument("timeout-milliseconds") + "'\n" + 
-			"Server name:          '" + ftpu.getNormalArgument("server-name")          + "'\n" + 
-			"Server port:          '" + ftpu.getNormalArgument("server-port")          + "'\n" + 
-			"Username:             '" + ftpu.getNormalArgument("username")             + "'\n" + 
-			"Password:             '" + ftpu.getNormalArgument("password")             + "'\n" + 
-			"Skip transfer:        '" + ftpu.getNormalArgument("skip-transfer")        + "'\n" + 
-			"Remove source:        '" + ftpu.getNormalArgument("remove-source")        + "'\n" +
-			"Debug:                '" + ftpu.getNormalArgument("debug")                + "'\n" + 
-			"Local directory:      '" + ftpu.getNormalArgument("local-directory")      + "'\n" + 
-			"Local regex:          '" + ftpu.getNormalArgument("local-regex")          + "'\n" + 
-			"Local file:           '" + ftpu.getNormalArgument("local-file")           + "'\n" + 
-			"Remote directory:     '" + ftpu.getNormalArgument("remote-directory")     + "'."
+			"Config file:          '" + ftpu.getConfigFile().getAbsolutePath()          + "'\n" + 
+			"Max retries:          '" + ftpu.getMaxRetries()                            + "'\n" + 
+			"Timeout milliseconds: '" + ftpu.getTimeoutMilliseconds()                   + "'\n" + 
+			"Server name:          '" + ftpu.getFtpUploaderThread().getServerName()     + "'\n" + 
+			"Server port:          '" + ftpu.getFtpUploaderThread().getServerPort()     + "'\n" + 
+			"Username:             '" + ftpu.getFtpUploaderThread().getUsername()       + "'\n" + 
+			"Password:             '" + ftpu.getFtpUploaderThread().getPassword()       + "'\n" + 
+			"Skip transfer:        '" + ftpu.getFtpUploaderThread().getSkipTransfer()   + "'\n" + 
+			"Remove source:        '" + ftpu.getFtpUploaderThread().getSkipTransfer()   + "'\n" +
+			"Debug:                '" + ftpu.getFtpUploaderThread().getDebug()          + "'\n" + 
+			uploadMappingString
 		);
 		
 		ftpu.run(args);
@@ -244,6 +233,43 @@ public class FTPUploader extends CommandLineProgram {
 		init();
 		
 		parseConfigFile(configFile);
+		
+		calculateUploadMappings(localDirectory, localFile, localRegex, remoteDirectory);
+	}
+	
+	public void calculateUploadMappings(String localDirectory, String localFile, String localRegex, String remoteDirectory){
+		if(localDirectory != null){
+			this.localDirectory  = localDirectory;
+		}
+		if(localFile != null){
+			this.localFile       = localFile;
+		}
+		if(localRegex != null){
+			this.localRegex      = localRegex;
+		}
+		if(remoteDirectory != null){
+			this.remoteDirectory = remoteDirectory;
+		}
+		
+		this.getFtpUploaderThread().setUploadMappings(new ArrayList<UploadMapping>());
+		
+		File uploadDirectory = new File(".");
+		if(this.localDirectory != null){
+			uploadDirectory = new File(this.localDirectory);
+		}
+		
+		if(this.localFile != null){
+			addUpload(uploadDirectory, this.localFile, this.remoteDirectory);
+		}
+		else{
+			for(File uploadFile : uploadDirectory.listFiles()){
+				Pattern pattern = Pattern.compile(this.localRegex);
+				Matcher matcher = pattern.matcher(uploadFile.getName());
+				if(matcher.find()){
+					addUpload(uploadFile, this.remoteDirectory);
+				}
+			}
+		}
 	}
 	
 	private void parseConfigFile(File configFile) throws ParserConfigurationException, SAXException, IOException, TransformerException {
@@ -292,27 +318,10 @@ public class FTPUploader extends CommandLineProgram {
 		String uploadFile      = getStringSetting(configDoc, "FTP_UPLOAD_LOCAL_FILE");
 		String remoteDirectory = getStringSetting(configDoc, "FTP_UPLOAD_REMOTE_DIRECTORY");
 		
-		File uploadDir = new File(uploadDirectory);
-		if(! uploadDir.exists()){
-			throw new IOException("Upload directory '" + uploadDir.getAbsolutePath() + "' does not exist.");
-		}
-		if(! uploadDir.isDirectory()){
-			throw new IOException("Path '" + uploadDir.getAbsolutePath() + "' is not a directory.");
-		}
-		
-		if(uploadFile != null){
-			addUpload(uploadDir, uploadFile, remoteDirectory);
-		}
-		else{
-			for(File localFile : uploadDir.listFiles()){
-				Pattern pattern = Pattern.compile(uploadRegex);
-				Matcher matcher = pattern.matcher(localFile.getName());
-				if(matcher.find()){
-					addUpload(localFile, remoteDirectory);
-				}
-			}
-		}
-		
+		setLocalDirectory(uploadDirectory);
+		setLocalRegex(uploadRegex);
+		setLocalFile(uploadFile);
+		setRemoteDirectory(remoteDirectory);
 	}
 	
 	/* (non-Javadoc)
@@ -475,6 +484,38 @@ public class FTPUploader extends CommandLineProgram {
 	
 	public void setFtpUploaderThread(FTPUploaderThread ftput){
 		this.ftput = ftput;
+	}
+	
+	public String getLocalDirectory(){
+		return localDirectory;
+	}
+	
+	public void setLocalDirectory(String localDirectory){
+		this.localDirectory = localDirectory;
+	}
+	
+	public String getRemoteDirectory(){
+		return remoteDirectory;
+	}
+	
+	public void setRemoteDirectory(String remoteDirectory){
+		this.remoteDirectory = remoteDirectory;
+	}
+	
+	public String getLocalFile(){
+		return localFile;
+	}
+	
+	public void setLocalFile(String localFile){
+		this.localFile = localFile;
+	}
+	
+	public String getLocalRegex(){
+		return localRegex;
+	}
+	
+	public void setLocalRegex(String localRegex){
+		this.localRegex = localRegex;
 	}
 	
 	public String getStringSetting(Document configDoc, String settingName) throws TransformerException {

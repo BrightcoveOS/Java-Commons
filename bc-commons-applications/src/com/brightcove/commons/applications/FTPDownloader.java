@@ -31,6 +31,11 @@ public class FTPDownloader extends CommandLineProgram {
 	private Long                timeoutMilliseconds = null;
 	private Integer             maxRetries          = null;
 	
+	private String remoteDirectory = null;
+	private String remoteFile      = null;
+	private String localDirectory  = null;
+	private String localFile       = null;
+	
 	/**
 	 * <p>
 	 *    Main command line execution.  This should not be called from another
@@ -105,28 +110,12 @@ public class FTPDownloader extends CommandLineProgram {
 			ftpd.getFtpDownloaderThread().setDebug(Boolean.parseBoolean(ftpd.getNormalArgument("debug")));
 		}
 		
-		if(ftpd.getNormalArgument("remote-directory") != null){
-			String remoteDirectory = ftpd.getNormalArgument("remote-directory");
-			String remoteFile      = ftpd.getNormalArgument("remote-file");
-			String localDirectory  = ftpd.getNormalArgument("local-directory");
-			String localFile       = ftpd.getNormalArgument("local-file");
-			
-			if(localFile != null){
-				File f = new File(localFile);
-				ftpd.addDownload(remoteDirectory, remoteFile, f);
-			}
-			else{
-				File localDir = new File(localDirectory);
-				if(! localDir.exists()){
-					ftpd.usage("Local directory '" + localDir.getAbsolutePath() + "' does not exist.");
-				}
-				if(! localDir.isDirectory()){
-					ftpd.usage("Path '" + localDir.getAbsolutePath() + "' is not a directory.");
-				}
-				
-				ftpd.addDownload(remoteDirectory, remoteFile, localDir);
-			}
-		}
+		ftpd.calculateDownloadMappings(
+			ftpd.getNormalArgument("remote-directory"),
+			ftpd.getNormalArgument("remote-file"),
+			ftpd.getNormalArgument("local-directory"),
+			ftpd.getNormalArgument("local-file")
+		);
 		
 		if(ftpd.getNormalArgument("max-retries") != null){
 			ftpd.setMaxRetries(Integer.parseInt(ftpd.getNormalArgument("max-retries")));
@@ -220,6 +209,8 @@ public class FTPDownloader extends CommandLineProgram {
 		init();
 		
 		parseConfigFile(configFile);
+		
+		calculateDownloadMappings(remoteDirectory, remoteFile, localDirectory, localFile);
 	}
 	
 	private void parseConfigFile(File configFile) throws ParserConfigurationException, SAXException, IOException, TransformerException {
@@ -261,18 +252,69 @@ public class FTPDownloader extends CommandLineProgram {
 		String downloadDirectory = getStringSetting(configDoc, "FTP_DOWNLOAD_REMOTE_DIRECTORY");
 		String downloadFile      = getStringSetting(configDoc, "FTP_DOWNLOAD_REMOTE_FILE");
 		String localDirectory    = getStringSetting(configDoc, "FTP_DOWNLOAD_LOCAL_DIRECTORY");
-		// String uploadOptions   = getStringSetting(configDoc, "FTP_UPLOAD_OPTIONS");
 		
-		File localDir = new File(localDirectory);
-		if(! localDir.exists()){
-			throw new IOException("Local directory '" + localDir.getAbsolutePath() + "' does not exist.");
-		}
-		if(! localDir.isDirectory()){
-			throw new IOException("Path '" + localDir.getAbsolutePath() + "' is not a directory.");
-		}
-		
-		addDownload(downloadDirectory, downloadFile, localDir);
+		setRemoteDirectory(downloadDirectory);
+		setRemoteFile(downloadFile);
+		setLocalDirectory(localDirectory);
+		setLocalFile(null);
 	}
+	
+	public void calculateDownloadMappings(String remoteDirectory, String remoteFile, String localDirectory, String localFile){
+		if(remoteDirectory != null){
+			this.remoteDirectory = remoteDirectory;
+		}
+		if(remoteFile != null){
+			this.remoteFile = remoteFile;
+		}
+		if(localDirectory != null){
+			this.localDirectory = localDirectory;
+		}
+		if(localFile != null){
+			this.localFile = localFile;
+		}
+		
+		if(this.remoteDirectory == null){
+			this.remoteDirectory = "/";
+		}
+		if(! this.remoteDirectory.endsWith("/")){
+			this.remoteDirectory += "/";
+		}
+		String remotePath = this.remoteDirectory + this.remoteFile;
+		
+		if(this.localFile == null){
+			this.localFile = this.remoteFile;
+		}
+		String localPath = this.localFile;
+		
+		if(this.localDirectory != null){
+			if(! this.localDirectory.endsWith("/")){
+				this.localDirectory += "/";
+			}
+			localPath = this.localDirectory + this.localFile;
+		}
+		
+		if(localPath != null){
+			ftpdt.addDownloadMapping(remotePath, new File(localPath));
+		}
+	}
+	
+	//private void addDownload(String remoteDirectory, String remoteFile, File localFile){
+	//	String remotePath = remoteDirectory;
+	//	if(remotePath == null){
+	//		remotePath = "/";
+	//	}
+	//	if(! remotePath.endsWith("/")){
+	//		remotePath += "/";
+	//	}
+	//	remotePath += remoteFile;
+	//	
+	//	if(localFile.isDirectory()){
+	//		File f = new File(localFile, remoteFile);
+	//		localFile = f;
+	//	}
+	//	
+	//	ftpdt.addDownloadMapping(remotePath, localFile);
+	//}
 	
 	/* (non-Javadoc)
 	 * @see com.brightcove.commons.system.commandLine.CommandLineProgram#run(java.lang.String[])
@@ -308,24 +350,6 @@ public class FTPDownloader extends CommandLineProgram {
 		}
 		
 		usage(lastException);
-	}
-	
-	private void addDownload(String remoteDirectory, String remoteFile, File localFile){
-		String remotePath = remoteDirectory;
-		if(remotePath == null){
-			remotePath = "/";
-		}
-		if(! remotePath.endsWith("/")){
-			remotePath += "/";
-		}
-		remotePath += remoteFile;
-		
-		if(localFile.isDirectory()){
-			File f = new File(localFile, remoteFile);
-			localFile = f;
-		}
-		
-		ftpdt.addDownloadMapping(remotePath, localFile);
 	}
 	
 	private String getStringSetting(Document configDoc, String settingName) throws TransformerException {
@@ -445,5 +469,37 @@ public class FTPDownloader extends CommandLineProgram {
 	
 	public Integer getMaxRetries(){
 		return maxRetries;
+	}
+	
+	public String getRemoteDirectory(){
+		return remoteDirectory;
+	}
+	
+	public void setRemoteDirectory(String remoteDirectory){
+		this.remoteDirectory = remoteDirectory;
+	}
+	
+	public String getRemoteFile(){
+		return remoteFile;
+	}
+	
+	public void setRemoteFile(String remoteFile){
+		this.remoteFile = remoteFile;
+	}
+	
+	public String getLocalDirectory(){
+		return localDirectory;
+	}
+	
+	public void setLocalDirectory(String localDirectory){
+		this.localDirectory = localDirectory;
+	}
+	
+	public String getLocalFile(){
+		return localFile;
+	}
+	
+	public void setLocalFile(String localFile){
+		this.localFile = localFile;
 	}
 }
