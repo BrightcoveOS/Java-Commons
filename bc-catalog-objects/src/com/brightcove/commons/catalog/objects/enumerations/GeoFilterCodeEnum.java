@@ -307,9 +307,13 @@ public enum GeoFilterCodeEnum {
 	}
 	
 	public static GeoFilterCodeEnum lookupByName(String name){
+		if(name == null){
+			return null;
+		}
+		
 		String upperName = name.toUpperCase();
 		for(GeoFilterCodeEnum code : EnumSet.allOf(GeoFilterCodeEnum.class)){
-			if(code.name.equals(upperName)){
+			if(code.name.toUpperCase().equals(upperName)){
 				return code;
 			}
 		}
@@ -317,9 +321,13 @@ public enum GeoFilterCodeEnum {
 	}
 	
 	public static GeoFilterCodeEnum lookupByCode(String code){
+		if(code == null){
+			return null;
+		}
+		
 		String upperCode = code.toUpperCase();
 		for(GeoFilterCodeEnum lookup : EnumSet.allOf(GeoFilterCodeEnum.class)){
-			if(lookup.code.equals(upperCode)){
+			if(lookup.code.toUpperCase().equals(upperCode)){
 				return lookup;
 			}
 		}
