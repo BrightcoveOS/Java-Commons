@@ -19,24 +19,24 @@ New - [JavaDocs!](http://brightcoveos.github.com/Java-Commons/javadoc)
 Downloads
 =========
 
-**Version 4.1.2**:
+**Version 4.1.3**:
 
-This release fixes some bugs with the commons applications (FTPUploader and FTPDownloader).
+This release fixes a minor bug with GeoCode lookups
 
 Full Download:
 
-- [BC Commons v4.1.2 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.1.2.zip)
+- [BC Commons v4.1.3 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.1.3.zip)
 
 Individual Packages (3rd Party):
 
-- [3rd Party - Apache Commons for BC Commons v4.1.2](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.1.2.zip)
-- [3rd Party - JSON.org for BC Commons v4.1.2](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.1.2.zip)
-- [3rd Party - Xalan for BC Commons v4.1.2](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.1.2.zip)
+- [3rd Party - Apache Commons for BC Commons v4.1.3](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.1.3.zip)
+- [3rd Party - JSON.org for BC Commons v4.1.3](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.1.3.zip)
+- [3rd Party - Xalan for BC Commons v4.1.3](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.1.3.zip)
 
 Brightcove Libraries Only:
 
-- [BC Commons v4.1.2](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.1.2.zip)
-- [BC Commons Examples v4.1.2](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.1.2.zip)
+- [BC Commons v4.1.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.1.3.zip)
+- [BC Commons Examples v4.1.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.1.3.zip)
 
 
 **Version 4.1.0**:
