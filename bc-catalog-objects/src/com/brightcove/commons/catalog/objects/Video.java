@@ -2136,6 +2136,15 @@ public class Video {
 			}
 		}
 		
+		if((adKeys != null) || includeNullFields.contains(VideoFieldEnum.ADKEYS)){
+			if(adKeys != null){
+				json.put("adKeys", adKeys);
+			}
+			else{
+				json.put("adKeys", JSONObject.NULL);
+			}
+		}
+		
 		if((startDate != null) || includeNullFields.contains(VideoFieldEnum.STARTDATE)){
 			if(startDate != null){
 				json.put("startDate", startDate.getTime());

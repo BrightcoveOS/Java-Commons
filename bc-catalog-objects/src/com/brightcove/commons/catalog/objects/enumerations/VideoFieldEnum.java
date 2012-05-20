@@ -51,7 +51,8 @@ public enum VideoFieldEnum {
 	ALLOWEDCOUNTRIES("ALLOWEDCOUNTRIES", "allowedCountries"),
 	ACCOUNTID("ACCOUNTID", "accountId"),
 	FLVFULLLENGTH("FLVFULLLENGTH", "flvFullLength"),
-	VIDEOFULLLENGTH("VIDEOFULLLENGTH", "videoFullLength");
+	VIDEOFULLLENGTH("VIDEOFULLLENGTH", "videoFullLength"),
+	ADKEYS("ADKEYS","adKeys");
 	
 	private final String definition;
 	private final String jsonName;

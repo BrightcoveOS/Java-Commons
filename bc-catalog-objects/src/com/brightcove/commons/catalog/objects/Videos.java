@@ -78,9 +78,9 @@ public class Videos extends ArrayList<Video> {
 			
 			if(Node.ELEMENT_NODE == child.getNodeType()){
 				if("Video".equals(nodeName)){
-					if(logger != null){
-						logger.info("Adding video " + childIdx + ".");
-					}
+					//if(logger != null){
+					//	logger.info("Adding video " + childIdx + ".");
+					//}
 					
 					Video video = new Video(child);
 					add(video);
@@ -89,6 +89,10 @@ public class Videos extends ArrayList<Video> {
 			
 			child = W3CXMLUtils.getNextElementSibling(child);
 			childIdx++;
+		}
+		
+		if(logger != null){
+			logger.info("Document loaded - total videos " + size() + ".");
 		}
 	}
 	

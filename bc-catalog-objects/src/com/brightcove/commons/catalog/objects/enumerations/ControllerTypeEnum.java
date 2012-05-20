@@ -1,5 +1,7 @@
 package com.brightcove.commons.catalog.objects.enumerations;
 
+import java.util.EnumSet;
+
 /**
  * <p>The controller type for a rendition on a video.</p>
  * 
@@ -14,5 +16,27 @@ package com.brightcove.commons.catalog.objects.enumerations;
  *
  */
 public enum ControllerTypeEnum {
-	LIMELIGHT_LIVE, AKAMAI_LIVE, DEFAULT
+	AKAMAI_STREAMING,
+	AKAMAI_SECURE_STREAMING,
+	AKAMAI_LIVE,
+	AKAMAI_HD,
+	AKAMAI_HD_LIVE,
+	LIMELIGHT_LIVE,
+	LIMELIGHT_MEDIAVAULT,
+	DEFAULT;
+	
+	public static ControllerTypeEnum lookupByName(String name){
+		if(name == null){
+			return null;
+		}
+		
+		String upperName = name.toUpperCase();
+		for(ControllerTypeEnum type : EnumSet.allOf(ControllerTypeEnum.class)){
+			if(type.toString().toUpperCase().equals(upperName)){
+				return type;
+			}
+		}
+		
+		return null;
+	}
 }

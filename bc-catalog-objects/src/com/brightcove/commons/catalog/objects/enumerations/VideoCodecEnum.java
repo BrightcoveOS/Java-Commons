@@ -1,5 +1,7 @@
 package com.brightcove.commons.catalog.objects.enumerations;
 
+import java.util.EnumSet;
+
 /**
  * <p>The codec used for encoding a video.</p>
  * 
@@ -18,4 +20,19 @@ public enum VideoCodecEnum {
 	SORENSON,
 	ON2,
 	H264;
+	
+	public static VideoCodecEnum lookupByName(String name){
+		if(name == null){
+			return null;
+		}
+		
+		String upperName = name.toUpperCase();
+		for(VideoCodecEnum codec : EnumSet.allOf(VideoCodecEnum.class)){
+			if(codec.toString().toUpperCase().equals(upperName)){
+				return codec;
+			}
+		}
+		
+		return null;
+	}
 }

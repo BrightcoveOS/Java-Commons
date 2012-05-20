@@ -14,10 +14,37 @@ of this.
 
 Documentation
 =============
-New - [JavaDocs!](http://brightcoveos.github.com/Java-Commons/javadoc)
+[JavaDocs](http://brightcoveos.github.com/Java-Commons/javadoc)
 
 Downloads
 =========
+
+**Version 4.1.5**:
+
+Numerous small fixes:
+- Per [mikerswain](https://github.com/mikerswain) - Fixing bug in Rendition/CuePoint serialization/deserialization (confusing type with typeEnum)
+- Per [mikerswain](https://github.com/mikerswain) - Fixing bug with adKeys - not properly returning with video or sending with update_video
+- Fixing bug with Playlists (difference between "null" string, null object and JSONObject.NULL object)
+- Quieting logging when serializing list of videos - was much too noisy
+- Fixing bug with VideoCodecEnum - upper/lower case string values getting mixed up
+- Greatly simplifying CollectionUtils JoinToString() logic
+- Adding some utils to the XalanUtils to remove non-valid XML characters - there is some odd behavior where the serialization of an XML object allows saving of characters that will break the parser on re-read
+
+Full Download:
+
+- [BC Commons v4.1.5 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.1.5.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.1.5](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.1.5.zip)
+- [3rd Party - JSON.org for BC Commons v4.1.5](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.1.5.zip)
+- [3rd Party - Xalan for BC Commons v4.1.5](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.1.5.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.1.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.1.5.zip)
+- [BC Commons Examples v4.1.5](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.1.5.zip)
+
 
 **Version 4.1.3**:
 

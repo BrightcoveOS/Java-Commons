@@ -21,11 +21,9 @@ public class Playlists extends ArrayList<Playlist> {
 	private Integer totalCount = 0;
 	
 	public Playlists(JSONObject jsonObj) throws JSONException {
-		JSONArray jsonItems = jsonObj.getJSONArray("items");
-		for(int itemIdx=0;itemIdx<jsonItems.length();itemIdx++){
-			JSONObject jsonItem = (JSONObject)jsonItems.get(itemIdx);
-			Playlist playlist = new Playlist(jsonItem);
-			add(playlist);
+		if((jsonObj == null) || jsonObj.equals(JSONObject.NULL)){
+			totalCount = -1;
+			return;
 		}
 		
 		try{
@@ -34,6 +32,26 @@ public class Playlists extends ArrayList<Playlist> {
 		catch(JSONException jsone){
 			// Don't fail altogether
 			totalCount = -1;
+		}
+		
+		JSONArray jsonItems = jsonObj.getJSONArray("items");
+		if((jsonItems == null) || jsonItems.equals(JSONObject.NULL)){
+			totalCount = -1;
+			return;
+		}
+		
+		for(int itemIdx=0;itemIdx<jsonItems.length();itemIdx++){
+			Object jsonObject = jsonItems.get(itemIdx);
+			if((jsonObject == null) || jsonObject.equals(JSONObject.NULL)){
+				// Strange...?
+				// Playlist playlist = new Playlist();
+				// add(playlist);
+			}
+			else{
+				JSONObject jsonItem = (JSONObject)jsonObject;
+				Playlist playlist = new Playlist(jsonItem);
+				add(playlist);
+			}
 		}
 	}
 	

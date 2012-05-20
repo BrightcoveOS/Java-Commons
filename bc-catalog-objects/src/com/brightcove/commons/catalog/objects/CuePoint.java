@@ -104,9 +104,15 @@ public class CuePoint {
 				time = jsonObj.getLong(rootKey);
 			}
 			else if("type".equals(rootKey)){
-				// Not currently handled - see typeEnum
+				// Numeric representation of type
+				for(CuePointTypeEnum typeEnum : CuePointTypeEnum.values()){
+					if((""+typeEnum.getCode()).equals(rootValue.toString())){
+						type = typeEnum;
+					}
+				}
 			}
 			else if("typeEnum".equals(rootKey)){
+				// String representation of type
 				for(CuePointTypeEnum typeEnum : CuePointTypeEnum.values()){
 					if(typeEnum.getName().equals(rootValue.toString())){
 						type = typeEnum;
@@ -163,16 +169,21 @@ public class CuePoint {
 						forceStop = Boolean.parseBoolean(nodeValue);
 					}
 				}
+				else if(nodeName.equals("typeEnum")){
+					if(nodeValue != null){
+						for(CuePointTypeEnum typeEnum : CuePointTypeEnum.values()){
+							if(typeEnum.getName().equals(nodeValue)){
+								type = typeEnum;
+							}
+						}
+					}
+				}
 				else if(nodeName.equals("type")){
 					if(nodeValue != null){
-						if(CuePointTypeEnum.AD.toString().equals(nodeValue)){
-							type = CuePointTypeEnum.AD;
-						}
-						else if(CuePointTypeEnum.CHAPTER.toString().equals(nodeValue)){
-							type = CuePointTypeEnum.CHAPTER;
-						}
-						else if(CuePointTypeEnum.CODE.toString().equals(nodeValue)){
-							type = CuePointTypeEnum.CODE;
+						for(CuePointTypeEnum typeEnum : CuePointTypeEnum.values()){
+							if((""+typeEnum.getCode()).equals(nodeValue)){
+								type = typeEnum;
+							}
 						}
 					}
 				}
@@ -522,7 +533,8 @@ public class CuePoint {
 			json.put("forceStop", forceStop);
 		}
 		if(type != null){
-			json.put("type", type);
+			json.put("type", type.getCode());
+			json.put("typeEnum", type.getName());
 		}
 		if(metadata != null){
 			json.put("metadata", metadata);
@@ -578,8 +590,12 @@ public class CuePoint {
 		
 		if(type != null){
 			Element typeElement = doc.createElement("type");
-			typeElement.appendChild(doc.createTextNode(""+type));
+			typeElement.appendChild(doc.createTextNode(""+type.getCode()));
 			cuePointElement.appendChild(typeElement);
+			
+			Element typeElemElement = doc.createElement("typeEnum");
+			typeElemElement.appendChild(doc.createTextNode(""+type.getName()));
+			cuePointElement.appendChild(typeElemElement);
 		}
 		
 		if(metadata != null){

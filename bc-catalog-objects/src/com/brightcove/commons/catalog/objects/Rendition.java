@@ -111,17 +111,9 @@ public class Rendition {
 				url = rootValue.toString();
 			}
 			else if("controllerType".equals(rootKey)){
-				if("AKAMAI_LIVE".equals(rootValue.toString())){
-					controllerType = ControllerTypeEnum.AKAMAI_LIVE;
-				}
-				else if("LIMELIGHT_LIVE".equals(rootValue.toString())){
-					controllerType = ControllerTypeEnum.LIMELIGHT_LIVE;
-				}
-				else if("DEFAULT".equals(rootValue.toString())){
-					controllerType = ControllerTypeEnum.DEFAULT;
-				}
-				else{
-					throw new JSONException("[ERR] Media API specified invalid value for controller type '" + rootValue + "'.  Acceptable values are 'AKAMAI_LIVE' and 'LIMELIGHT_LIVE'.");
+				controllerType = ControllerTypeEnum.lookupByName(rootValue.toString());
+				if(controllerType == null){
+					throw new JSONException("[ERR] Media API specified invalid value for controller type '" + rootValue + "'.");
 				}
 			}
 			else if("size".equals(rootKey)){
@@ -146,20 +138,9 @@ public class Rendition {
 				displayName = rootValue.toString();
 			}
 			else if("videoCodec".equals(rootKey)){
-				if(rootValue.toString().equals("NONE")){
-					videoCodec = VideoCodecEnum.NONE;
-				}
-				else if(rootValue.toString().equals("ON2")){
-					videoCodec = VideoCodecEnum.ON2;
-				}
-				else if(rootValue.toString().equals("H264")){
-					videoCodec = VideoCodecEnum.H264;
-				}
-				else if(rootValue.toString().equals("SORENSON")){
-					videoCodec = VideoCodecEnum.SORENSON;
-				}
-				else{
-					throw new JSONException("[ERR] Media API specified invalid value for video codec '" + rootValue + "'.  Acceptable values are 'NONE', 'ON2', 'H264' and 'SORENSON'.");
+				videoCodec = VideoCodecEnum.lookupByName(rootValue.toString());
+				if(videoCodec == null){
+					throw new JSONException("[ERR] Media API specified invalid value for video codec '" + rootValue + "'.");
 				}
 			}
 			else if("videoDuration".equals(rootKey)){
@@ -205,15 +186,7 @@ public class Rendition {
 				}
 				else if(nodeName.equals("controllerType")){
 					if(nodeValue  != null){
-						if(ControllerTypeEnum.AKAMAI_LIVE.toString().equals(nodeValue)){
-							controllerType = ControllerTypeEnum.AKAMAI_LIVE;
-						}
-						else if(ControllerTypeEnum.LIMELIGHT_LIVE.toString().equals(nodeValue)){
-							controllerType = ControllerTypeEnum.LIMELIGHT_LIVE;
-						}
-						else if(ControllerTypeEnum.DEFAULT.toString().equals(nodeValue)){
-							controllerType = ControllerTypeEnum.DEFAULT;
-						}
+						controllerType = ControllerTypeEnum.lookupByName(nodeValue);
 					}
 				}
 				else if(nodeName.equals("encodingRate")){
@@ -283,18 +256,7 @@ public class Rendition {
 				}
 				else if(nodeName.equals("videoCodec")){
 					if(nodeValue != null){
-						if(VideoCodecEnum.H264.toString().equals(nodeValue)){
-							videoCodec = VideoCodecEnum.H264;
-						}
-						else if(VideoCodecEnum.ON2.toString().equals(nodeValue)){
-							videoCodec = VideoCodecEnum.ON2;
-						}
-						else if(VideoCodecEnum.SORENSON.toString().equals(nodeValue)){
-							videoCodec = VideoCodecEnum.SORENSON;
-						}
-						else if(VideoCodecEnum.NONE.toString().equals(nodeValue)){
-							videoCodec = VideoCodecEnum.NONE;
-						}
+						videoCodec = VideoCodecEnum.lookupByName(nodeValue);
 					}
 				}
 			}
@@ -378,11 +340,16 @@ public class Rendition {
 	 *          Property name: controllerType<br/>
 	 *          Type:          enum<br/>
 	 *          Read only?:    no<br/>
-	 *          Description:   [Optional — required for
-	 *                         <a href="http://support.brightcove.com/en/docs/delivering-live-video">live streaming</a>
-	 *                         only] Depending on your CDN, one of the
-	 *                         following values: LIMELIGHT_LIVE or
-	 *                         AKAMAI_LIVE.
+	 *          Description:   Depending on your CDN, one of the following values:<ul>
+	 *                             <li>AKAMAI_STREAMING</li>
+	 *                             <li>AKAMAI_SECURE_STREAMING</li>
+	 *                             <li>AKAMAI_LIVE</li>
+	 *                             <li>AKAMAI_HD</li>
+	 *                             <li>AKAMAI_HD_LIVE</li>
+	 *                             <li>LIMELIGHT_LIVE</li>
+	 *                             <li>LIMELIGHT_MEDIAVAULT</li>
+	 *                             </ul><br/>
+	 *                             See <a href="http://support.brightcove.com/en/docs/media-api-objects-reference#controllerType">Setting the controllerType</a> for more information.
 	 *    </code>
 	 * </p>
 	 * 
@@ -402,11 +369,16 @@ public class Rendition {
 	 *          Property name: controllerType<br/>
 	 *          Type:          enum<br/>
 	 *          Read only?:    no<br/>
-	 *          Description:   [Optional — required for
-	 *                         <a href="http://support.brightcove.com/en/docs/delivering-live-video">live streaming</a>
-	 *                         only] Depending on your CDN, one of the
-	 *                         following values: LIMELIGHT_LIVE or
-	 *                         AKAMAI_LIVE.
+	 *          Description:   Depending on your CDN, one of the following values:<ul>
+	 *                             <li>AKAMAI_STREAMING</li>
+	 *                             <li>AKAMAI_SECURE_STREAMING</li>
+	 *                             <li>AKAMAI_LIVE</li>
+	 *                             <li>AKAMAI_HD</li>
+	 *                             <li>AKAMAI_HD_LIVE</li>
+	 *                             <li>LIMELIGHT_LIVE</li>
+	 *                             <li>LIMELIGHT_MEDIAVAULT</li>
+	 *                             </ul><br/>
+	 *                             See <a href="http://support.brightcove.com/en/docs/media-api-objects-reference#controllerType">Setting the controllerType</a> for more information.
 	 *    </code>
 	 * </p>
 	 * 

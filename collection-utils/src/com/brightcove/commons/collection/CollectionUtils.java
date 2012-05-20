@@ -1,7 +1,6 @@
 package com.brightcove.commons.collection;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,31 +15,41 @@ import java.util.Set;
 public class CollectionUtils {
 	/**
 	 * <p>
-	 *    Given a List and a delimiter, creates a delimited string of the
-	 *    objects in the List (using the toString() method of each object).
+	 *    Given a iterable object (list, set, etc) and a delimiter, creates a
+	 *    delimited string of the objects in the List (using the
+	 *    toString() method of each object).
 	 * </p>
 	 * 
-	 * @param list List of objects
+	 * <p>
+	 *    Null objects will be printed out as an empty string
+	 * </p>
+	 * 
+	 * @param list Iterable object (Set, List, etc) of objects
 	 * @param delimiter Delimiter to separate the objects in the output String
 	 * @return Delimited String of the objects in the List
 	 */
-	public static String JoinToString(List<?> list, String delimiter){
+	public static String JoinToString(Iterable<?> list, String delimiter){
 		return JoinToString(list, delimiter, false, null);
 	}
 	
 	/**
 	 * <p>
-	 *    Given a List and a delimiter, creates a delimited string of the
-	 *    objects in the List (using the toString() method of each object).
+	 *    Given a iterable object (list, set, etc) and a delimiter, creates a
+	 *    delimited string of the objects in the List (using the
+	 *    toString() method of each object).
 	 * </p>
 	 * 
-	 * @param list List of objects
+	 * <p>
+	 *    Null objects will be printed out as an empty string
+	 * </p>
+	 * 
+	 * @param list Iterable object (Set, List, etc) of objects
 	 * @param delimiter Delimiter to separate the objects in the output String
 	 * @param escapeDelimiter If true, delimiters in the original strings will be escaped with escapeSequence
 	 * @param escapeSequence String to escape delimiters with
 	 * @return Delimited String of the objects in the List
 	 */
-	public static String JoinToString(List<?> list, String delimiter, Boolean escapeDelimiter, String escapeSequence){
+	public static String JoinToString(Iterable<?> list, String delimiter, Boolean escapeDelimiter, String escapeSequence){
 		String ret = "";
 		
 		if(list == null){
@@ -50,130 +59,50 @@ public class CollectionUtils {
 			delimiter = "";
 		}
 		
-		for(int listIdx=0;listIdx<list.size();listIdx++){
-			Object o = list.get(listIdx);
-			
-			if(listIdx != 0){
+		for(Object item : list){
+			if(! "".equals(ret)){
 				ret += delimiter;
 			}
 			
-			String orig = o.toString();
-			if(escapeDelimiter){
-				StringBuffer sb = new StringBuffer();
-				
-				int windowStart  = 0;
-				int windowLength = delimiter.length();
-				int windowEnd    = windowStart + windowLength;
-				
-				while(windowEnd <= orig.length()){
-					String window = orig.substring(windowStart, windowEnd);
-					if(delimiter.equals(window)){
-						sb.append(escapeSequence);
-						sb.append(window);
-						
-						windowStart = windowEnd;
-						windowEnd   = windowStart + windowLength;
-					}
-					else{
-						String charAt = orig.substring(windowStart, windowStart+1);
-						sb.append(charAt);
-						
-						windowStart = windowStart + 1;
-						windowEnd   = windowStart + windowLength;
-					}
-				}
-				if(windowStart < orig.length()){
-					sb.append(orig.substring(windowStart, orig.length()));
-				}
-				
-				ret += sb.toString();
+			if(item == null){
+				ret += "";
 			}
 			else{
-				ret += o.toString();
-			}
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * <p>
-	 *    Given a Set and a delimiter, creates a delimited string of the
-	 *    objects in the Set (using the toString() method of each object).
-	 * </p>
-	 * 
-	 * @param set Set of objects
-	 * @param delimiter Delimiter to separate the objects in the output String
-	 * @return Delimited String of the objects in the Set
-	 */
-	public static String JoinToString(Set<?> set, String delimiter){
-		return JoinToString(set, delimiter, false, null);
-	}
-	
-	/**
-	 * <p>
-	 *    Given a Set and a delimiter, creates a delimited string of the
-	 *    objects in the Set (using the toString() method of each object).
-	 * </p>
-	 * 
-	 * @param set Set of objects
-	 * @param delimiter Delimiter to separate the objects in the output String
-	 * @param escapeDelimiter If true, delimiters in the original strings will be escaped with escapeSequence
-	 * @param escapeSequence String to escape delimiters with
-	 * @return Delimited String of the objects in the Set
-	 */
-	public static String JoinToString(Set<?> set, String delimiter, Boolean escapeDelimiter, String escapeSequence){
-		String ret = "";
-		
-		if(set == null){
-			return ret;
-		}
-		if(delimiter == null){
-			delimiter = "";
-		}
-		
-		Boolean start = true;
-		for(Object o : set){
-			if(start){
-				start = false;
-			}
-			else{
-				ret += delimiter;
-			}
-			
-			String orig = o.toString();
-			if(escapeDelimiter){
-				StringBuffer sb = new StringBuffer();
+				String orig = item.toString();
 				
-				int windowStart  = 0;
-				int windowLength = delimiter.length();
-				int windowEnd    = windowStart + windowLength;
-				
-				while(windowEnd <= orig.length()){
-					String window = orig.substring(windowStart, windowEnd);
-					if(delimiter.equals(window)){
-						sb.append(escapeSequence);
-						sb.append(window);
-						
-						windowStart = windowEnd;
-						windowEnd   = windowStart + windowLength;
+				if(escapeDelimiter){
+					StringBuffer sb = new StringBuffer();
+					
+					int windowStart  = 0;
+					int windowLength = delimiter.length();
+					int windowEnd    = windowStart + windowLength;
+					
+					while(windowEnd <= orig.length()){
+						String window = orig.substring(windowStart, windowEnd);
+						if(delimiter.equals(window)){
+							sb.append(escapeSequence);
+							sb.append(window);
+							
+							windowStart = windowEnd;
+							windowEnd   = windowStart + windowLength;
+						}
+						else{
+							String charAt = orig.substring(windowStart, windowStart+1);
+							sb.append(charAt);
+							
+							windowStart = windowStart + 1;
+							windowEnd   = windowStart + windowLength;
+						}
 					}
-					else{
-						String charAt = orig.substring(windowStart, windowStart+1);
-						sb.append(charAt);
-						
-						windowStart = windowStart + 1;
-						windowEnd   = windowStart + windowLength;
+					if(windowStart < orig.length()){
+						sb.append(orig.substring(windowStart, orig.length()));
 					}
+					
+					ret += sb.toString();
 				}
-				if(windowStart < orig.length()){
-					sb.append(orig.substring(windowStart, orig.length()));
+				else{
+					ret += item.toString();
 				}
-				
-				ret += sb.toString();
-			}
-			else{
-				ret += o.toString();
 			}
 		}
 		
