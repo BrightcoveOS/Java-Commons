@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class BrightcoveAccount {
 	private Long   publisherId;
+	private String accountName;
 	private String readToken;
 	private String writeToken;
 	private String ftpUsername;
@@ -35,6 +36,7 @@ public class BrightcoveAccount {
 	 */
 	public BrightcoveAccount(Long publisherId){
 		this.publisherId = publisherId;
+		accountName = null;
 		readToken   = null;
 		writeToken  = null;
 		ftpUsername = null;
@@ -49,6 +51,14 @@ public class BrightcoveAccount {
 	
 	public Long getPublisherId(){
 		return publisherId;
+	}
+	
+	public void setAccountName(String accountName){
+		this.accountName = accountName;
+	}
+	
+	public String getAccountName(){
+		return accountName;
 	}
 	
 	public void setReadToken(String readToken){

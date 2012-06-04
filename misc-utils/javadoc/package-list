@@ -1,4 +1,5 @@
 com.brightcove.commons.misc.comparison
 com.brightcove.commons.misc.date
+com.brightcove.commons.misc.logging
 com.brightcove.commons.misc.nvpair
 com.brightcove.commons.misc.strings

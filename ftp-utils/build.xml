@@ -8,7 +8,7 @@
 	
 	<property name="release-package-name" value="bc-commons-ftp-utils"/>
 	
-	<property name="apache-commons-net-jar" value="../apache-commons/release/${common-release-package-version}/commons-net-2.2.jar"/>
+	<property name="apache-commons-net-jar" value="../apache-commons/release/${common-release-package-version}/commons-net-${apache-net-version}.jar"/>
 	
 	<property name="release-dir" value="release/${common-release-package-version}"/>
 	

@@ -19,6 +19,31 @@ Documentation
 Downloads
 =========
 
+**Version 4.1.6**:
+
+Numerous small fixes:
+- Adding name field to Brightcove Account object
+- Adding Collection Util methods for static arrays
+- Adding Log Utils - generate logging messages on one line only
+- Updating Apache net libraries to v3.1
+- Cleaning up build process
+
+Full Download:
+
+- [BC Commons v4.1.6 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.1.6.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.1.6](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.1.6.zip)
+- [3rd Party - JSON.org for BC Commons v4.1.6](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.1.6.zip)
+- [3rd Party - Xalan for BC Commons v4.1.6](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.1.6.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.1.6](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.1.6.zip)
+- [BC Commons Examples v4.1.6](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.1.6.zip)
+
+
 **Version 4.1.5**:
 
 Numerous small fixes:

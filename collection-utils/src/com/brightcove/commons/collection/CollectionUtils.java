@@ -1,6 +1,8 @@
 package com.brightcove.commons.collection;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,6 +15,51 @@ import java.util.Set;
  *
  */
 public class CollectionUtils {
+	
+	/**
+	 * <p>
+	 *    Given an object static array and a delimiter, creates a
+	 *    delimited string of the objects in the array (using the
+	 *    toString() method of each object).
+	 * </p>
+	 * 
+	 * <p>
+	 *    Null objects will be printed out as an empty string
+	 * </p>
+	 * 
+	 * @param array Static array of objects
+	 * @param delimiter Delimiter to separate the objects in the output String
+	 * @return Delimited String of the objects in the array
+	 */
+	public static <T> String JoinToString(T[] array, String delimiter){
+		return JoinToString(array, delimiter, false, null);
+	}
+	
+	/**
+	 * <p>
+	 *    Given an object static array and a delimiter, creates a
+	 *    delimited string of the objects in the array (using the
+	 *    toString() method of each object).
+	 * </p>
+	 * 
+	 * <p>
+	 *    Null objects will be printed out as an empty string
+	 * </p>
+	 * 
+	 * @param array Static array of objects
+	 * @param delimiter Delimiter to separate the objects in the output String
+	 * @param escapeDelimiter If true, delimiters in the original strings will be escaped with escapeSequence
+	 * @param escapeSequence String to escape delimiters with
+	 * @return Delimited String of the objects in the array
+	 */
+	public static <T> String JoinToString(T[] array, String delimiter, Boolean escapeDelimiter, String escapeSequence){
+		List<T> list = new ArrayList<T>();
+		for(T item : array){
+			list.add(item);
+		}
+		return JoinToString(list, delimiter, escapeDelimiter, escapeSequence);
+	}
+	
 	/**
 	 * <p>
 	 *    Given a iterable object (list, set, etc) and a delimiter, creates a

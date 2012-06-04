@@ -614,7 +614,7 @@ public class XalanUtils {
 	 *    Removes characters that may be legal UTF-8, but will cause problems for the Xalan parser
 	 * </p>
 	 * 
-	 * @param doc Node to strip
+	 * @param node Node to strip
 	 */
 	public static void stripNonValidXMLCharacters(Node node){
 		if(node == null){

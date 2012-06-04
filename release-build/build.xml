@@ -234,7 +234,7 @@
 				<link href="http://commons.apache.org/io/api-release"/>
 				<link href="http://commons.apache.org/lang/api-release"/>
 				<link href="http://commons.apache.org/logging/apidocs"/>
-				<link href="http://commons.apache.org/net/api-2.2"/>
+				<link href="http://commons.apache.org/net/api-${apache-net-version}"/>
 				<link href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs"/>
 				<link href="http://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs"/>
 				<link href="http://hc.apache.org/httpcomponents-core-ga/httpcore-nio/apidocs"/>
