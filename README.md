@@ -19,6 +19,26 @@ Documentation
 Downloads
 =========
 
+**Version 4.1.7**:
+
+Adding a few (new-ish) sort by type enum values (namely DISPLAY_NAME and REFERENCE_ID)
+
+Full Download:
+
+- [BC Commons v4.1.7 with dependencies](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-with-dep-4.1.7.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.1.7](https://github.com/downloads/BrightcoveOS/Java-Commons/apache-commons-bcver-4.1.7.zip)
+- [3rd Party - JSON.org for BC Commons v4.1.7](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.1.7.zip)
+- [3rd Party - Xalan for BC Commons v4.1.7](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.1.7.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.1.6](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.1.7.zip)
+- [BC Commons Examples v4.1.6](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-examples-4.1.7.zip)
+
+
 **Version 4.1.6**:
 
 Numerous small fixes:

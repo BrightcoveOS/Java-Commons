@@ -14,5 +14,14 @@ package com.brightcove.commons.catalog.objects.enumerations;
  *
  */
 public enum SortByTypeEnum {
-	PUBLISH_DATE, CREATION_DATE, MODIFIED_DATE, PLAYS_TOTAL, PLAYS_TRAILING_WEEK
+	DISPLAY_NAME,        // (video only) 	Enum 	read-only 	Name of the title.
+	REFERENCE_ID,        // (video only) 	Enum 	read-only 	Reference ID of the title.
+	PLAYS_TOTAL,         // (video only) 	Enum 	read-only 	Number of times this title has been viewed.
+	PLAYS_TRAILING_WEEK, // (video only) 	Enum 	read-only 	Number of times this title has been viewed in the past 7 days (excluding today)
+	START_DATE,          // (video only) 	Enum 	read-only 	Date title is scheduled to be available.
+	PUBLISH_DATE,        //              	Enum 	read-only 	Date title was published.
+	CREATION_DATE,       //              	Enum 	read-only 	Date title was created.
+	MODIFIED_DATE        //              	Enum 	read-only 	Date title was last modified.
+	// PLAYS_TOTAL,         //              	Enum 	read-only 	Number of times this title has been viewed.
+	// PLAYS_TRAILING_WEEK  //              	Enum 	read-only 	Number of times this title has been viewed in the past 7 days (excluding today)
 }
