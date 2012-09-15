@@ -65,8 +65,9 @@ public class Video {
 	private Date    releaseDate;
 	private String  adKeys;
 	
-	private List<Rendition> renditions;
-	private Rendition       videoFullLength;
+	private List<Rendition>    renditions;
+	private List<iosRendition> iosRenditions;
+	private Rendition          videoFullLength;
 	
 	private ItemStateEnum itemState;
 	
@@ -292,6 +293,19 @@ public class Video {
 						if("Rendition".equals(renditionElement.getNodeName())){
 							Rendition rendition = new Rendition(renditionElement);
 							renditions.add(rendition);
+						}
+						
+						renditionElement = W3CXMLUtils.getNextElementSibling(renditionElement);
+					}
+				}
+				else if(nodeName.equals("IOSRenditions")){
+					iosRenditions = new ArrayList<iosRendition>();
+					
+					Element renditionElement = W3CXMLUtils.getFirstElementChild(child);
+					while(renditionElement != null){
+						if("iosRendition".equals(renditionElement.getNodeName())){
+							iosRendition iosRendition = new iosRendition(renditionElement);
+							iosRenditions.add(iosRendition);
 						}
 						
 						renditionElement = W3CXMLUtils.getNextElementSibling(renditionElement);
@@ -570,6 +584,16 @@ public class Video {
 					renditions.add(rendition);
 				}
 			}
+			else if("IOSRenditions".equals(rootKey)){
+				iosRenditions = new ArrayList<iosRendition>();
+				
+				JSONArray rendArray = jsonObj.getJSONArray(rootKey);
+				for(int rendIdx=0;rendIdx<rendArray.length();rendIdx++){
+					String    rend      = rendArray.get(rendIdx).toString();
+					iosRendition iosRendition = new iosRendition(rend);
+					iosRenditions.add(iosRendition);
+				}
+			}
 			else if("cuePoints".equals(rootKey)){
 				cuePoints = new ArrayList<CuePoint>();
 				
@@ -631,6 +655,7 @@ public class Video {
 		adKeys             = null;
 		
 		renditions      = null;
+		iosRenditions   = null;
 		videoFullLength = null;
 		
 		itemState = null;
@@ -1024,6 +1049,46 @@ public class Video {
 	 */
 	public void setRenditions(List<Rendition> renditions){
 		this.renditions = renditions;
+	}
+	
+	/**
+	 * <p>
+	 *    Gets the iOS renditions for this Video.
+	 * </p>
+	 * 
+	 * <p>
+	 *    <code>
+	 *          Property name: iosRenditions<br/>
+	 *          Type:          Array<br/>
+	 *          Read only?:    no<br/>
+	 *          Description:   
+	 *    </code>
+	 * </p>
+	 * 
+	 * @return List of renditions for this Video 
+	 */
+	public List<Rendition> getIOSRenditions(){
+		return renditions;
+	}
+	
+	/**
+	 * <p>
+	 *    Sets the iOS renditions for this Video.
+	 * </p>
+	 * 
+	 * <p>
+	 *    <code>
+	 *          Property name: iosRenditions<br/>
+	 *          Type:          Array<br/>
+	 *          Read only?:    no<br/>
+	 *          Description:   
+	 *    </code>
+	 * </p>
+	 * 
+	 * @param renditions List of renditions for this Video 
+	 */
+	public void setIOSRenditions(List<iosRendition> renditions){
+		this.iosRenditions = renditions;
 	}
 	
 	/**
@@ -2212,9 +2277,22 @@ public class Video {
 			
 			json.put("renditions", jsonRenditions);
 		}
+		if(iosRenditions != null){
+			JSONArray jsonRenditions = new JSONArray();
+			for(iosRendition iosRendition : iosRenditions){
+				JSONObject renditionJson = iosRendition.toJson();
+				jsonRenditions.put(renditionJson);
+			}
+			
+			json.put("IOSRenditions", jsonRenditions);
+		}
 		else if(includeNullFields.contains(VideoFieldEnum.RENDITIONS)){
 			JSONArray jsonArray = new JSONArray();
 			json.put("renditions", jsonArray);
+		}
+		else if(includeNullFields.contains(VideoFieldEnum.IOSRENDITIONS)){
+			JSONArray jsonArray = new JSONArray();
+			json.put("IOSRenditions", jsonArray);
 		}
 		
 		if(videoFullLength != null){
@@ -2449,6 +2527,15 @@ public class Video {
 			}
 		}
 		
+		if(iosRenditions != null){
+			Element renditionsElement = doc.createElement("IOSRenditions");
+			videoElement.appendChild(renditionsElement);
+			
+			for(iosRendition rendition : iosRenditions){
+				rendition.appendXml(renditionsElement, "iosRendition");
+			}
+		}
+		
 		if(videoFullLength != null){
 			videoFullLength.appendXml(videoElement, "videoFullLength");
 		}
@@ -2538,6 +2625,7 @@ public class Video {
 			"\tplaysTotal:'"           + playsTotal           + "'\n" +
 			"\tplaysTrailingWeek:'"    + playsTrailingWeek    + "'\n" +
 			"\trenditions:'"           + renditions           + "'\n" +
+			"\tiosRenditions:'"        + iosRenditions        + "'\n" +
 			"\tvideoFullLength:'"      + videoFullLength      + "'\n" +
 			"\titemState:'"            + itemState            + "'\n" +
 			"\ttags:'"                 + tags                 + "'\n" +

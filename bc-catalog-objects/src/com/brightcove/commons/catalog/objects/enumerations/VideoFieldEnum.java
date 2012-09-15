@@ -43,6 +43,7 @@ public enum VideoFieldEnum {
 	RELEASEDATE("RELEASEDATE", "releaseDate"),
 	FLVURL("FLVURL", "flvUrl"),
 	RENDITIONS("RENDITIONS", "renditions"),
+	IOSRENDITIONS("IOSRENDITIONS", "iosRenditions"),
 	GEOFILTERED("GEOFILTERED", "geoFiltered"),
 	GEORESTRICTED("GEORESTRICTED", "geoRestricted"),
 	GEOFILTEREXCLUDE("GEOFILTEREXCLUDE", "geoFilterExclude"),
