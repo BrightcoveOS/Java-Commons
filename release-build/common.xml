@@ -1,5 +1,5 @@
 	<!-- Global BC Commons Release Vars -->
-	<property name="common-release-package-version" value="4.1.8"/>
+	<property name="common-release-package-version" value="4.1.9"/>
 	
 	<!-- Apache Commons Release Vars -->
 	<property name="apache-codec-version" value="1.5"/>

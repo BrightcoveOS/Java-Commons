@@ -23,6 +23,7 @@ public enum ControllerTypeEnum {
 	AKAMAI_HD_LIVE,
 	LIMELIGHT_LIVE,
 	LIMELIGHT_MEDIAVAULT,
+	LIVE_STREAMING,
 	DEFAULT;
 	
 	public static ControllerTypeEnum lookupByName(String name){
