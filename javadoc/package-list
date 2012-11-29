@@ -1,3 +1,5 @@
+com.brightcove.commons.account.objects
+com.brightcove.commons.applications
 com.brightcove.commons.catalog.objects
 com.brightcove.commons.catalog.objects.enumerations
 com.brightcove.commons.collection
@@ -5,6 +7,7 @@ com.brightcove.commons.ftp
 com.brightcove.commons.http
 com.brightcove.commons.misc.comparison
 com.brightcove.commons.misc.date
+com.brightcove.commons.misc.logging
 com.brightcove.commons.misc.nvpair
 com.brightcove.commons.misc.strings
 com.brightcove.commons.system.commandLine
