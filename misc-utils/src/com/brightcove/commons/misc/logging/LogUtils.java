@@ -1,7 +1,7 @@
 package com.brightcove.commons.misc.logging;
 
+import java.util.List;
 import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +13,10 @@ public class LogUtils {
 	}
 	
 	public static Logger getLogger(String name){
+		return getLogger(name, null);
+	}
+	
+	public static Logger getLogger(String name, List<String> redactStrings){
 		if(name == null){
 			name = "[Anonymous Class]";
 		}
@@ -24,8 +28,14 @@ public class LogUtils {
 			logger.removeHandler(handler);
 		}
 		
-		ConsoleHandler handler   = new ConsoleHandler();
-		Formatter      formatter = new SimpleFormatter();
+		ConsoleHandler  handler   = new ConsoleHandler();
+		SimpleFormatter formatter = new SimpleFormatter();
+		
+		if(redactStrings != null){
+			for(String redactString : redactStrings){
+				formatter.addRedactString(redactString);
+			}
+		}
 		
 		handler.setFormatter(formatter);
 		logger.addHandler(handler);

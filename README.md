@@ -14,10 +14,39 @@ of this.
 
 Documentation
 =============
-[JavaDocs](http://brightcoveos.github.com/Java-Commons/javadoc)
+[JavaDocs](http://bcos-static-hosting.s3-website-us-east-1.amazonaws.com/java-commons/javadoc/)
 
 Downloads
 =========
+
+**Version 4.1.10**:
+
+- Fixing Playlist type PLAYS_TOTAL (was PLAYSTOTAL).
+- Moving downloads to Amazon S3.
+- Fixing issues with UpdatePlaylist and Playlist.tagInclusionRule.  Reported by [martinsmid914](https://github.com/martinsmid914)
+- New feature: Simple formatter (Created by LogUtils, part of com.brightcove.commons.misc.logging) supports redacting strings from log output.  This is intended for removing Media API tokens from log files as they are written.  Example usage:
+```java
+ List<String> redactFromLogging = new ArrayList<String>();
+ redactFromLogging.add(readToken);
+ redactFromLogging.add(writeToken);
+ logger = LogUtils.getLogger(this.getClass().getCanonicalName(), redactFromLogging);
+```
+
+Full Download:
+
+- [BC Commons v4.1.10 with dependencies](http://bcos-release-files.s3.amazonaws.com/java-commons/bc-commons-with-dep-4.1.10.zip)
+
+Individual Packages (3rd Party):
+
+- [3rd Party - Apache Commons for BC Commons v4.1.10](http://bcos-release-files.s3.amazonaws.com/java-commons/apache-commons-bcver-4.1.10.zip)
+- [3rd Party - JSON.org for BC Commons v4.1.10](http://bcos-release-files.s3.amazonaws.com/java-commons/json-org-bcver-4.1.10.zip)
+- [3rd Party - Xalan for BC Commons v4.1.10](http://bcos-release-files.s3.amazonaws.com/java-commons/xalan-bcver-4.1.10.zip)
+
+Brightcove Libraries Only:
+
+- [BC Commons v4.1.10](http://bcos-release-files.s3.amazonaws.com/java-commons/bc-commons-4.1.10.zip)
+- [BC Commons Examples v4.1.10](http://bcos-release-files.s3.amazonaws.com/java-commons/bc-commons-examples-4.1.10.zip)
+
 
 **Version 4.1.9**:
 

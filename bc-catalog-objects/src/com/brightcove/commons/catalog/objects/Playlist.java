@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.brightcove.commons.catalog.objects.enumerations.InclusionRuleEnum;
 import com.brightcove.commons.catalog.objects.enumerations.PlaylistTypeEnum;
 
 /**
@@ -33,12 +34,13 @@ import com.brightcove.commons.catalog.objects.enumerations.PlaylistTypeEnum;
  *
  */
 public class Playlist {
-	private Long    id;
-	private String  referenceId;
-	private Long    accountId;
-	private String  name;
-	private String  shortDescription;
-	private String  thumbnailUrl;
+	private Long              id;
+	private String            referenceId;
+	private Long              accountId;
+	private String            name;
+	private String            shortDescription;
+	private String            thumbnailUrl;
+	private InclusionRuleEnum tagInclusionRule;
 	
 	private List<Long>   videoIds;
 	private List<Video>  videos;
@@ -166,7 +168,10 @@ public class Playlist {
 					playlistType = PlaylistTypeEnum.ALPHABETICAL;
 				}
 				else if(rootValue.toString().equals("PLAYSTOTAL")){
-					playlistType = PlaylistTypeEnum.PLAYSTOTAL;
+					playlistType = PlaylistTypeEnum.PLAYS_TOTAL;
+				}
+				else if(rootValue.toString().equals("PLAYS_TOTAL")){
+					playlistType = PlaylistTypeEnum.PLAYS_TOTAL;
 				}
 				else if(rootValue.toString().equals("PLAYS_TRAILING_WEEK")){
 					playlistType = PlaylistTypeEnum.PLAYS_TRAILING_WEEK;
@@ -185,6 +190,17 @@ public class Playlist {
 				for(int tagIdx=0;tagIdx<tagArray.length();tagIdx++){
 					String tag = tagArray.get(tagIdx).toString();
 					filterTags.add(tag);
+				}
+			}
+			else if("tagInclusionRule".equals(rootKey)){
+				if(rootValue.toString().equals("AND")){
+					tagInclusionRule = InclusionRuleEnum.AND;
+				}
+				else if(rootValue.toString().equals("OR")){
+					tagInclusionRule = InclusionRuleEnum.OR;
+				}
+				else{
+					throw new JSONException("[ERR] Media API specified invalid value for playlist tag inclusion rule '" + rootValue + "'.  Acceptable values are 'AND', 'OR'.");
 				}
 			}
 			else{
@@ -212,6 +228,7 @@ public class Playlist {
 		videos             = null;
 		filterTags         = null;
 		playlistType       = null;
+		tagInclusionRule   = null;
 	}
 	
 	/**
@@ -425,7 +442,30 @@ public class Playlist {
 		return filterTags;
 	}
 	
-	// T.B.D. - tagInclusionRule
+	/**
+	 * <p>
+	 *    Gets the tag inclusion rule for this Playlist.
+	 * </p>
+	 * 
+	 * <p>
+	 *    <code>
+	 *          Property name: tagInclusionRule<br/>
+	 *          Type:          Enum<br/>
+	 *          Read only?:    no<br/>
+	 *          Description:   For a smart playlist, defines whether the video
+	 *                         must contain all or contain one or more of the
+	 *                         values in filterTags. Use AND for
+	 *                         "contains all" and OR for
+	 *                         "contains one or more." Not available in Read
+	 *                         API methods.
+	 *    </code>
+	 * </p>
+	 * 
+	 * @return tag inclusion rule for this Playlist
+	 */
+	public InclusionRuleEnum getTagInclusionRule(){
+		return tagInclusionRule;
+	}
 	
 	/**
 	 * <p>
@@ -665,8 +705,6 @@ public class Playlist {
 		this.filterTags = filterTags;
 	}
 	
-	// T.B.D. tagInclusionRule
-	
 	/**
 	 * <p>
 	 *    Sets the thumbnail URL for this Playlist.
@@ -686,6 +724,31 @@ public class Playlist {
 	 */
 	public void setThumbnailUrl(String thumbnailUrl){
 		this.thumbnailUrl = thumbnailUrl;
+	}
+	
+	/**
+	 * <p>
+	 *    Sets the tag inclusion rule for this Playlist.
+	 * </p>
+	 * 
+	 * <p>
+	 *    <code>
+	 *          Property name: tagInclusionRule<br/>
+	 *          Type:          Enum<br/>
+	 *          Read only?:    no<br/>
+	 *          Description:   For a smart playlist, defines whether the video
+	 *                         must contain all or contain one or more of the
+	 *                         values in filterTags. Use AND for
+	 *                         "contains all" and OR for
+	 *                         "contains one or more." Not available in Read
+	 *                         API methods.
+	 *    </code>
+	 * </p>
+	 * 
+	 * @param tagInclusionRule tag inclusion rule for this Playlist
+	 */
+	public void getTagInclusionRule(InclusionRuleEnum tagInclusionRule){
+		this.tagInclusionRule = tagInclusionRule;
 	}
 	
 	/**
@@ -735,6 +798,9 @@ public class Playlist {
 			}
 			json.put("filterTags", tagArray);
 		}
+		if(tagInclusionRule != null){
+			json.put("tagInclusionRule", tagInclusionRule);
+		}
 		if(playlistType != null){
 			json.put("playlistType", playlistType);
 		}
@@ -773,6 +839,7 @@ public class Playlist {
 			"\tvideoIds:'"         + videoIds         + "'\n" +
 			"\tvideos:'"           + videos           + "'\n" +
 			"\tfilterTags:'"       + filterTags       + "'\n" +
+			"\ttagInclusionRule:'" + tagInclusionRule + "'\n" +
 			"\tplaylistType:'"     + playlistType     + "'\n" +
 			")]";
 		
