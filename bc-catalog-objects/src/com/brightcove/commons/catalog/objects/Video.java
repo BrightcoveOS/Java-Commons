@@ -325,6 +325,9 @@ public class Video {
 						if(ItemStateEnum.INACTIVE.toString().equals(nodeValue)){
 							itemState = ItemStateEnum.INACTIVE;
 						}
+						if(ItemStateEnum.PENDING.toString().equals(nodeValue)){
+							itemState = ItemStateEnum.PENDING;
+						}
 					}
 				}
 				else if(nodeName.equals("tags")){
@@ -459,8 +462,11 @@ public class Video {
 				else if(rootValue.toString().equals("INACTIVE")){
 					itemState = ItemStateEnum.INACTIVE;
 				}
+				else if(rootValue.toString().equals("PENDING")){
+					itemState = ItemStateEnum.PENDING;
+				}
 				else{
-					throw new JSONException("[ERR] Media API specified invalid value for item state '" + rootValue + "'.  Acceptable values are 'ACTIVE', 'DELETED' and 'INACTIVE'.");
+					throw new JSONException("[ERR] Media API specified invalid value for item state '" + rootValue + "'.  Acceptable values are 'ACTIVE', 'DELETED', 'PENDING' and 'INACTIVE'.");
 				}
 			}
 			else if("geoFilterExclude".equals(rootKey)){
@@ -1319,7 +1325,7 @@ public class Video {
 	 *          Read only?:    no<br/>
 	 *          Description:   An
 	 *                         <a href="http://docs.brightcove.com/en/media/index.html#ItemStateEnum">ItemStateEnum</a>.
-	 *                         One of the properties: ACTIVE, INACTIVE, or
+	 *                         One of the properties: ACTIVE, INACTIVE, PENDING, or
 	 *                         DELETED. You can set this property only to
 	 *                         ACTIVE or INACTIVE; you cannot delete a video
 	 *                         by setting its itemState to DELETED.
@@ -1344,7 +1350,7 @@ public class Video {
 	 *          Read only?:    no<br/>
 	 *          Description:   An
 	 *                         <a href="http://docs.brightcove.com/en/media/index.html#ItemStateEnum">ItemStateEnum</a>.
-	 *                         One of the properties: ACTIVE, INACTIVE, or
+	 *                         One of the properties: ACTIVE, INACTIVE, PENDING, or
 	 *                         DELETED. You can set this property only to
 	 *                         ACTIVE or INACTIVE; you cannot delete a video
 	 *                         by setting its itemState to DELETED.
