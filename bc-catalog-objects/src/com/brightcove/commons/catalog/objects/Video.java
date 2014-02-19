@@ -1068,7 +1068,7 @@ public class Video {
 	 * @return List of renditions for this Video 
 	 */
 	public List<iosRendition> getIOSRenditions(){
-		return iosRendition;
+		return iosRenditions;
 	}
 	
 	/**
