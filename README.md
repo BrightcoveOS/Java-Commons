@@ -221,6 +221,10 @@ Individual Packages (3rd Party):
 - [3rd Party - JSON.org for BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/json-org-bcver-4.0.3.zip)
 - [3rd Party - Xalan for BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/xalan-bcver-4.0.3.zip)
 
+**Addendum to v4.0.3**
+
+Adding standard MIT license used for Brightcove Open Source projects
+
 Brightcove Libraries Only:
 
 - [BC Commons v4.0.3](https://github.com/downloads/BrightcoveOS/Java-Commons/bc-commons-4.0.3.zip)
@@ -229,22 +233,22 @@ Brightcove Libraries Only:
 Package - (3rd party) apache-commons
 ====================================
 
-This package includes several Apache Commons libraries, including: 
- 
+This package includes several Apache Commons libraries, including:
+
 - Mime4j (from Apache James project)
 - Commons IO
 - HTTP Components (core and client)
 
-These can all be downloaded from Apache directly if preferred: 
- 
+These can all be downloaded from Apache directly if preferred:
+
 - [Apache Commons](http://commons.apache.org/)
 - [Apache James](http://james.apache.org/download.cgi)
 - [Apache HTTP Components](http://hc.apache.org/)
 
 The versions stored here will be stripped down to just what is needed (plus any legal / license notifications)
 
-Dependencies: 
- 
+Dependencies:
+
 - None
 
 Package - (3rd party) json-org
@@ -254,8 +258,8 @@ This package is almost entirely just the source code downloaded from json.org
 (http://www.json.org/java/index.html) downloaded on January 12th 2011.  The
 only changes made are to resolve compiler and/or eclipse warnings.
 
-Dependencies: 
- 
+Dependencies:
+
 - None
 
 Package - (3rd party) Xalan-J
@@ -263,14 +267,14 @@ Package - (3rd party) Xalan-J
 
 This package includes repackaged Xalan-J libraries for working with XML
 
-These can all be downloaded from directly from the source if preferred: 
- 
+These can all be downloaded from directly from the source if preferred:
+
 - [Xalan-J](http://xml.apache.org/xalan-j/downloads.html)
 
 The versions stored here will be stripped down to just what is needed (plus any legal / license notifications)
 
-Dependencies: 
- 
+Dependencies:
+
 - None
 
 Package - bc-catalog-objects
@@ -280,8 +284,8 @@ This package includes classes to represent all of the fundamental data objects p
 
 Most of the objects are created following the Brightcove Media API object reference, but some modifications are needed to support other projects.
 
-Dependencies: 
- 
+Dependencies:
+
 - json.org
 
 Package - collection-utils
@@ -289,8 +293,8 @@ Package - collection-utils
 
 This package includes classes to make working with Collections (Sets, Lists, etc) easier.
 
-Dependencies: 
- 
+Dependencies:
+
 - None
 
 Package - ftp-utils
@@ -298,8 +302,8 @@ Package - ftp-utils
 
 This package includes classes to make working with FTP servers easier.
 
-Dependencies: 
- 
+Dependencies:
+
 - Xalan-J
 - BC Commons - XML Utils (used for config files)
 
@@ -308,8 +312,8 @@ Package - http-utils
 
 This package includes classes to make working with HTTP objects (requests, responses, entities, etc) easier.
 
-Dependencies: 
- 
+Dependencies:
+
 - Apache HTTP Components (core)
 - Apache Commons IO
 
@@ -320,8 +324,8 @@ This package includes miscellaneous classes that could not easily be fit into an
 
 E.g. Date/Time utils, String utils, Object comparison utils
 
-Dependencies: 
- 
+Dependencies:
+
 - None
 
 Package - system-utils
@@ -329,8 +333,8 @@ Package - system-utils
 
 This package includes classes to make working with the underlying system (e.g. sys exec calls) easier.
 
-Dependencies: 
- 
+Dependencies:
+
 - None
 
 Package - xml-utils
@@ -338,8 +342,8 @@ Package - xml-utils
 
 This package includes classes to make working with XML objects (especially XML files) easier.
 
-Dependencies: 
- 
+Dependencies:
+
 - Xalan-J
 
 Package - examples
@@ -347,8 +351,8 @@ Package - examples
 
 This package includes examples for working with the other BC Commons packages.
 
-Dependencies: 
- 
+Dependencies:
+
 - *.*
 
 Package - release-build
@@ -356,6 +360,6 @@ Package - release-build
 
 This package doesn't contain any libraries itself.  It contains scripts and configuration to build and release the other commons packages.
 
-Dependencies: 
- 
+Dependencies:
+
 - None
