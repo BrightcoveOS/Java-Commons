@@ -186,7 +186,7 @@ This release adds quite a few features:
 
 - (new) bc-account-objects: Library to keep track of account details (e.g. read/write tokens, FTP credentials, etc)
 - (new) bc-commons-applications: Utility applications that take advantage of the commons libraries (e.g. FTPUploader)
-- (new) xml-utils: Added a pure W3C library (no Xalan dependecy) for simple operations
+- (new) xml-utils: Added a pure W3C library (no Xalan dependency) for simple operations
 - (changed) bc-catalog-objects: Added ability to serialize/deserialize objects to/from XML
 - (removed) ftp-utils: Moved command line applications to new bc-commons-applications library
 
