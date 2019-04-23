@@ -14,5 +14,5 @@ package com.brightcove.commons.catalog.objects.enumerations;
  *
  */
 public enum ItemStateEnum {
-	ACTIVE, INACTIVE, DELETED
+	ACTIVE, INACTIVE, DELETED, PENDING
 }
