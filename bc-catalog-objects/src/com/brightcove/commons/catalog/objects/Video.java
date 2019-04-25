@@ -66,7 +66,7 @@ public class Video {
 	private String  adKeys;
 	
 	private List<Rendition>    renditions;
-	private List<iosRendition> iosRenditions;
+	private List<Rendition> iosRenditions;
 	private Rendition          videoFullLength;
 	
 	private ItemStateEnum itemState;
@@ -299,12 +299,12 @@ public class Video {
 					}
 				}
 				else if(nodeName.equals("IOSRenditions")){
-					iosRenditions = new ArrayList<iosRendition>();
+					iosRenditions = new ArrayList<Rendition>();
 					
 					Element renditionElement = W3CXMLUtils.getFirstElementChild(child);
 					while(renditionElement != null){
 						if("iosRendition".equals(renditionElement.getNodeName())){
-							iosRendition iosRendition = new iosRendition(renditionElement);
+							Rendition iosRendition = new Rendition(renditionElement);
 							iosRenditions.add(iosRendition);
 						}
 						
@@ -585,12 +585,12 @@ public class Video {
 				}
 			}
 			else if("IOSRenditions".equals(rootKey)){
-				iosRenditions = new ArrayList<iosRendition>();
+				iosRenditions = new ArrayList<Rendition>();
 				
 				JSONArray rendArray = jsonObj.getJSONArray(rootKey);
 				for(int rendIdx=0;rendIdx<rendArray.length();rendIdx++){
 					String    rend      = rendArray.get(rendIdx).toString();
-					iosRendition iosRendition = new iosRendition(rend);
+					Rendition iosRendition = new Rendition(rend);
 					iosRenditions.add(iosRendition);
 				}
 			}
@@ -1068,7 +1068,7 @@ public class Video {
 	 * @return List of renditions for this Video 
 	 */
 	public List<Rendition> getIOSRenditions(){
-		return renditions;
+		return iosRenditions;
 	}
 	
 	/**
@@ -1087,7 +1087,7 @@ public class Video {
 	 * 
 	 * @param renditions List of renditions for this Video 
 	 */
-	public void setIOSRenditions(List<iosRendition> renditions){
+	public void setIOSRenditions(List<Rendition> renditions){
 		this.iosRenditions = renditions;
 	}
 	
@@ -2279,7 +2279,7 @@ public class Video {
 		}
 		if(iosRenditions != null){
 			JSONArray jsonRenditions = new JSONArray();
-			for(iosRendition iosRendition : iosRenditions){
+			for(Rendition iosRendition : iosRenditions){
 				JSONObject renditionJson = iosRendition.toJson();
 				jsonRenditions.put(renditionJson);
 			}
@@ -2531,7 +2531,7 @@ public class Video {
 			Element renditionsElement = doc.createElement("IOSRenditions");
 			videoElement.appendChild(renditionsElement);
 			
-			for(iosRendition rendition : iosRenditions){
+			for(Rendition rendition : iosRenditions){
 				rendition.appendXml(renditionsElement, "iosRendition");
 			}
 		}
