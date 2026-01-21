@@ -12,10 +12,6 @@ Whenever possible, the libraries will be compatible with Java 1.5, but in
 some cases Java 1.6 may be required.  Each commons library should make note
 of this.
 
-Documentation
-=============
-[JavaDocs](http://bcos-static-hosting.s3-website-us-east-1.amazonaws.com/java-commons/javadoc/)
-
 Downloads
 =========
 
